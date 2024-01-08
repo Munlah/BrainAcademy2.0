@@ -1,11 +1,6 @@
 const { Course } = require('../models/Course');
 const admin = require('firebase-admin');
-const serviceAccount = require('../serviceAccountKey.json');
 const fs = require('fs').promises;
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 const db = admin.firestore();
 
@@ -135,7 +130,5 @@ async function addCourse(req, res) {
 
 
 module.exports = {
-  addCourse,
-  getCourse,
-  getAllCourses,
+  addCourse
 };

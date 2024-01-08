@@ -1,6 +1,9 @@
 const { Quiz } = require('../models/Quiz');
 const { Question } = require('../models/Question');
 const fs = require('fs').promises;
+const admin = require('firebase-admin');
+
+const db = admin.firestore();
 
 // to read contents of JSON and parse into JS object
 async function readJSON(filename) {

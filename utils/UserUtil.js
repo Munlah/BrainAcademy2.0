@@ -1,11 +1,6 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('../serviceAccountKey.json'); // Download this file from Firebase Console
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // Set the number of rounds to use for salt generation
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 const db = admin.firestore();
 
@@ -187,8 +182,8 @@ async function login(req, res) {
         .json({ message: 'Username and password are required' });
     }
 
-    // Checking if user exists in the database
-    const users = await readJSON('utils/users.json');
+    // Checking if user exists in the Firestore
+    const users = await readFirestoreUsers();
 
     // Find and Compare the users (Basically search)
     const user = users.find((user) => user.username === username);

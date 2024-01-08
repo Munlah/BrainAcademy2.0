@@ -1,9 +1,15 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+const admin = require('firebase-admin');
+const serviceAccount = require('./serviceAccountKey.json'); // Download this file from Firebase Console
 
 const PORT = process.env.PORT || 5050;
 var startPage = 'index.html';
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -19,16 +25,6 @@ const {
   deleteQuiz,
 } = require('./utils/QuizzesUtil');
 
-app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
-app.post(
-  '/view-all-questions-for-quiz/:quizId/:questionId/:userOptionInput',
-  validateQuestionAnswer
-);
-app.post('/create-new-quiz', createQuizWithQuestions);
-app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
-app.put('/edit-quiz/:quizId', editQuiz);
-app.delete('/delete-quiz/:quizId', deleteQuiz);
-
 // Users
 const {
   registerUser,
@@ -38,18 +34,29 @@ const {
   deleteUser,
 } = require('./utils/UserUtil');
 
+// Courses
+const { addCourse, getCourse, getAllCourses, getCoursesByCategory } = require('./utils/CourseUtil');
+
+app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
+app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
+//app.get('/getcourse/:id', getCourse);
+//app.get('/getcourse', getAllCourses);
+
+app.post(
+  '/view-all-questions-for-quiz/:quizId/:questionId/:userOptionInput',
+  validateQuestionAnswer
+);
+app.post('/create-new-quiz', createQuizWithQuestions);
+app.put('/edit-quiz/:quizId', editQuiz);
+app.delete('/delete-quiz/:quizId', deleteQuiz);
+
 app.post('/register', registerUser);
 app.get('/getUser/:username', getUser);
 app.post('/login', login);
 app.put('/updateUser/:id', updateUser);
 app.delete('/deleteUser/:id', deleteUser);
 
-// Courses
-const { addCourse, getCourse, getAllCourses, getCoursesByCategory } = require('./utils/CourseUtil');
-
 app.post('/addCourse', addCourse);
-app.get('/getcourse/:id', getCourse);
-app.get('/getcourse', getAllCourses);
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/' + startPage);

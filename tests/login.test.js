@@ -1,0 +1,152 @@
+const { describe, it } = require('mocha');
+const { expect } = require('chai');
+const fs = require('fs').promises;
+const sinon = require('sinon');
+const { login } = require('../utils/UserUtil');
+const firebase = require('firebase/app');
+require('firebase/firestore');
+
+describe('Testing Login Function', () => {
+    const users = [
+        {
+            username: 'newuser',
+            passwordHash: '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', // bcrypt hash for 'password'
+        },
+    ];
+
+    beforeEach(() => {
+        sinon.stub(firebase.firestore().collection('users'), 'get').callsFake(async () => {
+            const queriedUsers = users.filter(user => user.username === 'newuser'); // Customize the filtering based on your test case
+            return {
+                docs: queriedUsers.map(user => ({
+                    data: () => user
+                }))
+            };
+        });
+    });    
+
+    afterEach(() => {
+        // Restore Firestore call
+        firebase.firestore().collection('users').get.restore();
+    });
+
+    it('Should login successfully', async () => {
+        const req = {
+            body: {
+                username: 'newuser',
+                password: 'password',
+            },
+        };
+        const res = {
+            status: function (code) {
+                expect(code).to.equal(200);
+                return this;
+            },
+            json: function (data) {
+                expect(data.message).to.equal('Login successful!');
+            },
+        };
+        await login(req, res);
+    });
+
+    it('Should fail when username is missing', async () => {
+        const req = {
+            body: {
+                password: 'password',
+            },
+        };
+        const res = {
+            status: function (code) {
+                expect(code).to.equal(400);
+                return this;
+            },
+            json: function (data) {
+                expect(data.message).to.equal('Username and password are required');
+            },
+        };
+        await login(req, res);
+    });
+
+    it('Should fail when password is missing', async () => {
+        const req = {
+            body: {
+                username: 'newuser',
+            },
+        };
+        const res = {
+            status: function (code) {
+                expect(code).to.equal(400);
+                return this;
+            },
+            json: function (data) {
+                expect(data.message).to.equal('Username and password are required');
+            },
+        };
+        await login(req, res);
+    });
+
+    it('Should fail when username does not exist', async () => {
+        const req = {
+            body: {
+                username: 'nonexistentuser',
+                password: 'password',
+            },
+        };
+        const res = {
+            status: function (code) {
+                expect(code).to.equal(401);
+                return this;
+            },
+            json: function (data) {
+                expect(data.message).to.equal('Invalid username');
+            },
+        };
+        await login(req, res);
+    });
+
+    it('Should fail when password is incorrect', async () => {
+        const req = {
+            body: {
+                username: 'newuser',
+                password: 'wrongpassword',
+            },
+        };
+        const res = {
+            status: function (code) {
+                expect(code).to.equal(401);
+                return this;
+            },
+            json: function (data) {
+                expect(data.message).to.equal('Invalid password');
+            },
+        };
+        await login(req, res);
+    });
+
+    it('Should fail with status 500 when there is a server error', async () => {
+        const req = {
+            body: {
+                username: 'newuser',
+                password: 'password',
+            },
+        };
+        const res = {
+            status: function (code) {
+                expect(code).to.equal(500);
+                return this;
+            },
+            json: function (data) {
+                expect(data.message).to.equal('Internal server error');
+            },
+        };
+
+        // Simulate a server error by throwing an error in the login function
+        const loginStub = sinon
+            .stub(require('../utils/UserUtil'), 'login')
+            .throws(new Error('Internal server error'));
+
+        await login(req, res);
+
+        loginStub.restore();
+    });
+});
