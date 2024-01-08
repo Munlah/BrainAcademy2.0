@@ -1,73 +1,90 @@
 const { Course } = require('../models/Course');
+const admin = require('firebase-admin');
+const serviceAccount = require('../serviceAccountKey.json');
 const fs = require('fs').promises;
 
-async function readJSON(filename) {
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+const db = admin.firestore();
+
+// Function to write data to Firestore
+async function writeFirestore(data, collectionName) {
   try {
-    const data = await fs.readFile(filename, 'utf8');
-    return JSON.parse(data);
+    const docRef = await db.collection(collectionName).add(data);
+    return docRef.id;
   } catch (err) {
-    console.error(err);
+    console.error('Error writing to Firestore:', err);
     throw err;
   }
 }
 
-async function writeJSON(data, filename) {
-  try {
-    await fs.writeFile(filename, JSON.stringify(data), 'utf8');
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
+// Function to upload file to Firebase Storage
+async function uploadFile(filePath, storagePath) {
+  const bucket = admin.storage().bucket(); // Get the default storage bucket
+
+  await bucket.upload(filePath, {
+    destination: storagePath,
+    metadata: {
+      contentType: 'image/jpeg', // Change the content type based on your file type
+    },
+  });
+
+  // Get the public URL of the uploaded file
+  const publicUrl = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
+  return publicUrl;
 }
+
+// Replace the existing addCourse function with the updated version
 async function addCourse(req, res) {
   try {
-    const { topic, description, video, category } = req.body;
+    const { topic, description, video, category, pic } = req.body;
 
     // Validate input
-    if (!topic || !description || !video || !category) {
+    if (!topic || !description || !video || !category || !pic) {
       return res.status(400).json({ message: 'Incomplete course data' });
     }
 
-    // Read existing courses from the JSON file
-    const allCourses = await readJSON('utils/course.json');
+    // Check for duplicate topic in Firestore
+    const existingCourses = await db.collection('courses').where('topic', '==', topic).get();
+    if (!existingCourses.empty) {
+      return res.status(409).json({ message: 'Topic already exists' });
+    }
 
-        // Check for duplicate topic
-        if (allCourses.some(course => course.topic === topic)) {
-            return res.status(409).json({ message: 'Topic already exists' });
-        }
+    // Validate input length
+    if (topic.length > 100 || description.length > 500 || category.length > 50) {
+      return res.status(400).json({ message: 'Invalid input length' });
+    }
 
-        // Check for duplicate topic
-        if (allCourses.some(course => course.description === description)) {
-            return res.status(409).json({ message: 'Description already exists' });
-        }
-        // Validate input length
-        if (topic.length > 100 || description.length > 500 || category.length > 50) {
-            return res.status(400).json({ message: 'Invalid input length' });
-        }
-        const maxLength = 255;
-        const videoUrlPattern = new RegExp(`^https?:\/\/\\S{1,${maxLength}}$`);
+    const maxLength = 255;
+    const videoUrlPattern = new RegExp(`^https?:\/\/\\S{1,${maxLength}}$`);
 
-        if (!videoUrlPattern.test(video)) {
-            return res.status(400).json({ message: 'Invalid video URL format' });
-        }
-
-
+    if (!videoUrlPattern.test(video)) {
+      return res.status(400).json({ message: 'Invalid video URL format' });
+    }
 
     // Generate a unique ID for the new course
     const timestamp = new Date().getTime();
     const random = Math.floor(Math.random() * 1000);
-    const courseId = parseInt(
-      timestamp + '' + random.toString().padStart(3, '0')
-    );
+    const courseId = parseInt(timestamp + '' + random.toString().padStart(3, '0'));
+
+    // Upload pic and video to Firebase Storage (assuming 'pic' and 'video' are file paths)
+    const picUrl = await uploadFile(pic, `courses/${courseId}/pic.jpg`);
+    const videoUrl = await uploadFile(video, `courses/${courseId}/video.mp4`);
 
     // Create a new Course instance
-    const newCourse = new Course(courseId, topic, description, video, category);
+    const newCourse = {
+      courseId,
+      topic,
+      description,
+      video: videoUrl,
+      category,
+      pic: picUrl,
+    };
 
-    // Add the new course to the existing courses
-    allCourses.push(newCourse);
-
-    // Write the updated course list back to the JSON file
-    await writeJSON(allCourses, 'utils/course.json');
+    // Add the new course to Firestore
+    await writeFirestore(newCourse, 'courses');
 
     return res.status(201).json({ message: 'Add Course successful!' });
   } catch (error) {
@@ -75,6 +92,7 @@ async function addCourse(req, res) {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 
 async function getCourse(req, res) {
   try {
@@ -102,12 +120,12 @@ async function getCourse(req, res) {
 }
 
 async function getAllCourses(req, res) {
-    try {
-        const allCourses = await readJSON('utils/course.json');
+  try {
+    const allCourses = await readJSON('utils/course.json');
 
-        if (allCourses.length === 0) {
-            return res.status(200).json({ message: 'No courses available' });
-        }
+    if (allCourses.length === 0) {
+      return res.status(200).json({ message: 'No courses available' });
+    }
 
 
     return res.status(200).json(allCourses);
