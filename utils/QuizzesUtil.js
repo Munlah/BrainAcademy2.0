@@ -1,7 +1,7 @@
 const { Quiz } = require('../models/Quiz');
 const { Question } = require('../models/Question');
 const fs = require('fs').promises;
-const admin = require('firebase-admin');
+const { admin } = require('../firebaseAdmin.js');
 
 const db = admin.firestore();
 

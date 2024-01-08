@@ -1,5 +1,5 @@
 const { Course } = require('../models/Course');
-const admin = require('firebase-admin');
+const { admin } = require('../firebaseAdmin.js');
 const fs = require('fs').promises;
 
 const db = admin.firestore();

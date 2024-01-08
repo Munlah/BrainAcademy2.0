@@ -1,4 +1,4 @@
-const admin = require('firebase-admin');
+const { admin } = require('../firebaseAdmin.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // Set the number of rounds to use for salt generation
 

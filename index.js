@@ -1,15 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccountKey.json'); // Download this file from Firebase Console
 
 const PORT = process.env.PORT || 5050;
 var startPage = 'index.html';
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
