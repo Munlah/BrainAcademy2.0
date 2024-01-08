@@ -3,19 +3,20 @@ const { expect } = require('chai');
 const fs = require('fs').promises;
 const sinon = require('sinon');
 const { login } = require('../utils/UserUtil');
-const firebase = require('firebase/app');
-require('firebase/firestore');
+const { admin } = require('../firebaseAdmin.js');
 
-describe('Testing Login Function', () => {
+let getStub;
+
+describe.only('Testing Login Function', () => {
     const users = [
         {
-            username: 'newuser',
-            passwordHash: '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', // bcrypt hash for 'password'
+            username: 'jennieeain2',
+            passwordHash: '$2b$10$Pl/TQWWefjaAawfqIqL/OeL8bfrFSg5HXhXTojuM31DYmxwr1BGr6', // bcrypt hash for 'password'
         },
     ];
 
     beforeEach(() => {
-        sinon.stub(firebase.firestore().collection('users'), 'get').callsFake(async () => {
+        getStub = sinon.stub(admin.firestore().collection('users'), 'get').callsFake(async () => {
             const queriedUsers = users.filter(user => user.username === 'newuser'); // Customize the filtering based on your test case
             return {
                 docs: queriedUsers.map(user => ({
@@ -23,18 +24,17 @@ describe('Testing Login Function', () => {
                 }))
             };
         });
-    });    
+    });
 
     afterEach(() => {
-        // Restore Firestore call
-        firebase.firestore().collection('users').get.restore();
+        getStub.restore();
     });
 
     it('Should login successfully', async () => {
         const req = {
             body: {
-                username: 'newuser',
-                password: 'password',
+                username: 'jennieeain2',
+                password: 'Ilovefood123@',
             },
         };
         const res = {
@@ -107,7 +107,7 @@ describe('Testing Login Function', () => {
     it('Should fail when password is incorrect', async () => {
         const req = {
             body: {
-                username: 'newuser',
+                username: 'jennieeain2',
                 password: 'wrongpassword',
             },
         };
@@ -140,7 +140,6 @@ describe('Testing Login Function', () => {
             },
         };
 
-        // Simulate a server error by throwing an error in the login function
         const loginStub = sinon
             .stub(require('../utils/UserUtil'), 'login')
             .throws(new Error('Internal server error'));
