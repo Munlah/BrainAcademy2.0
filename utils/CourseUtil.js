@@ -30,8 +30,6 @@ async function uploadFile(filePath, storagePath) {
       contentType: 'image/jpeg', // Change the content type based on your file type
     },
   });
-
-  // Get the public URL of the uploaded file
   const publicUrl = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
   return publicUrl;
 }
@@ -94,46 +92,46 @@ async function addCourse(req, res) {
 }
 
 
-async function getCourse(req, res) {
-  try {
-    const courseId = parseInt(req.params.id);
+// async function getCourse(req, res) {
+//   try {
+//     const courseId = parseInt(req.params.id);
 
-    if (isNaN(courseId)) {
-      return res.status(400).json({ message: 'Invalid course ID' });
-    }
+//     if (isNaN(courseId)) {
+//       return res.status(400).json({ message: 'Invalid course ID' });
+//     }
 
-    // Read existing courses from the JSON file
-    const allCourses = await readJSON('utils/course.json');
+//     // Read existing courses from the JSON file
+//     const allCourses = await readJSON('utils/course.json');
 
-    // Find the course with the specified ID
-    const course = allCourses.find((course) => course.id === courseId);
+//     // Find the course with the specified ID
+//     const course = allCourses.find((course) => course.id === courseId);
 
-    if (course) {
-      return res.status(200).json(course);
-    } else {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-}
+//     if (course) {
+//       return res.status(200).json(course);
+//     } else {
+//       return res.status(404).json({ message: 'Course not found' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// }
 
-async function getAllCourses(req, res) {
-  try {
-    const allCourses = await readJSON('utils/course.json');
+// async function getAllCourses(req, res) {
+//   try {
+//     const allCourses = await readJSON('utils/course.json');
 
-    if (allCourses.length === 0) {
-      return res.status(200).json({ message: 'No courses available' });
-    }
+//     if (allCourses.length === 0) {
+//       return res.status(200).json({ message: 'No courses available' });
+//     }
 
 
-    return res.status(200).json(allCourses);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-}
+//     return res.status(200).json(allCourses);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// }
 
 
 module.exports = {
