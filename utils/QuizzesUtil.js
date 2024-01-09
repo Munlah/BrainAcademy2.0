@@ -7,7 +7,7 @@ const { admin } = require('../firebaseAdmin.js');
 const db = admin.firestore();
 
 // Function to write data to Firestore
-async function writeFirestoreQuiz(data, collectionName) {
+async function writeFirestore(data, collectionName) {
   try {
     const docRef = await db.collection(collectionName).add(data);
     return docRef.id;
@@ -17,21 +17,10 @@ async function writeFirestoreQuiz(data, collectionName) {
   }
 }
 
-// Function to write data to Firestore
-async function writeFirestoreQuiz(data, collectionName) {
-  try {
-    const docRef = await db.collection(collectionName).add(data);
-    return docRef.id;
-  } catch (err) {
-    console.error('Error writing to Firestore:', err);
-    throw err;
-  }
+// Replace the existing writeFirestoreQuiz function with Firestore version
+async function writeFirestoreQuiz(quiz) {
+  return writeFirestore(quiz, 'quizzes');
 }
-
-// // Replace the existing writeFirestoreQuiz function with Firestore version
-// async function writeFirestoreQuiz(quiz) {
-//   return writeFirestore(quiz, 'quizzes');
-// }
 
 // Create new quiz with several questions
 async function createQuizWithQuestions(req, res) {
