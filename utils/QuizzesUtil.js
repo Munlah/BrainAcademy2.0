@@ -5,39 +5,13 @@ const { admin } = require('../firebaseAdmin.js');
 
 const db = admin.firestore();
 
-// to read contents of JSON and parse into JS object
-async function readJSON(filename) {
-  try {
-    const data = await fs.readFile(filename, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error(err); //handle errors
-    throw err;
-  }
+// Replace the existing readJSON and writeJSON functions with Firestore versions
+async function readFirestoreQuiz() {
+  return readFirestore('quizzes');
 }
 
-//to write contents on JSON
-async function writeJSON(object, filename) {
-  try {
-    let allObjects = await readJSON(filename);
-
-    if (!allObjects) {
-      //if the file is empty or doesn't exist, create a new array (used for questions)
-      allObjects = [];
-    } else if (!Array.isArray(allObjects)) {
-      //if the file contains an object and not an array
-      allObjects = [allObjects];
-    }
-
-    allObjects.push(object);
-
-    await fs.writeFile(filename, JSON.stringify(allObjects), 'utf8');
-
-    return allObjects;
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
+async function writeFirestoreQuiz(user) {
+  return writeFirestore(quiz, 'quizzes');
 }
 
 async function viewQuestionsPerQuiz(req, res) {
