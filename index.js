@@ -11,10 +11,10 @@ app.use(express.static('./public'));
 
 // Quizzes
 const {
-  viewQuestionsPerQuiz,
+  // viewQuestionsPerQuiz,
   createQuizWithQuestions,
-  validateQuestionAnswer,
-  viewAllQuizzesByCourse,
+  // validateQuestionAnswer,
+  // viewAllQuizzesByCourse,
   editQuiz,
   deleteQuiz,
 } = require('./utils/QuizzesUtil');
@@ -35,26 +35,26 @@ const { addCourse,
   // getCoursesByCategory 
 } = require('./utils/CourseUtil');
 
-app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
-app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
+// app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
+// app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
 //app.get('/getcourse/:id', getCourse);
 //app.get('/getcourse', getAllCourses);
 
-app.post(
-  '/view-all-questions-for-quiz/:quizId/:questionId/:userOptionInput',
-  validateQuestionAnswer
-);
+// app.post(
+//   '/view-all-questions-for-quiz/:quizId/:questionId/:userOptionInput',
+//   validateQuestionAnswer
+// );
 app.post('/create-new-quiz', createQuizWithQuestions);
-app.put('/edit-quiz/:quizId', editQuiz);
-app.delete('/delete-quiz/:quizId', deleteQuiz);
+// app.put('/edit-quiz/:quizId', editQuiz);
+// app.delete('/delete-quiz/:quizId', deleteQuiz);
 
-app.post('/register', registerUser);
-app.get('/getUser/:username', getUser);
-app.post('/login', login);
-app.put('/updateUser/:id', updateUser);
-app.delete('/deleteUser/:id', deleteUser);
+// app.post('/register', registerUser);
+// app.get('/getUser/:username', getUser);
+// app.post('/login', login);
+// app.put('/updateUser/:id', updateUser);
+// app.delete('/deleteUser/:id', deleteUser);
 
-app.post('/addCourse', addCourse);
+// app.post('/addCourse', addCourse);
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/' + startPage);
