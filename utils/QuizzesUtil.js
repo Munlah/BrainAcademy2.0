@@ -8,6 +8,7 @@ const db = admin.firestore();
 
 // Function to write data to Firestore
 async function writeFirestore(data, collectionName) {
+async function writeFirestore(data, collectionName) {
   try {
     const docRef = await db.collection(collectionName).add(data);
     return docRef.id;

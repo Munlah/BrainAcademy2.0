@@ -29,7 +29,11 @@ const {
 } = require('./utils/UserUtil');
 
 // Courses
-const { addCourse, getCourse, getAllCourses, getCoursesByCategory } = require('./utils/CourseUtil');
+const { addCourse, 
+  // getCourse, 
+  // getAllCourses, 
+  // getCoursesByCategory 
+} = require('./utils/CourseUtil');
 
 app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
 app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
