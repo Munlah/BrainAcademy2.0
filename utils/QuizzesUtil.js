@@ -1,13 +1,10 @@
 const { Quiz } = require('../models/Quiz');
 const { Question } = require('../models/Question');
-
-const fs = require('fs').promises;
 const { admin } = require('../firebaseAdmin.js');
 
 const db = admin.firestore();
 
 // Function to write data to Firestore
-async function writeFirestore(data, collectionName) {
 async function writeFirestore(data, collectionName) {
   try {
     const docRef = await db.collection(collectionName).add(data);
@@ -27,11 +24,6 @@ async function readFirestore(collectionName) {
     throw err;
   }
 }
-
-// // Replace the existing writeFirestoreQuiz function with Firestore version
-// async function writeFirestoreQuiz(quiz) {
-//   return writeFirestore(quiz, 'quizzes');
-// }
 
 // Create new quiz with several questions
 async function createQuizWithQuestions(req, res) {
@@ -232,7 +224,9 @@ async function deleteQuiz(req, res) {
 
 module.exports = {
 
-  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions, viewAllQuizzesByCourse, editQuiz, deleteQuiz
+  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions,
+  viewAllQuizzesByCourse, editQuiz, deleteQuiz
 };
+
 
 
