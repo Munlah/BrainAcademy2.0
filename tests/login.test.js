@@ -7,7 +7,7 @@ const { admin } = require('../firebaseAdmin.js');
 
 let getStub;
 
-describe.only('Testing Login Function', () => {
+describe('Testing Login Function', () => {
     const users = [
         {
             username: 'jennieeain2',
