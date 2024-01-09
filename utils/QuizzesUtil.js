@@ -7,7 +7,7 @@ const { admin } = require('../firebaseAdmin.js');
 const db = admin.firestore();
 
 // Function to write data to Firestore
-async function writeFirestoreQuiz(data, collectionName) {
+async function writeFirestore(data, collectionName) {
   try {
     const docRef = await db.collection(collectionName).add(data);
     return docRef.id;
@@ -17,13 +17,12 @@ async function writeFirestoreQuiz(data, collectionName) {
   }
 }
 
-// Function to write data to Firestore
-async function writeFirestoreQuiz(data, collectionName) {
+async function readFirestore(collectionName) {
   try {
-    const docRef = await db.collection(collectionName).add(data);
-    return docRef.id;
+    const snapshot = await db.collection(collectionName).get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (err) {
-    console.error('Error writing to Firestore:', err);
+    console.error('Error reading Firestore:', err);
     throw err;
   }
 }
@@ -60,7 +59,7 @@ async function createQuizWithQuestions(req, res) {
     const newQuiz = new Quiz(quizTitle, quizCourse, newQuestions);
 
     // Write the new quiz to Firestore
-    const quizId = await writeFirestoreQuiz(newQuiz);
+    const quizId = await writeFirestore(newQuiz.toFirestore(), 'quizzes');
 
     // Log the response before sending it
     console.log('Response:', JSON.stringify({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } }));
@@ -76,9 +75,6 @@ async function createQuizWithQuestions(req, res) {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
-
-
-
 
 async function viewQuestionsPerQuiz(req, res) {
   try {
@@ -235,7 +231,7 @@ async function deleteQuiz(req, res) {
 
 module.exports = {
 
-  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions, viewAllQuizzesByCourse, editQuiz, deleteQuiz, writeFirestoreQuiz
+  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions, viewAllQuizzesByCourse, editQuiz, deleteQuiz
 };
 
 
