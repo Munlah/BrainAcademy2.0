@@ -1,18 +1,84 @@
 const { Quiz } = require('../models/Quiz');
 const { Question } = require('../models/Question');
+
 const fs = require('fs').promises;
 const { admin } = require('../firebaseAdmin.js');
 
 const db = admin.firestore();
 
-// Replace the existing readJSON and writeJSON functions with Firestore versions
-async function readFirestoreQuiz() {
-  return readFirestore('quizzes');
+// Function to write data to Firestore
+async function writeFirestoreQuiz(data, collectionName) {
+  try {
+    const docRef = await db.collection(collectionName).add(data);
+    return docRef.id;
+  } catch (err) {
+    console.error('Error writing to Firestore:', err);
+    throw err;
+  }
 }
 
-async function writeFirestoreQuiz(user) {
-  return writeFirestore(quiz, 'quizzes');
+// Function to write data to Firestore
+async function writeFirestoreQuiz(data, collectionName) {
+  try {
+    const docRef = await db.collection(collectionName).add(data);
+    return docRef.id;
+  } catch (err) {
+    console.error('Error writing to Firestore:', err);
+    throw err;
+  }
 }
+
+// // Replace the existing writeFirestoreQuiz function with Firestore version
+// async function writeFirestoreQuiz(quiz) {
+//   return writeFirestore(quiz, 'quizzes');
+// }
+
+// Create new quiz with several questions
+async function createQuizWithQuestions(req, res) {
+  try {
+    const { quizTitle, quizCourse, questions } = req.body;
+
+    // Validate that required data is provided
+    if (!quizTitle || !quizCourse || !questions || !Array.isArray(questions)) {
+      return res.status(400).json({ message: 'Invalid data provided for creating quiz.' });
+    }
+
+    // Validate each question
+    for (const questionData of questions) {
+      const { questionTitle, options, correctOption } = questionData;
+
+      // Validate that correctOption is a valid index
+      if (!Number.isInteger(correctOption) || correctOption < 0 || correctOption >= options.length) {
+        return res.status(400).json({ message: 'Invalid correct option provided for creating quiz.' });
+      }
+    }
+
+    // Create an array of Question instances
+    const newQuestions = questions.map(questionData => new Question(questionData.questionTitle, questionData.options, questionData.correctOption));
+
+    // Create a new Quiz instance
+    const newQuiz = new Quiz(quizTitle, quizCourse, newQuestions);
+
+    // Write the new quiz to Firestore
+    const quizId = await writeFirestoreQuiz(newQuiz);
+
+    // Log the response before sending it
+    console.log('Response:', JSON.stringify({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } }));
+
+    return res.status(201).json({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } });
+
+  } catch (error) {
+    console.error(error);
+
+    // Log the response in case of an error
+    console.log('Response:', JSON.stringify({ message: 'Internal Server Error' }));
+
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+
+
 
 async function viewQuestionsPerQuiz(req, res) {
   try {
@@ -88,76 +154,7 @@ async function validateQuestionAnswer(req, res) {
   }
 }
 
-//create new quiz with several questions
-async function createQuizWithQuestions(req, res) {
-  try {
-    const { quizTitle, quizCourse, questions } = req.body;
 
-    //validate that required data is provided
-    if (!quizTitle || !quizCourse || !questions || !Array.isArray(questions)) {
-      return res
-        .status(400)
-        .json({ message: 'Invalid data provided for creating quiz.' });
-    }
-
-    // array to hold the new questions
-    const newQuestions = [];
-
-
-    //loop through the provided questions and generate unique Ids
-    for (const questionData of questions) {
-      const { questionTitle, options, correctOption } = questionData;
-
-      // Validate that correctOption is a valid index
-      if (
-        !Number.isInteger(correctOption) ||
-        correctOption < 0 ||
-        correctOption >= options.length
-      ) {
-        return res.status(400).json({
-          message: 'Invalid correct option provided for creating quiz.',
-        });
-      }
-
-      const questionTimestamp = new Date().getTime();
-      const questionRandom = Math.floor(Math.random() * 1000);
-      const questionId = parseInt(
-        questionTimestamp + '' + questionRandom.toString().padStart(3, '0')
-      );
-
-      //create a new Question instance
-      const newQuestion = new Question(
-        questionId,
-        questionTitle,
-        options,
-        correctOption
-      );
-
-      //add the new question to the array
-      newQuestions.push(newQuestion);
-    }
-
-    //generate a unique Id for the quiz
-    const timestamp = new Date().getTime();
-    const random = Math.floor(Math.random() * 1000);
-    const quizId = parseInt(
-      timestamp + '' + random.toString().padStart(3, '0')
-    );
-
-    //create a new Quiz instance with the generated ID and questions
-    const newQuiz = new Quiz(quizId, quizTitle, quizCourse, newQuestions);
-
-    //write the new quiz to the JSON file
-    await writeJSON(newQuiz, 'utils/quizzes.json');
-
-    return res
-      .status(201)
-      .json({ message: 'Quiz created successfully.', quiz: newQuiz });
-  } catch (error) {
-
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-}
 
 // View all quizzes function by course
 async function viewAllQuizzesByCourse(req, res) {
@@ -238,7 +235,7 @@ async function deleteQuiz(req, res) {
 
 module.exports = {
 
-  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions, viewAllQuizzesByCourse, editQuiz, deleteQuiz, readJSON, writeJSON
+  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions, viewAllQuizzesByCourse, editQuiz, deleteQuiz, writeFirestoreQuiz
 };
 
 

@@ -1,11 +1,9 @@
-// Improved model for Quiz
 class Quiz {
-  constructor(quizId, quizTitle, quizCourse, questions) {
-    this.quizId = quizId;
+  constructor(quizTitle, quizCourse, questions) {
     this.quizTitle = quizTitle;
     this.quizCourse = quizCourse;
     this.questions = questions;
   }
 }
 
-module.exports = { Quiz };
+module.exports = Quiz;
