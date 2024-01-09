@@ -8,6 +8,7 @@ const db = admin.firestore();
 
 // Function to write data to Firestore
 async function writeFirestore(data, collectionName) {
+async function writeFirestore(data, collectionName) {
   try {
     const docRef = await db.collection(collectionName).add(data);
     return docRef.id;
@@ -17,10 +18,20 @@ async function writeFirestore(data, collectionName) {
   }
 }
 
-// Replace the existing writeFirestoreQuiz function with Firestore version
-async function writeFirestoreQuiz(quiz) {
-  return writeFirestore(quiz, 'quizzes');
+async function readFirestore(collectionName) {
+  try {
+    const snapshot = await db.collection(collectionName).get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (err) {
+    console.error('Error reading Firestore:', err);
+    throw err;
+  }
 }
+
+// // Replace the existing writeFirestoreQuiz function with Firestore version
+// async function writeFirestoreQuiz(quiz) {
+//   return writeFirestore(quiz, 'quizzes');
+// }
 
 // Create new quiz with several questions
 async function createQuizWithQuestions(req, res) {
@@ -49,7 +60,7 @@ async function createQuizWithQuestions(req, res) {
     const newQuiz = new Quiz(quizTitle, quizCourse, newQuestions);
 
     // Write the new quiz to Firestore
-    const quizId = await writeFirestoreQuiz(newQuiz);
+    const quizId = await writeFirestore(newQuiz.toFirestore(), 'quizzes');
 
     // Log the response before sending it
     console.log('Response:', JSON.stringify({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } }));
@@ -65,9 +76,6 @@ async function createQuizWithQuestions(req, res) {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
-
-
-
 
 async function viewQuestionsPerQuiz(req, res) {
   try {
@@ -224,7 +232,7 @@ async function deleteQuiz(req, res) {
 
 module.exports = {
 
-  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions, viewAllQuizzesByCourse, editQuiz, deleteQuiz, writeFirestoreQuiz
+  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions, viewAllQuizzesByCourse, editQuiz, deleteQuiz
 };
 
 
