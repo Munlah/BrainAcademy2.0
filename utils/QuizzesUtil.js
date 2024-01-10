@@ -200,25 +200,23 @@ async function editQuiz(req, res) {
 
 async function deleteQuiz(req, res) {
   try {
-    const quizId = parseInt(req.params.quizId);
+    const quizId = req.params.quizId;
 
-    const allQuizzes = await readJSON('utils/quizzes.json');
+    const quizRef = db.collection('quizzes').doc(quizId);
 
-    const quizIndex = allQuizzes.findIndex((quiz) => quiz.quizId === quizId);
+    const doc = await quizRef.get();
 
-    if (quizIndex === -1) {
+    if (!doc.exists) {
       return res.status(404).json({ message: 'Quiz not found' });
     }
 
-    allQuizzes.splice(quizIndex, 1);
-
-    await writeJSON(allQuizzes, 'utils/quizzes.json');
+    await quizRef.delete();
 
     return res.status(200).json({ message: 'Quiz deleted successfully' });
   } catch (error) {
     return res
       .status(500)
-      .json({ message: 'Error occured attempted to delete quiz' });
+      .json({ message: 'Error occurred attempting to delete quiz' });
   }
 }
 
