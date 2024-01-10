@@ -28,7 +28,7 @@ afterEach(() => {
     getStub.restore();
 });
 
-describe.only('Testing Display All Quizzes by Course Function', () => {
+describe('Testing Display All Quizzes by Course Function', () => {
 
     it('should return quizzes by course', async () => {
         const req = { params: { course: 'Your Quiz Course' } };
