@@ -100,7 +100,9 @@ async function addCourse(req, res) {
 }
 
 module.exports = {
-  addCourse
+  addCourse,
+  writeFirestore,
+  readFirestore
 };
 
 
