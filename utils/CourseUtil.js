@@ -10,8 +10,10 @@ async function readFirestore(collectionName) {
     const snapshot = await db.collection(collectionName).get();
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (err) {
-    console.error('Error reading Firestore:', err);
-    throw err;
+    // console.error('Error reading Firestore:', err);
+    // throw err;
+    throw new Error('Internal Server Error'); 
+
   }
 }
 
@@ -20,8 +22,10 @@ async function writeFirestore(course) {
     const coursesCollection = db.collection('courses');
     await coursesCollection.add(course.toJSON()); // Convert to plain object before adding
   } catch (error) {
-    console.error('Error writing course to Firestore:', error);
-    throw error;
+    // console.error('Error writing course to Firestore:', error);
+    // throw error;
+    throw new Error('Internal Server Error'); 
+
   }
 }
 
@@ -90,7 +94,7 @@ async function addCourse(req, res) {
 
     return res.status(201).json({ message: 'Add Course successful!' });
   } catch (error) {
-    console.error('Error in addCourse:', error);
+    // console.error('Error in addCourse:', error);
     return res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 }

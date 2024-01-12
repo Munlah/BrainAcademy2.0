@@ -1,15 +1,24 @@
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
+const proxyquire = require('proxyquire');
 const { addCourse } = require('../utils/CourseUtil');
 const { admin } = require('../firebaseAdmin.js');
 
 let getStub;
+const adminMockInternalError = {
+    firestore: () => ({
+        collection: () => ({
+            add: sinon.stub().throws(new Error('Internal Server Error')),
+        }),
+    }),
+};
+
+const { addCourse: addCourseInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
 describe('Testing add Course Function', () => {
     const course = [
         {
-
             topic: 'Mutiplication and Division',
             description: 'Learn about simple division and multiplication for primary 6',
             video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
@@ -42,7 +51,7 @@ describe('Testing add Course Function', () => {
                 topic: 'Mutiplication and Division',
                 description: 'Learn about simple division and multiplication for primary 6',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
-                category: 'Maths',    
+                category: 'Maths',
             },
         };
         const res = {
@@ -74,7 +83,7 @@ describe('Testing add Course Function', () => {
                 description: 'Learn about multiplication for primary 6',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: 'Maths',
-    
+
             },
         };
         const res = {
@@ -100,15 +109,15 @@ describe('Testing add Course Function', () => {
             console.error('Caught an error in the test:', error);
         }
     });
-      // Test case for failure if same topic is being added
+    // Test case for failure if same topic is being added
 
-      it('Should fail if same description is being added', async () => {
+    it('Should fail if same description is being added', async () => {
         const req = {
             body: {
                 topic: 'Division',
                 description: 'Learn about simple division and multiplication for primary 6',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
-                category: 'Maths',    
+                category: 'Maths',
             },
         };
         const res = {
@@ -237,7 +246,7 @@ describe('Testing add Course Function', () => {
         await addCourse(req, res);
 
     });
-  
+
 
     it('Should fail validation for topic length exceeding 100 characters', async () => {
         const req = {
@@ -321,5 +330,30 @@ describe('Testing add Course Function', () => {
             },
         };
         await addCourse(req, res);
+    });
+    it('should handle internal server error', async () => {
+        const newCourse = {
+            topic: 'Mutiplication and Division',
+            description: 'Learn about simple division and multiplication for primary 6',
+            video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
+            category: 'Maths',
+        };
+
+        const req = { body: newCourse };
+        const res = {
+            status: function (code) {
+                this.statusCode = code;
+                return this;
+            },
+            json: function (data) {
+                this.data = data;
+            },
+        };
+
+        await addCourseInternalError(req, res);
+
+        // Expectations
+        expect(res.statusCode).to.equal(500);
+        expect(res.data.message).to.equal('Internal Server Error');
     });
 });
