@@ -10,10 +10,10 @@ async function writeFirestore(data, collectionName) {
     const docRef = await db.collection(collectionName).add(data);
     return docRef.id;
   } catch (err) {
-    console.error('Error writing to Firestore:', err);
-    throw err;
+    throw new Error('Internal Server Error'); 
   }
 }
+
 
 async function readFirestore(collectionName) {
   try {
@@ -55,15 +55,11 @@ async function createQuizWithQuestions(req, res) {
     const quizId = await writeFirestore(newQuiz.toFirestore(), 'quizzes');
 
     // Log the response before sending it
-    console.log('Response:', JSON.stringify({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } }));
+    //console.log('Response:', JSON.stringify({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } }));
 
     return res.status(201).json({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } });
 
   } catch (error) {
-    console.error(error);
-
-    // Log the response in case of an error
-    console.log('Response:', JSON.stringify({ message: 'Internal Server Error' }));
 
     return res.status(500).json({ message: 'Internal Server Error' });
   }
@@ -77,16 +73,13 @@ async function viewQuestionsPerQuiz(req, res) {
     const quizSnapshot = await db.collection('quizzes').doc(quizId).get();
 
     if (!quizSnapshot.exists) {
-      console.log('Setting status 404');
       return res.status(404).json({ message: 'Quiz not found' });
     }
 
     const quiz = quizSnapshot.data();
 
-    console.log('Setting status 200');
     return res.status(200).json({ questions: quiz.questions });
   } catch (error) {
-    console.error('Setting status 500:', error.message);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
