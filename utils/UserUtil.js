@@ -10,8 +10,9 @@ async function readFirestore(collectionName) {
     const snapshot = await db.collection(collectionName).get();
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (err) {
-    console.error('Error reading Firestore:', err);
-    throw err;
+    // console.error('Error reading Firestore:', err);
+    // throw err;
+    throw new Error ('Internal Server Error');
   }
 }
 
@@ -21,8 +22,9 @@ async function writeFirestore(data, collectionName) {
     const docRef = await db.collection(collectionName).add(data);
     return docRef.id;
   } catch (err) {
-    console.error('Error writing to Firestore:', err);
-    throw err;
+    // console.error('Error writing to Firestore:', err);
+    // throw err;
+    throw new Error ('Internal Server Error');
   }
 }
 
@@ -131,7 +133,7 @@ async function registerUser(req, res) {
     // Respond with a success message
     return res.status(201).json({ message: 'User registered successfully', userId });
   } catch (error) {
-    console.error('Error registering user:', error);
+    // console.error('Error registering user:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -207,62 +209,62 @@ async function login(req, res) {
   }
 }
 
-// Function to update user data by id
-async function updateUser(req, res) {
-  try {
-    const { id } = req.params;
-    const { username, email, password, fullName, role, contactNumber } =
-      req.body;
+// // Function to update user data by id
+// async function updateUser(req, res) {
+//   try {
+//     const { id } = req.params;
+//     const { username, email, password, fullName, role, contactNumber } =
+//       req.body;
 
-    // Read the existing users data
-    const users = await readJSON('utils/users.json');
+//     // Read the existing users data
+//     const users = await readJSON('utils/users.json');
 
-    // Find the user and update their details
-    const userIndex = users.findIndex((user) => user.id === id);
-    if (userIndex === -1) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+//     // Find the user and update their details
+//     const userIndex = users.findIndex((user) => user.id === id);
+//     if (userIndex === -1) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
 
-    // Check if the new username is already taken by another user
-    if (
-      username &&
-      users.some((user) => user.username === username && user.id !== id)
-    ) {
-      return res.status(400).json({ message: 'Username is already taken' });
-    }
+//     // Check if the new username is already taken by another user
+//     if (
+//       username &&
+//       users.some((user) => user.username === username && user.id !== id)
+//     ) {
+//       return res.status(400).json({ message: 'Username is already taken' });
+//     }
 
-    // Validate the password if it's being changed
-    if (password) {
-      validatePassword(
-        password,
-        username || users[userIndex].username,
-        email || users[userIndex].email
-      );
-      users[userIndex].passwordHash = await bcrypt.hash(password, saltRounds);
-    }
+//     // Validate the password if it's being changed
+//     if (password) {
+//       validatePassword(
+//         password,
+//         username || users[userIndex].username,
+//         email || users[userIndex].email
+//       );
+//       users[userIndex].passwordHash = await bcrypt.hash(password, saltRounds);
+//     }
 
-    // Update the user details
-    users[userIndex] = {
-      ...users[userIndex],
-      username: username || users[userIndex].username,
-      email: email || users[userIndex].email,
-      fullName: fullName || users[userIndex].fullName,
-      role: role || users[userIndex].role,
-      contactNumber: contactNumber || users[userIndex].contactNumber,
-    };
+//     // Update the user details
+//     users[userIndex] = {
+//       ...users[userIndex],
+//       username: username || users[userIndex].username,
+//       email: email || users[userIndex].email,
+//       fullName: fullName || users[userIndex].fullName,
+//       role: role || users[userIndex].role,
+//       contactNumber: contactNumber || users[userIndex].contactNumber,
+//     };
 
-    // Write the updated array back to the JSON file
-    await writeJSON(users, 'utils/users.json');
+//     // Write the updated array back to the JSON file
+//     await writeJSON(users, 'utils/users.json');
 
-    // Respond with the updated user details
-    const updatedUser = { ...users[userIndex] };
-    return res
-      .status(200)
-      .json({ message: 'User updated successfully', user: updatedUser });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-}
+//     // Respond with the updated user details
+//     const updatedUser = { ...users[userIndex] };
+//     return res
+//       .status(200)
+//       .json({ message: 'User updated successfully', user: updatedUser });
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// }
 
 // Function to delete a user
 async function deleteUser(req, res) {
@@ -304,6 +306,6 @@ module.exports = {
   getUser,
   login,
   validatePassword,
-  updateUser,
+  // updateUser,
   deleteUser,
 };
