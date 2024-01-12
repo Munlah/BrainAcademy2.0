@@ -71,14 +71,17 @@ async function createQuizWithQuestions(req, res) {
 
 async function viewQuestionsPerQuiz(req, res) {
   try {
-    const quizId = parseInt(req.params.quizId);
-    const allQuizzes = await readJSON('utils/quizzes.json');
-    const quiz = allQuizzes.find((quiz) => quiz.quizId === quizId);
+    const quizId = req.params.quizId;
 
-    if (!quiz) {
+    // Query Firestore directly for the specific quiz
+    const quizSnapshot = await db.collection('quizzes').doc(quizId).get();
+
+    if (!quizSnapshot.exists) {
       console.log('Setting status 404');
       return res.status(404).json({ message: 'Quiz not found' });
     }
+
+    const quiz = quizSnapshot.data();
 
     console.log('Setting status 200');
     return res.status(200).json({ questions: quiz.questions });
@@ -87,6 +90,7 @@ async function viewQuestionsPerQuiz(req, res) {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 
 //validate whether a question is answered correctly or not (quizId, questionId, userOptionInput)
 async function validateQuestionAnswer(req, res) {
@@ -143,26 +147,26 @@ async function validateQuestionAnswer(req, res) {
   }
 }
 
+
+
 // View all quizzes function by course
 async function viewAllQuizzesByCourse(req, res) {
   try {
     // Request the course from the URL
     const course = req.params.course;
 
-    // Read from the Firestore collection
-    const allQuizzes = await readFirestore('quizzes');
+    // Read the quizzes.json file
+    const allQuizzes = await readJSON('utils/quizzes.json');
 
-    // Filter quizzes by course
-    const quizzesByCourse = allQuizzes.filter(quiz => quiz.quizCourse === course);
-
-    if (quizzesByCourse.length === 0) {
-      return res.status(404).json({ message: 'No quizzes found' });
-    }
+    // Filter the quizzes by course
+    const quizzesByCourse = allQuizzes.filter(
+      (quiz) => quiz.quizCourse === course
+    );
 
     // Return the quizzes
     return res.status(200).json(quizzesByCourse);
   } catch (error) {
-    return res.status(500).json({ message: 'Error reading from Firestore' });
+    return res.status(404).json({ message: 'No quizzes found' });
   }
 }
 
@@ -200,30 +204,32 @@ async function editQuiz(req, res) {
 
 async function deleteQuiz(req, res) {
   try {
-    const quizId = req.params.quizId;
+    const quizId = parseInt(req.params.quizId);
 
-    const quizRef = db.collection('quizzes').doc(quizId);
+    const allQuizzes = await readJSON('utils/quizzes.json');
 
-    const doc = await quizRef.get();
+    const quizIndex = allQuizzes.findIndex((quiz) => quiz.quizId === quizId);
 
-    if (!doc.exists) {
+    if (quizIndex === -1) {
       return res.status(404).json({ message: 'Quiz not found' });
     }
 
-    await quizRef.delete();
+    allQuizzes.splice(quizIndex, 1);
+
+    await writeJSON(allQuizzes, 'utils/quizzes.json');
 
     return res.status(200).json({ message: 'Quiz deleted successfully' });
   } catch (error) {
     return res
       .status(500)
-      .json({ message: 'Error occurred attempting to delete quiz' });
+      .json({ message: 'Error occured attempted to delete quiz' });
   }
 }
 
 module.exports = {
 
   viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions,
-  viewAllQuizzesByCourse, editQuiz, deleteQuiz, readFirestore
+  viewAllQuizzesByCourse, editQuiz, deleteQuiz
 };
 
 
