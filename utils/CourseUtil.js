@@ -76,7 +76,19 @@ async function addCourse(req, res) {
 
     // Create a new Course instance
     const newCourse = new Course(courseId, topic, description, video, category);
+
+    //const courseId = Date.now() + Math.floor(Math.random() * 1000);
     
+    // // Create a new Course instance
+    // const newCourse = {
+    //   id: courseId,
+    //   topic,
+    //   description,
+    //   video, // Use the storage URL for the video link
+    //   category,
+    // };
+    // Create a new Quiz instance
+
     // Add the new course details to Firestore in the 'course' collection
     await writeFirestoreCourse(newCourse, 'courses');
 

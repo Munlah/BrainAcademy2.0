@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha './tests/**/*.js'"
-  },
+    "test": "nyc mocha tests/*.test.js"  },
   "author": "",
   "license": "ISC",
   "dependencies": {

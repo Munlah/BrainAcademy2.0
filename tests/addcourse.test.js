@@ -16,7 +16,7 @@ const adminMockInternalError = {
 
 const { addCourse: addCourseInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
-describe.only('Testing add Course Function', () => {
+describe('Testing add Course Function', () => {
     const course = [
         {
             topic: 'Mutiplication and Division',
