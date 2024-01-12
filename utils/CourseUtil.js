@@ -15,16 +15,17 @@ async function readFirestore(collectionName) {
   }
 }
 
-async function writeFirestore(data, collectionName) {
+async function writeFirestore(course) {
   try {
-    const coursesCollection = db.collection(collectionName);
-    await coursesCollection.add(data);
-    // console.log(`Course added to Firestore: ${courses.id}`);
+    const coursesCollection = db.collection('courses');
+    await coursesCollection.add(course.toJSON()); // Convert to plain object before adding
   } catch (error) {
     console.error('Error writing course to Firestore:', error);
     throw error;
   }
 }
+
+
 // Replace the existing readJSON and writeJSON functions with Firestore versions
 async function readFirestoreCourse() {
   return readFirestore('courses');
@@ -33,6 +34,7 @@ async function readFirestoreCourse() {
 async function writeFirestoreCourse(course) {
   return writeFirestore(course, 'courses');
 }
+
 async function addCourse(req, res) {
   try {
     const { topic, description, video, category } = req.body;
@@ -66,6 +68,11 @@ async function addCourse(req, res) {
     }
 
     // Simplify file path generation
+    const courseId = Date.now() + Math.floor(Math.random() * 1000);
+
+    // Create a new Course instance
+    const newCourse = new Course(courseId, topic, description, video, category);
+
     //const courseId = Date.now() + Math.floor(Math.random() * 1000);
     
     // // Create a new Course instance
@@ -77,7 +84,7 @@ async function addCourse(req, res) {
     //   category,
     // };
     // Create a new Quiz instance
-    const newCourse = new Course(topic, description, video, category);
+
     // Add the new course details to Firestore in the 'course' collection
     await writeFirestoreCourse(newCourse, 'courses');
 
