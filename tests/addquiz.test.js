@@ -17,7 +17,7 @@ describe('Testing Add Quiz Function', () => {
 
   it('should create a new quiz', async () => {
     const newQuiz = {
-      quizTitle: 'Test Quiz',
+      quizTitle: 'Test Quiz123',
       quizCourse: 'Test course',
       questions: [
         {
