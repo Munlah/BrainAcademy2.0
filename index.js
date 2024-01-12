@@ -11,7 +11,7 @@ app.use(express.static('./public'));
 
 // Quizzes
 const {
-  // viewQuestionsPerQuiz,
+  viewQuestionsPerQuiz,
   createQuizWithQuestions,
   // validateQuestionAnswer,
   viewAllQuizzesByCourse,
@@ -35,7 +35,7 @@ const { addCourse,
   // getCoursesByCategory 
 } = require('./utils/CourseUtil');
 
-// app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
+app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
 app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
 //app.get('/getcourse/:id', getCourse);
 //app.get('/getcourse', getAllCourses);
