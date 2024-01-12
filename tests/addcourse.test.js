@@ -42,7 +42,7 @@ describe.only('Testing add Course Function', () => {
                 topic: 'Mutiplication and Division',
                 description: 'Learn about simple division and multiplication for primary 6',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
-                category: 'Maths',
+                category: 'Maths',    
             },
         };
         const res = {
@@ -71,9 +71,10 @@ describe.only('Testing add Course Function', () => {
         const req = {
             body: {
                 topic: 'Mutiplication and Division',
-                description: 'Learn about simple multiplication for primary 6',
+                description: 'Learn about multiplication for primary 6',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: 'Maths',
+    
             },
         };
         const res = {
@@ -99,11 +100,39 @@ describe.only('Testing add Course Function', () => {
             console.error('Caught an error in the test:', error);
         }
     });
+      // Test case for failure if same topic is being added
+
+      it('Should fail if same description is being added', async () => {
+        const req = {
+            body: {
+                topic: 'Division',
+                description: 'Learn about simple division and multiplication for primary 6',
+                video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
+                category: 'Maths',    
+            },
+        };
+        const res = {
+            status: function (code) {
+                if (code !== 409) {
+                    console.error('Error status:', code);
+                    console.error('Error details:', this.errorDetails); // Log the error details
+                }
+                expect(code).to.equal(409);
+                return this;
+            },
+            json: function (data) {
+                if (data.message !== 'Description already exists') {
+                    expect(data.message).to.equal('Description already exists');
+                }
+            },
+        };
+        await addCourse(req, res);
+    });
     it('Should fail if topic is missing', async () => {
         const req = {
             body: {
                 topic: '',
-                description: 'Learn about simple division and multiplication for primary 4',
+                description: 'Learn about simple division and multiplication for primary 6',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: 'Maths',
             },
@@ -147,7 +176,7 @@ describe.only('Testing add Course Function', () => {
         const req = {
             body: {
                 topic: 'Division and Multiplication',
-                description: 'Learn about simple division and multiplication for primary 4',
+                description: 'Learn about simple division and multiplication for primary 6',
                 video: '',
                 category: 'Maths',
             },
@@ -169,7 +198,7 @@ describe.only('Testing add Course Function', () => {
         const req = {
             body: {
                 topic: 'Division and Multiplication',
-                description: 'Learn about simple division and multiplication for primary 4',
+                description: 'Learn about simple division and multiplication for primary 6',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: '',
             },
@@ -208,36 +237,13 @@ describe.only('Testing add Course Function', () => {
         await addCourse(req, res);
 
     });
-    // Test case for failure if same topic is being added
-
-    it('Should fail if same description is being added', async () => {
-        const req = {
-            body: {
-                topic: 'Division',
-                description: 'Learn about simple division and multiplication for primary 6',
-                video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
-                category: 'Maths',
-            },
-        };
-        const res = {
-            status: function (code) {
-                expect(code).to.equal(409);
-                return this;
-            },
-            json: function (data) {
-                if (data.message !== 'Description already exists') {
-                    expect(data.message).to.equal('Description already exists');
-                }
-            },
-        };
-        await addCourse(req, res);
-    });
+  
 
     it('Should fail validation for topic length exceeding 100 characters', async () => {
         const req = {
             body: {
                 topic: 'A'.repeat(101), // Creating a string with more than 100 characters
-                description: 'Valid description within the allowed length',
+                description: 'Learn about simple division and multiplication for primary 6',
                 video: 'https://youtu.be/valid-video-id',
                 category: 'ValidCategory',
             },
@@ -279,7 +285,7 @@ describe.only('Testing add Course Function', () => {
         const req = {
             body: {
                 topic: 'Valid Topic',
-                description: 'Valid description within the allowed length',
+                description: 'Learn about simple division and multiplication for primary 6',
                 video: 'https://youtu.be/valid-video-id',
                 category: 'A'.repeat(51), // Creating a string with more than 50 characters
             },
@@ -300,7 +306,7 @@ describe.only('Testing add Course Function', () => {
         const req = {
             body: {
                 topic: 'Valid Topic',
-                description: 'Valid description within the allowed length',
+                description: 'Learn about simple division and multiplication for primary 6',
                 video: 'invalid-video-url', // Invalid video URL format
                 category: 'ValidCategory',
             },
