@@ -29,9 +29,9 @@ const {
 } = require('./utils/UserUtil');
 
 // Courses
-const { addCourse, 
-  // getCourse, 
-  // getAllCourses, 
+const {
+   addCourse, 
+   // getAllCourses, 
   // getCoursesByCategory 
 } = require('./utils/CourseUtil');
 
