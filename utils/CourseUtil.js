@@ -2,7 +2,6 @@ const { Course } = require('../models/Course');
 const { admin } = require('../firebaseAdmin.js');
 const fs = require('fs').promises;
 
-// Get a reference to Firestore
 const db = admin.firestore();
 
 // Function to read data from Firestore
@@ -16,66 +15,31 @@ async function readFirestore(collectionName) {
   }
 }
 
-// Function to write data to Firestore
 async function writeFirestore(data, collectionName) {
   try {
-    const docRef = await db.collection(collectionName).add(data);
-    return docRef.id;
-  } catch (err) {
-    console.error('Error writing to Firestore:', err);
-    throw err;
+    const coursesCollection = db.collection(collectionName);
+    await coursesCollection.add(data);
+    // console.log(`Course added to Firestore: ${courses.id}`);
+  } catch (error) {
+    console.error('Error writing course to Firestore:', error);
+    throw error;
   }
 }
-
-// async function readFirestoreUsers() {
-//   return readFirestore('courses');
-// }
+// Replace the existing readJSON and writeJSON functions with Firestore versions
+async function readFirestoreCourse() {
+  return readFirestore('courses');
+}
 
 async function writeFirestoreCourse(course) {
   return writeFirestore(course, 'courses');
 }
-
-
-
-// Function to upload file to Firebase Storage
-// Updated uploadFile function to handle both images and videos
-async function uploadFile(filePath, storagePath, contentType) {
-  const bucket = admin.storage().bucket();
-
-  if (filePath.startsWith('http')) {
-    // If the file path is an online link, return it directly
-    return filePath;
-  }
-
-  // If the file path is a local file, proceed with the upload
-  await bucket.upload(filePath, {
-    destination: storagePath,
-    metadata: {
-      contentType: contentType,
-    },
-  });
-
-  // Get the public URL of the uploaded file
-  const publicUrl = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
-
-  return publicUrl;
-}
-
-
-// Updated addCourse function
 async function addCourse(req, res) {
   try {
-    const { topic, description, video, category, pic } = req.body;
+    const { topic, description, video, category } = req.body;
 
     // Validate input
-    if (!topic || !description || !video || !category || !pic) {
+    if (!topic || !description || !video || !category) {
       return res.status(400).json({ message: 'Incomplete course data' });
-    }
-
-    // Check for duplicate topic in Firestore
-    const existingCourses = await db.collection('course').where('topic', '==', topic).get();
-    if (!existingCourses.empty) {
-      return res.status(409).json({ message: 'Topic already exists' });
     }
 
     // Validate input length
@@ -83,6 +47,7 @@ async function addCourse(req, res) {
       return res.status(400).json({ message: 'Invalid input length' });
     }
 
+    // Validate video URL format
     const maxLength = 255;
     const videoUrlPattern = new RegExp(`^https?://\\S{1,${maxLength}}$`);
 
@@ -90,25 +55,30 @@ async function addCourse(req, res) {
       return res.status(400).json({ message: 'Invalid video URL format' });
     }
 
+    // Check for duplicate topic or description
+    const courses = await readFirestoreCourse();
+    if (courses.some(course => course.topic === topic)) {
+      return res.status(409).json({ message: 'Topic already exists' });
+    }
+
+    if (courses.some(course => course.description === description)) {
+      return res.status(409).json({ message: 'Description already exists' });
+    }
+
     // Simplify file path generation
     const courseId = Date.now() + Math.floor(Math.random() * 1000);
-
-    // Upload pic and video link to Firebase Storage
-    const picUrl = await uploadFile(pic, `courses/${courseId}/pic.jpg`, 'image/jpeg');
-    const videoUrl = await uploadFile(video, `courses/${courseId}/video.txt`, 'text/plain');
-
+    
     // Create a new Course instance
     const newCourse = {
       id: courseId,
       topic,
       description,
-      video: videoUrl, // Use the storage URL for the video link
+      video, // Use the storage URL for the video link
       category,
-      pic: picUrl,
     };
 
     // Add the new course details to Firestore in the 'course' collection
-    await writeFirestoreCourse(newCourse, 'course');
+    await writeFirestoreCourse(newCourse, 'courses');
 
     return res.status(201).json({ message: 'Add Course successful!' });
   } catch (error) {
