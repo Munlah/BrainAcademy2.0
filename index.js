@@ -13,8 +13,7 @@ app.use(express.static('./public'));
 const {
   viewQuestionsPerQuiz,
   createQuizWithQuestions,
-  // validateQuestionAnswer,
-  viewAllQuizzesByCourse,
+  validateUserAnswers, viewAllQuizzesByCourse,
   editQuiz,
   deleteQuiz,
 } = require('./utils/QuizzesUtil');
@@ -30,8 +29,8 @@ const {
 
 // Courses
 const {
-   addCourse, 
-   // getAllCourses, 
+  addCourse,
+  // getAllCourses, 
   // getCoursesByCategory 
 } = require('./utils/CourseUtil');
 
@@ -40,10 +39,16 @@ app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
 //app.get('/getcourse/:id', getCourse);
 //app.get('/getcourse', getAllCourses);
 
-// app.post(
-//   '/view-all-questions-for-quiz/:quizId/:questionId/:userOptionInput',
-//   validateQuestionAnswer
-// );
+app.post('/validate-answers', async (req, res) => {
+  try {
+    const { quizId, userAnswers } = req.body;
+    const result = await validateUserAnswers(quizId, userAnswers);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 app.post('/create-new-quiz', createQuizWithQuestions);
 // app.put('/edit-quiz/:quizId', editQuiz);
 app.delete('/delete-quiz/:quizId', deleteQuiz);

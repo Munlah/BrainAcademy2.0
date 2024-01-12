@@ -10,7 +10,7 @@ async function writeFirestore(data, collectionName) {
     const docRef = await db.collection(collectionName).add(data);
     return docRef.id;
   } catch (err) {
-    throw new Error('Internal Server Error'); 
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -86,59 +86,55 @@ async function viewQuestionsPerQuiz(req, res) {
 
 
 //validate whether a question is answered correctly or not (quizId, questionId, userOptionInput)
-async function validateQuestionAnswer(req, res) {
+async function validateUserAnswers(quizId, userAnswers) {
   try {
-    const quizId = parseInt(req.params.quizId);
-    const questionId = parseInt(req.params.questionId);
-    const userOptionInput = parseInt(req.params.userOptionInput);
+    // Fetch the quiz from Firestore
+    const quizDoc = await db.collection('quizzes').doc(quizId).get();
+    const quizData = quizDoc.data();
 
-    const allQuizzes = await readJSON('utils/quizzes.json'); //read contents of quizzes.json
-    //find the specific quiz by its quizId
-    const quiz = allQuizzes.find((quiz) => quiz.quizId === quizId);
-
-    //throw error if quizId is not found
-    if (!quiz) {
-      return res.status(404).json({ message: 'Quiz not found' });
+    if (!quizData) {
+      throw new Error('Quiz not found.');
     }
 
-    //find the specific question by the questionId
-    const question = quiz.questions.find(
-      (question) => question.questionId === questionId
-    );
+    const questions = quizData.questions;
 
-    //throw error if questionId is not found
-    if (!question) {
-      return res.status(404).json({ message: 'Question not found' });
+    // Validate the number of user answers
+    if (userAnswers.length !== questions.length) {
+      return {
+        error: 'Invalid number of answers.',
+      };
     }
 
-    //get the correct option for the question
-    const correctOption = question.correctOption;
-    console.log(correctOption);
+    let correctAnswers = 0;
+    const results = [];
 
-    //the actual value of the correct option from the options array
-    correctValue = '';
+    // Compare each user answer with the correct option
+    userAnswers.forEach((userAnswer, index) => {
+      const correctOption = questions[index].correctOption;
 
-    //display the correct value from the options array based on the correctOption
-    for (let i = 0; i < question.options.length; i++) {
-      if (i == correctOption) {
-        correctValue = question.options[i];
-      }
-    }
-
-    //actually checks if the user given input is accurate to the correctOption and if not it shows the correct answer
-    if (userOptionInput == correctOption) {
-      return res
-        .status(200)
-        .json({ message: 'Good job! This is the correct answer' });
-    } else {
-      return res.status(200).json({
-        message: 'Wrong answer! The correct answer was ' + correctValue,
+      results.push({
+        questionTitle: questions[index].questionTitle,
+        userAnswer,
+        correctOption: questions[index].options[correctOption],
+        isCorrect: userAnswer === correctOption,
       });
-    }
+
+      if (userAnswer === correctOption) {
+        correctAnswers++;
+      }
+    });
+
+    return {
+      totalQuestions: questions.length,
+      correctAnswers,
+      results,
+    };
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    console.error('Error validating user answers:', error);
+    throw new Error('Internal Server Error');
   }
 }
+
 
 
 
@@ -221,7 +217,7 @@ async function deleteQuiz(req, res) {
 
 module.exports = {
 
-  viewQuestionsPerQuiz, validateQuestionAnswer, createQuizWithQuestions,
+  viewQuestionsPerQuiz, validateUserAnswers, createQuizWithQuestions,
   viewAllQuizzesByCourse, editQuiz, deleteQuiz
 };
 
