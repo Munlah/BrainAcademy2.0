@@ -6,7 +6,7 @@ const { admin } = require('../firebaseAdmin.js');
 
 let getStub;
 
-describe.only('Testing add Course Function', () => {
+describe('Testing add Course Function', () => {
     const course = [
         {
 
