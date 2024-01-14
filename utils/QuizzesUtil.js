@@ -165,10 +165,12 @@ async function editQuiz(req, res) {
     const { quizId } = req.params;
     const { newQuizTitle, newQuizCourse, newQuestions } = req.body;
 
-    const allQuizzes = await readJSON('utils/quizzes.json');
-    const quizIndex = allQuizzes.findIndex(quiz => quiz.quizId === parseInt(quizId));
+    // Reference to the specific quiz in Firestore
+    const quizRef = db.collection('quizzes').doc(quizId);
 
-    if (quizIndex === -1) {
+    // Fetch the existing quiz
+    const doc = await quizRef.get();
+    if (!doc.exists) {
       return res.status(404).json({ message: 'Quiz not found' });
     }
 
@@ -177,18 +179,28 @@ async function editQuiz(req, res) {
       return res.status(400).json({ message: 'Missing required fields for editing quiz.' });
     }
 
-    // Proceed with updating since all required fields are present
-    allQuizzes[quizIndex].quizTitle = newQuizTitle;
-    allQuizzes[quizIndex].quizCourse = newQuizCourse;
-    allQuizzes[quizIndex].questions = newQuestions;
+    // Update the quiz data
+    const updatedQuiz = {
+      quizTitle: newQuizTitle,
+      quizCourse: newQuizCourse,
+      questions: newQuestions.map(question => ({
+        questionTitle: question.questionTitle,
+        options: question.options,
+        correctOption: question.correctOption
+      }))
+    };
 
-    await fs.writeFile('utils/quizzes.json', JSON.stringify(allQuizzes), 'utf8');
-    return res.status(200).json({ message: 'Quiz updated successfully', quiz: allQuizzes[quizIndex] });
+    // Update the quiz in Firestore
+    await quizRef.update(updatedQuiz);
+
+    return res.status(200).json({ message: 'Quiz updated successfully', quiz: updatedQuiz });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res
+      .status(500)
+      .json({ message: 'Error occurred attempting to edit quiz' });
   }
 }
+
 
 async function deleteQuiz(req, res) {
   try {

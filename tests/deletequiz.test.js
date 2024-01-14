@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const { admin } = require('../firebaseAdmin.js');
 const { createQuizWithQuestions, deleteQuiz } = require('../utils/QuizzesUtil');
 
-describe.only('Testing Delete Quiz Function', () => {
+describe('Testing Delete Quiz Function', () => {
     let getStub, deleteStub, statusStub, jsonStub;
 
     beforeEach(() => {

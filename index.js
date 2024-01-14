@@ -50,10 +50,10 @@ app.post('/validate-answers', async (req, res) => {
   }
 });
 app.post('/create-new-quiz', createQuizWithQuestions);
-// app.put('/edit-quiz/:quizId', editQuiz);
+app.put('/edit-quiz/:quizId', editQuiz);
 app.delete('/delete-quiz/:quizId', deleteQuiz);
 
-// app.post('/register', registerUser);
+app.post('/register', registerUser);
 // app.get('/getUser/:username', getUser);
 // app.post('/login', login);
 // app.put('/updateUser/:id', updateUser);
