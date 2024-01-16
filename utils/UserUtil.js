@@ -12,7 +12,7 @@ async function readFirestore(collectionName) {
   } catch (err) {
     // console.error('Error reading Firestore:', err);
     // throw err;
-    throw new Error ('Internal Server Error');
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -24,7 +24,7 @@ async function writeFirestore(data, collectionName) {
   } catch (err) {
     // console.error('Error writing to Firestore:', err);
     // throw err;
-    throw new Error ('Internal Server Error');
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -266,38 +266,52 @@ async function login(req, res) {
 //   }
 // }
 
-// Function to delete a user
+
 async function deleteUser(req, res) {
   const userId = req.params.id;
 
-  // Read the existing users from the JSON file
-  const users = await readJSON('utils/users.json');
-
-  // Find the index of the user with the given ID
-  const userIndex = users.findIndex((user) => user.id === userId);
-
-  // If the user with the given ID is not found, return an error
-  if (userIndex === -1) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-
-  // Remove the user from the array
-  users.splice(userIndex, 1);
-
-  // Write the updated array back to the JSON file
   try {
-    await fs.writeFile('utils/users.json', JSON.stringify(users), 'utf8');
-    return res.status(200).json({ message: 'User deleted successfully' });
-  } catch (writeError) {
-    // Log the error for testing purposes
-    console.error('Error writing to users.json:', writeError);
+    // Read the existing users from Firestore
+    const users = await readFirestoreUsers();
 
-    // Return the error response for testing purposes
-    return res
-      .status(500)
-      .json({ message: 'Internal server error while deleting user' });
+    // Find the index of the user with the given ID
+    const userIndex = users.findIndex((user) => user.id === userId);
+
+    // If the user with the given ID is not found, return an error
+    if (userIndex === -1) {
+      console.error(`User not found: ${userId}`);
+      if (res && res.status && res.json) {
+        return res.status(404).json({ message: 'User not found' });
+      } else {
+        console.error('Error: res is undefined or missing required methods');
+        return; // or return some default response
+      }
+    }
+
+    // Remove the user from Firestore
+    await db.collection('users').doc(userId).delete();
+
+    // Check if res.json exists before using it
+    if (res && res.json) {
+      return res.status(200).json({ message: 'User deleted successfully' });
+    } else {
+      console.error('Error: res.json is undefined');
+      return; // or return some default response
+    }
+  } catch (error) {
+    // Log the error for debugging purposes
+    console.error('Error deleting user:', error);
+
+    // Return the error response
+    if (res && res.status && res.json) {
+      return res.status(500).json({ message: 'Internal server error while deleting user' });
+    } else {
+      console.error('Error: res is undefined or missing required methods');
+      return; // or return some default response
+    }
   }
 }
+
 
 module.exports = {
   readFirestoreUsers,
