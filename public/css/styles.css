@@ -81,3 +81,25 @@ p {
 .nav-container span {
     color: white;
 }
+
+.all-quiz-main-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left:40px;
+    margin-right:40px;
+    margin-top:20px;
+}
+
+.normal-button {
+    background-color: #344F98;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.normal-button:hover {
+    background-color: #233566;
+}
