@@ -115,21 +115,22 @@ async function getAllCourses(req, res) {
 
 async function getCourseById(req, res) {
   try {
-    const courseId = req.params.id; // Assuming you're passing the course ID as a parameter in the request
+    const courseId = req.params.id;
 
     // Validate if courseId is provided
     if (!courseId) {
       return res.status(400).json({ message: 'Course ID is missing in the request parameters' });
     }
 
-    const courses = await readFirestoreCourse();
+    // Query Firestore to find the course with the specified ID
+    const courseSnapshot = await db.collection('courses').doc(courseId).get();
 
-    // Find the course with the specified ID
-    const foundCourse = courses.find(course => String(course.id) === courseId);
-
-    if (!foundCourse) {
+    // Check if the course exists
+    if (!courseSnapshot.exists) {
       return res.status(404).json({ message: 'Course not found' });
     }
+
+    const foundCourse = { id: courseSnapshot.id, ...courseSnapshot.data() };
 
     return res.status(200).json({ course: foundCourse });
   } catch (error) {
@@ -137,6 +138,7 @@ async function getCourseById(req, res) {
     return res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 }
+
 module.exports = {
   addCourse,
   getAllCourses,
