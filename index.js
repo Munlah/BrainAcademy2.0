@@ -30,7 +30,7 @@ const {
 // Courses
 const {
   addCourse,
-  // getAllCourses, 
+  getAllCourses, 
   // getCoursesByCategory 
 } = require('./utils/CourseUtil');
 
@@ -59,7 +59,8 @@ app.post('/login', login);
 // app.put('/updateUser/:id', updateUser);
 // app.delete('/deleteUser/:id', deleteUser);
 
-// app.post('/addCourse', addCourse);
+app.post('/addCourse', addCourse);
+app.get('/getAllCourses', getAllCourses);
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/' + startPage);
