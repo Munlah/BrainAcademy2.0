@@ -144,18 +144,20 @@ async function viewAllQuizzesByCourse(req, res) {
     // Request the course from the URL
     const course = req.params.course;
 
-    // Read the quizzes.json file
-    const allQuizzes = await readJSON('utils/quizzes.json');
+    // Read from the Firestore collection
+    const allQuizzes = await readFirestore('quizzes');
 
-    // Filter the quizzes by course
-    const quizzesByCourse = allQuizzes.filter(
-      (quiz) => quiz.quizCourse === course
-    );
+    // Filter quizzes by course
+    const quizzesByCourse = allQuizzes.filter(quiz => quiz.quizCourse === course);
+
+    if (quizzesByCourse.length === 0) {
+      return res.status(404).json({ message: 'No quizzes found' });
+    }
 
     // Return the quizzes
     return res.status(200).json(quizzesByCourse);
   } catch (error) {
-    return res.status(404).json({ message: 'No quizzes found' });
+    return res.status(500).json({ message: 'Error reading from Firestore' });
   }
 }
 
