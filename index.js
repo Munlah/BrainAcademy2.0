@@ -55,7 +55,7 @@ app.delete('/delete-quiz/:quizId', deleteQuiz);
 
 app.post('/register', registerUser);
 // app.get('/getUser/:username', getUser);
-// app.post('/login', login);
+app.post('/login', login);
 // app.put('/updateUser/:id', updateUser);
 // app.delete('/deleteUser/:id', deleteUser);
 

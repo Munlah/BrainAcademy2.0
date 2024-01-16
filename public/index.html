@@ -1,12 +1,37 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>DVOPS - Resource Management Web App</title>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css">
 </head>
 
 <body>
-    Welcome to my Resource Management Web Application. In this application, you will
-    be able to perform user related operations and manage resources.
+    <nav class="nav-container">
+        <div style="display: flex; align-items: center;">
+            <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%;">
+            <span style="font-size: 30px;">BA</span>
+        </div>
+        <ul>
+            <li><a href="#">Login</a></li>
+            <span>|</span>
+            <li><a href="#">Register</a></li>
+        </ul>
+    </nav>
+    <div class="login-container">
+        <h1>Welcome to Brain Academy!</h1>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter Username">
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter Password">
+            <br>
+            <div id="error" style="display: none; color: red;"></div>
+            <br>
+            <button type="submit">LOGIN</button>
+        </form>
+    </div>
+    <script src="./js/login.js"></script>
 </body>
 
 </html>
