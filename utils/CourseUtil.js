@@ -22,17 +22,17 @@ async function readFirestore(collectionName) {
 }
 
 
-async function writeFirestore(course) {
+async function writeFirestore(data, collectionName) {
   try {
-    const coursesCollection = db.collection('courses');
-    await coursesCollection.add(course.toJSON()); // Convert to plain object before adding
-  } catch (error) {
-    // console.error('Error writing course to Firestore:', error);
-    // throw error;
-    throw new Error('Internal Server Error');
-
+    const docRef = await db.collection(collectionName).add(data);
+    return docRef.id;
+  } catch (err) {
+    // console.error('Error writing to Firestore:', err);
+    // throw err;
+    throw new Error ('Internal Server Error');
   }
 }
+
 
 
 // Replace the existing readJSON and writeJSON functions with Firestore versions
@@ -41,7 +41,7 @@ async function readFirestoreCourse() {
 }
 
 async function writeFirestoreCourse(course) {
-  return writeFirestore(course, 'courses');
+  return writeFirestore(course,'courses' );
 }
 
 async function addCourse(req, res) {
@@ -76,28 +76,23 @@ async function addCourse(req, res) {
       return res.status(409).json({ message: 'Description already exists' });
     }
 
-    // Simplify file path generation
-    const courseId = Date.now() + Math.floor(Math.random() * 1000);
-
     // Create a new Course instance
-    const newCourse = new Course(courseId, topic, description, video, category);
+    //const newCourse = new Course(topic, description, video, category);
+    // Create new User instance
+    const newCourse = {
+      topic,
+      description,
+      video,
+      category
+    };
 
-    //const courseId = Date.now() + Math.floor(Math.random() * 1000);
-
-    // // Create a new Course instance
-    // const newCourse = {
-    //   id: courseId,
-    //   topic,
-    //   description,
-    //   video, // Use the storage URL for the video link
-    //   category,
-    // };
-    // Create a new Quiz instance
+    // Adding the new user to Firestore
+    const courseId = await writeFirestoreCourse(newCourse);
 
     // Add the new course details to Firestore in the 'course' collection
-    await writeFirestoreCourse(newCourse, 'courses');
+    //await writeFirestoreCourse(newCourse);
 
-    return res.status(201).json({ message: 'Add Course successful!' });
+    return res.status(201).json({ message: 'Add Course successful!' , courseId});
   } catch (error) {
     // console.error('Error in addCourse:', error);
     return res.status(500).json({ message: 'Internal Server Error', error: error.message });
