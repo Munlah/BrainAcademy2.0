@@ -134,7 +134,6 @@ async function validateUserAnswers(quizId, userAnswers) {
 
 
 
-
 // View all quizzes function by course
 async function viewAllQuizzesByCourse(req, res) {
   try {
