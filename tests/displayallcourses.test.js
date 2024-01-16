@@ -39,7 +39,7 @@ afterEach(() => {
 });
 const { getAllCourses: getAllCourseInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
-describe('Testing getAllCourses Function', () => {
+describe('Testing Get All Courses Function', () => {
 
 
     it('Should return all courses', async () => {

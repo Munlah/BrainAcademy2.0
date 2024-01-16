@@ -31,7 +31,7 @@ const {
 const {
   addCourse,
   getAllCourses, 
-  // getCoursesByCategory 
+  getCourseById
 } = require('./utils/CourseUtil');
 
 app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
@@ -61,6 +61,9 @@ app.post('/login', login);
 
 app.post('/addCourse', addCourse);
 app.get('/getAllCourses', getAllCourses);
+app.get('/getcourse/:id', getCourseById);
+
+
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/' + startPage);

@@ -13,7 +13,7 @@ async function readFirestore(collectionName) {
 
     // Check if the error is due to a missing document
     if (err.code === 'not-found') {
-     //console.error('Document not found');
+      //console.error('Document not found');
       return [];
     }
 
@@ -118,9 +118,34 @@ async function getAllCourses(req, res) {
   }
 }
 
+async function getCourseById(req, res) {
+  try {
+    const courseId = req.params.id; // Assuming you're passing the course ID as a parameter in the request
+
+    // Validate if courseId is provided
+    if (!courseId) {
+      return res.status(400).json({ message: 'Course ID is missing in the request parameters' });
+    }
+
+    const courses = await readFirestoreCourse();
+
+    // Find the course with the specified ID
+    const foundCourse = courses.find(course => String(course.id) === courseId);
+
+    if (!foundCourse) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    return res.status(200).json({ course: foundCourse });
+  } catch (error) {
+    // Handle errors
+    return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+}
 module.exports = {
   addCourse,
   getAllCourses,
+  getCourseById, // Add the new function to exports
   writeFirestore,
   readFirestore
 };
