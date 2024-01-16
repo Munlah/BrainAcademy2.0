@@ -4,18 +4,23 @@ const fs = require('fs').promises;
 
 const db = admin.firestore();
 
-// Function to read data from Firestore
 async function readFirestore(collectionName) {
   try {
     const snapshot = await db.collection(collectionName).get();
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (err) {
-    // console.error('Error reading Firestore:', err);
-    // throw err;
-    throw new Error('Internal Server Error'); 
+    //console.error('Error reading Firestore:', err);  // Uncomment for debugging
 
+    // Check if the error is due to a missing document
+    if (err.code === 'not-found') {
+     //console.error('Document not found');
+      return [];
+    }
+
+    throw new Error('Internal Server Error');
   }
 }
+
 
 async function writeFirestore(course) {
   try {
@@ -24,7 +29,7 @@ async function writeFirestore(course) {
   } catch (error) {
     // console.error('Error writing course to Firestore:', error);
     // throw error;
-    throw new Error('Internal Server Error'); 
+    throw new Error('Internal Server Error');
 
   }
 }
@@ -78,7 +83,7 @@ async function addCourse(req, res) {
     const newCourse = new Course(courseId, topic, description, video, category);
 
     //const courseId = Date.now() + Math.floor(Math.random() * 1000);
-    
+
     // // Create a new Course instance
     // const newCourse = {
     //   id: courseId,
@@ -98,12 +103,28 @@ async function addCourse(req, res) {
     return res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 }
+async function getAllCourses(req, res) {
+  try {
+    const courses = await readFirestoreCourse();
+
+    if (courses.length === 0) {
+      return res.status(200).json({ message: 'No courses available' });
+    }
+
+    return res.status(200).json({ courses });
+  } catch (error) {
+    //console.error('Error in getAllCourses:', error);
+    return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+}
 
 module.exports = {
   addCourse,
+  getAllCourses,
   writeFirestore,
   readFirestore
 };
+
 
 
 // async function getCourse(req, res) {
