@@ -92,9 +92,6 @@ async function validateUserAnswers(quizId, userAnswers) {
     const quizDoc = await db.collection('quizzes').doc(quizId).get();
     const quizData = quizDoc.data();
 
-    if (!quizData) {
-      throw new Error('Quiz not found.');
-    }
 
     const questions = quizData.questions;
 
@@ -130,7 +127,7 @@ async function validateUserAnswers(quizId, userAnswers) {
       results,
     };
   } catch (error) {
-    console.error('Error validating user answers:', error);
+    // console.error('Error validating user answers:', error);
     throw new Error('Internal Server Error');
   }
 }
