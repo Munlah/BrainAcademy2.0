@@ -23,6 +23,8 @@ const { registerUser: registerUserInternalError } = proxyquire(
 );
 
 describe("Testing Register User Function", () => {
+  let req;
+
   beforeEach(() => {
     // Stub Firestore's get method to simulate reading users
     getStub = sinon
@@ -44,14 +46,23 @@ describe("Testing Register User Function", () => {
     hashStub = sinon.stub(bcrypt, "hash").resolves("hashedPassword");
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     getStub.restore();
     addStub.restore();
     hashStub.restore();
+
+    if (req.body.username) {
+      const usersCollection = admin.firestore().collection("users");
+      const snapshot = await usersCollection.where('username', '==', req.body.username).get();
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        await usersCollection.doc(doc.id).delete();
+      }
+    }
   });
 
   it("Should register a user successfully", async () => {
-    const req = {
+    req = {
       body: {
         username: "newuser",
         email: "newuser@gmail.com",
@@ -76,7 +87,7 @@ describe("Testing Register User Function", () => {
 
   const testMissingField = (fieldName) => {
     it(`Should fail when ${fieldName} is missing`, async () => {
-      const req = {
+      req = {
         body: {
           username: "newuser",
           email: "newuser@gmail.com",
@@ -122,15 +133,17 @@ describe("Testing Register User Function", () => {
 
   it("Should fail when user already exists", async () => {
     const existingUser = {
-      username: "jennieeain2",
-      email: "jennieeain2@gmail.com",
+      username: "ForTesting",
+      email: "ForTesting@gmail.com",
       password: "Ilovefood123@",
-      fullName: "Jennie Eain",
+      fullName: "Test1112",
       role: "student",
-      contactNumber: "12345678",
+      contactNumber: "12345678"
     };
 
-    const req = {
+    await admin.firestore().collection("users").add(existingUser);
+
+    req = {
       body: {
         username: existingUser.username,
         email: "anotheruser@gmail.com",
@@ -157,10 +170,18 @@ describe("Testing Register User Function", () => {
 
     expect(status).to.equal(400);
     expect(responseData).to.deep.equal({ message: "User already exists" });
+
+    // Delete the user
+    const usersCollection = admin.firestore().collection("users");
+    const snapshot = await usersCollection.where('username', '==', existingUser.username).get();
+    if (!snapshot.empty) {
+      const doc = snapshot.docs[0];
+      await usersCollection.doc(doc.id).delete();
+    }
   });
 
   it("Should hash the password before storing", async () => {
-    const req = {
+    req = {
       body: {
         username: "hashpwduser",
         email: "hashpwduser@gmail.com",
@@ -189,7 +210,7 @@ describe("Testing Register User Function", () => {
 
   const testInvalidPassword = (password, expectedErrorMessage) => {
     it(`Should return 400 status with specific error message for invalid password: "${password}"`, async () => {
-      const req = {
+      req = {
         body: {
           username: "invaliduser",
           email: "invaliduser@gmail.com",
