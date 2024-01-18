@@ -141,6 +141,8 @@ describe("Testing Register User Function", () => {
       contactNumber: "12345678"
     };
 
+    await admin.firestore().collection("users").add(existingUser);
+
     req = {
       body: {
         username: existingUser.username,
