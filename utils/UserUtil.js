@@ -203,7 +203,7 @@ async function login(req, res) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    return res.status(200).json({ message: 'Login successful!' });
+    return res.status(200).json({ message: 'Login successful!', role: user.role });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
   }

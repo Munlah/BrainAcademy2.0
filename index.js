@@ -1,6 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 var app = express();
+
+app.use(cors());
 
 const PORT = process.env.PORT || 5050;
 var startPage = 'index.html';
@@ -30,7 +33,7 @@ const {
 // Courses
 const {
   addCourse,
-  getAllCourses, 
+  getAllCourses,
   getCourseById
 } = require('./utils/CourseUtil');
 
