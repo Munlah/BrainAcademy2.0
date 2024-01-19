@@ -3,7 +3,8 @@ const { expect } = require('chai');
 const fs = require('fs').promises;
 const sinon = require('sinon');
 const { admin } = require('../firebaseAdmin.js');
-const { viewAllQuizzesByCourse, readFirestore } = require('../utils/QuizzesUtil');
+const { viewAllQuizzesByCourse, viewAllQuizzes, readFirestore } = require('../utils/QuizzesUtil');
+const QuizzesUtil = require('../utils/QuizzesUtil');
 
 let getStub;
 
@@ -26,6 +27,7 @@ beforeEach(() => {
 
 afterEach(() => {
     getStub.restore();
+    sinon.restore();
 });
 
 describe('Testing Display All Quizzes by Course Function', () => {
@@ -54,13 +56,13 @@ describe('Testing Display All Quizzes by Course Function', () => {
     it('should return 500 if an error occurs', async () => {
         const req = { params: { course: 'Your Quiz Course' } };
         const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
-    
+
         // Make the readFirestore function throw an error
         const readFirestoreStub = sinon.stub().throws(new Error('Error reading from Firestore'));
-    
+
         try {
             await viewAllQuizzesByCourse(req, res);
-    
+
             expect(res.status.calledOnceWith(500)).to.be.true;
             expect(res.json.calledOnceWith({ message: 'Error reading from Firestore' })).to.be.true;
         } catch (error) {
@@ -70,6 +72,60 @@ describe('Testing Display All Quizzes by Course Function', () => {
             sinon.restore();
         }
     });
-    
 
+
+});
+
+describe('Testing View All Quizzes Function', () => {
+
+    it('should return all quizzes', async () => {
+        const req = {};
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+
+        await viewAllQuizzes(req, res);
+
+        expect(res.status.calledOnceWith(200)).to.be.true;
+        expect(res.json.calledOnce).to.be.true;
+        expect(Array.isArray(res.json.getCall(0).args[0])).to.be.true;
+    });
+
+    it('should return 404 if no quizzes are found', async () => {
+        const req = {};
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+    
+        // Make the readFirestore function return an empty array
+        const readFirestoreStub = sinon.stub(QuizzesUtil, 'readFirestore').returns(Promise.resolve([]));
+    
+        try {
+            await QuizzesUtil.viewAllQuizzes(req, res);
+    
+            expect(res.status.calledOnceWith(404)).to.be.true;
+            expect(res.json.calledOnceWith({ message: 'No quizzes found' })).to.be.true;
+        } catch (error) {
+    
+        } finally {
+            // Restore the original function after the test
+            sinon.restore();
+        }
+    });
+
+    it('should return 500 if an error occurs', async () => {
+        const req = {};
+        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+
+        // Make the readFirestore function throw an error
+        const readFirestoreStub = sinon.stub().throws(new Error('Error reading from Firestore'));
+
+        try {
+            await viewAllQuizzes(req, res);
+
+            expect(res.status.calledOnceWith(500)).to.be.true;
+            expect(res.json.calledOnceWith({ message: 'Error reading from Firestore' })).to.be.true;
+        } catch (error) {
+
+        } finally {
+            // Restore the original function after the test
+            sinon.restore();
+        }
+    });
 });

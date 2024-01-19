@@ -234,7 +234,7 @@ async function deleteQuiz(req, res) {
 module.exports = {
 
   viewQuestionsPerQuiz, validateUserAnswers, createQuizWithQuestions,
-  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes
+  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes, readFirestore
 };
 
 
