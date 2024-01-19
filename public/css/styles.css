@@ -103,3 +103,27 @@ p {
 .normal-button:hover {
     background-color: #233566;
 }
+
+.quiz {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+  
+  .edit-button, .delete-button {
+    margin-left: 5px;
+  }
+
+  .delete-button{
+    color: white;
+    background-color: red;
+  }
+
+  #display-all-courses {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 1.8%;
+  }
+
+  .course-button {
+    margin: 5px;
+  }

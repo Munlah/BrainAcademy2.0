@@ -1,20 +1,97 @@
-//function to get all quizzes
-function getQuizzesData() { 
-  var request = new XMLHttpRequest(); 
-  request.open('GET', movie_url, true); 
-  //This function will be called when data returns from the web api 
-  request.onload = function () { 
-      //get all the movies records into our movie array 
-      movie_array = JSON.parse(request.responseText); 
-      //Fetch the comments as well 
-      fetchComments(); 
-      console.log(movie_array) // output to console 
-      //call the function so as to display all movies tiles for "Now Showing" 
-      displayMovies(category); 
-  }; 
-  //This command starts the calling of the movies web api 
-  request.send(); 
-} 
+function fetchAndDisplayQuizzes() {
+  fetch('http://localhost:5050/get-all-quizzes')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(quizzes => {
+      console.log(quizzes); 
 
+      const container = document.getElementById('display-all-quizzes');
 
-//function to display quizzes in list view
+      container.innerHTML = '';
+
+      const template = document.getElementById('quiz-template');
+
+      quizzes.forEach(quiz => {
+        const quizElement = template.content.cloneNode(true);
+
+        quizElement.querySelector('.quiz-title').textContent = quiz.quizTitle;
+
+        container.appendChild(quizElement);
+      });
+    })
+    .catch(e => console.log('There was a problem with your fetch operation: ' + e.message));
+}
+
+fetchAndDisplayQuizzes();
+
+function fetchAndDisplayCourses() {
+  fetch('http://localhost:5050/getAllCourses')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(courses => {
+      const container = document.getElementById('display-all-courses');
+
+      const template = document.getElementById('course-template');
+
+      const allButtonElement = template.content.cloneNode(true);
+      const allButton = allButtonElement.querySelector('.course-button');
+      allButton.textContent = 'All';
+      allButton.addEventListener('click', fetchAndDisplayQuizzes);
+      container.appendChild(allButtonElement);
+
+      courses.courses.forEach(course => {
+        const courseElement = template.content.cloneNode(true);
+
+        const courseButton = courseElement.querySelector('.course-button');
+        courseButton.textContent = course.category;
+
+        courseButton.addEventListener('click', () => fetchAndDisplayQuizzesByCourse(course.category));
+
+        container.appendChild(courseElement);
+      });
+    })
+    .catch(e => console.log('There was a problem with your fetch operation: ' + e.message));
+}
+
+fetchAndDisplayCourses();
+
+function fetchAndDisplayQuizzesByCourse(course) {
+  fetch(`http://localhost:5050/view-all-quizzes/${course}`)
+    .then(response => {
+      if (!response.ok) {
+        if (response.status === 404) {
+          const container = document.getElementById('display-all-quizzes');
+          container.innerHTML = '<p class="no-quizzes-message">No quizzes found for this course</p>';
+                } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      } else {
+        return response.json();
+      }
+    })
+    .then(quizzes => {
+      if (quizzes) {
+        const container = document.getElementById('display-all-quizzes');
+        container.innerHTML = '';
+
+        const template = document.getElementById('quiz-template');
+
+        quizzes.forEach(quiz => {
+          const quizElement = template.content.cloneNode(true);
+
+          quizElement.querySelector('.quiz-title').textContent = quiz.quizTitle;
+
+          container.appendChild(quizElement);
+        });
+      }
+    })
+    .catch(e => console.log('There was a problem with your fetch operation: ' + e.message));
+}

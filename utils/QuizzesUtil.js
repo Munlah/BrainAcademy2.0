@@ -132,26 +132,35 @@ async function validateUserAnswers(quizId, userAnswers) {
   }
 }
 
-
-
 // View all quizzes function by course
 async function viewAllQuizzesByCourse(req, res) {
   try {
-    // Request the course from the URL
     const course = req.params.course;
 
-    // Read from the Firestore collection
     const allQuizzes = await readFirestore('quizzes');
 
-    // Filter quizzes by course
     const quizzesByCourse = allQuizzes.filter(quiz => quiz.quizCourse === course);
 
     if (quizzesByCourse.length === 0) {
       return res.status(404).json({ message: 'No quizzes found' });
     }
 
-    // Return the quizzes
     return res.status(200).json(quizzesByCourse);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error reading from Firestore' });
+  }
+}
+
+// View all quizzes function
+async function viewAllQuizzes(req, res) {
+  try {
+    const allQuizzes = await readFirestore('quizzes');
+
+    if (allQuizzes.length === 0) {
+      return res.status(404).json({ message: 'No quizzes found' });
+    }
+
+    return res.status(200).json(allQuizzes);
   } catch (error) {
     return res.status(500).json({ message: 'Error reading from Firestore' });
   }
@@ -225,7 +234,7 @@ async function deleteQuiz(req, res) {
 module.exports = {
 
   viewQuestionsPerQuiz, validateUserAnswers, createQuizWithQuestions,
-  viewAllQuizzesByCourse, editQuiz, deleteQuiz
+  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes
 };
 
 
