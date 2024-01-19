@@ -62,33 +62,38 @@ p {
     align-items: center;
     background-color: #344F98;
 }
+
 .nav-container img {
     height: 10px;
     margin-left: 1%;
 }
+
 .nav-container ul {
     list-style-type: none;
     margin-right: 1%;
 }
+
 .nav-container ul li {
     display: inline;
     margin: 0 10px;
 }
+
 .nav-container a {
     text-decoration: none;
     color: white;
 }
+
 .nav-container span {
     color: white;
 }
 
-.all-quiz-main-div{
+.all-quiz-main-div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left:40px;
-    margin-right:40px;
-    margin-top:20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 20px;
 }
 
 .normal-button {
@@ -107,23 +112,61 @@ p {
 .quiz {
     margin-left: 2%;
     margin-right: 2%;
-  }
-  
-  .edit-button, .delete-button {
-    margin-left: 5px;
-  }
+}
 
-  .delete-button{
+.edit-button,
+.delete-button {
+    margin-left: 5px;
+}
+
+.delete-button {
     color: white;
     background-color: red;
-  }
+}
 
-  #display-all-courses {
+#display-all-courses {
     display: flex;
     flex-wrap: wrap;
     margin-left: 1.8%;
-  }
+}
 
-  .course-button {
+.course-button {
     margin: 5px;
-  }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #000;
+    background-color: white;
+    padding: 2.5%;
+}
+
+.modal-content p {
+    font-size: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+#cancel-delete {
+    background-color: grey;
+}

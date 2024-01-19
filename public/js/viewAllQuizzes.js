@@ -1,4 +1,6 @@
 function fetchAndDisplayQuizzes() {
+  let quizToDelete = null;
+
   fetch('http://localhost:5050/get-all-quizzes')
     .then(response => {
       if (!response.ok) {
@@ -7,8 +9,6 @@ function fetchAndDisplayQuizzes() {
       return response.json();
     })
     .then(quizzes => {
-      console.log(quizzes); 
-
       const container = document.getElementById('display-all-quizzes');
 
       container.innerHTML = '';
@@ -19,6 +19,38 @@ function fetchAndDisplayQuizzes() {
         const quizElement = template.content.cloneNode(true);
 
         quizElement.querySelector('.quiz-title').textContent = quiz.quizTitle;
+
+        const deleteButton = quizElement.querySelector('.delete-button');
+        deleteButton.id = quiz.id; 
+
+        deleteButton.addEventListener('click', () => {
+          quizToDelete = quiz.id;
+
+          const modal = document.getElementById('myModal');
+          const confirmDeleteButton = document.getElementById('confirm-delete');
+          const cancelDeleteButton = document.getElementById('cancel-delete');
+
+          modal.style.display = 'block';
+
+          confirmDeleteButton.addEventListener('click', () => {
+            fetch(`http://localhost:5050/delete-quiz/${quizToDelete}`, {
+              method: 'DELETE',
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                fetchAndDisplayQuizzes();
+              })
+              .catch(e => console.log('There was a problem with your fetch operation: ' + e.message));
+
+            modal.style.display = 'none';
+          });
+
+          cancelDeleteButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+          });
+        });
 
         container.appendChild(quizElement);
       });
@@ -70,7 +102,7 @@ function fetchAndDisplayQuizzesByCourse(course) {
         if (response.status === 404) {
           const container = document.getElementById('display-all-quizzes');
           container.innerHTML = '<p class="no-quizzes-message">No quizzes found for this course</p>';
-                } else {
+        } else {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
       } else {
