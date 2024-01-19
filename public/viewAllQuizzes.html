@@ -1,19 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>View All uizzes Admin</title>
-    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-  </head>
-  <body>
-    <!-- View all quizzes -->
-    <div class="all-quiz-main-div">
-      <h3>All Quizzes</h3>
-      <button style="border-radius: 4px" class="normal-button">Add Quiz</button>
-      <div id="display-all-quizzes">
 
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View All uizzes Admin</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+</head>
+
+<body>
+  <nav class="nav-container">
+    <div style="display: flex; align-items: center;">
+      <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%;">
+      <span style="font-size: 30px;">BA</span>
     </div>
-  </body>
+  </nav>
+  <div class="all-quiz-main-div">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <h1>All Quizzes</h1>
+      <button style="border-radius: 4px" class="normal-button">Add Quiz</button>
+    </div>
+  </div>
+  <div id="display-all-courses"></div>
+
+  <template id="course-template">
+    <div class="course">
+      <button class="course-button"></button>
+    </div>
+  </template>
+
+  <div id="display-all-quizzes">
+  </div>
+
+  <template id="quiz-template">
+    <div class="quiz">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="quiz-title"></h4>
+        <div>
+          <button class="edit-button">Edit</button>
+          <button class="delete-button">Delete</button>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </template>
+  <script src="./js/viewAllQuizzes.js"></script>
+</body>
+
 </html>
