@@ -170,3 +170,39 @@ p {
 #cancel-delete {
     background-color: grey;
 }
+
+.password-errors ul {
+    color: red;
+    font-size: smaller;
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+
+.register-container {
+    width: 300px;
+    padding: 50px;
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field {
+    flex-grow: 1;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 9px;
+    right: 10px;
+    cursor: pointer;
+    color: #777;
+}
