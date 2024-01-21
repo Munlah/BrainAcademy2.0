@@ -156,10 +156,6 @@ async function viewAllQuizzes(req, res) {
   try {
     const allQuizzes = await readFirestore('quizzes');
 
-    if (allQuizzes.length === 0) {
-      return res.status(404).json({ message: 'No quizzes found' });
-    }
-
     return res.status(200).json(allQuizzes);
   } catch (error) {
     return res.status(500).json({ message: 'Error reading from Firestore' });
