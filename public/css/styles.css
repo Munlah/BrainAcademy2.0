@@ -157,6 +157,10 @@ p {
     padding: 2.5%;
 }
 
+.modal-content.show{
+    opacity: 1;
+}
+
 .modal-content p {
     font-size: 20px;
 }
@@ -206,3 +210,47 @@ p {
     cursor: pointer;
     color: #777;
 }
+
+/* add quiz css */
+.quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .questions-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Style for each question container */
+  .question-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+
+  
+  /* Center options horizontally */
+  .question-container textarea {
+    margin-right: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Clearfix for the last option to prevent it from sticking to the right */
+  .question-container textarea:last-child {
+    margin-right: 0;
+  }
+
+  .form-select {
+    height: 30px; /* You can adjust the height value to your preference */
+  }
+
+  .back-arrow {
+    position: absolute;
+    font-size: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000; 
+  }
