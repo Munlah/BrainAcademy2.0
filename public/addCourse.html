@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Courses</title>
+</head>
+
+<body>
+    <nav class="nav-container">
+        <div style="display: flex; align-items: center">
+            <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
+            <span style="font-size: 30px">BA</span>
+        </div>
+    </nav>
+    <h1>All Courses</h1>
+    <div class="add-button">
+        <button onclick="addCourse()">Add Course</button>
+    </div>
+    <!-- Include the content of addCourseModal.html -->
+    <div id="addCourseModal" class="modal slide-down">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add Course</h2>
+            <form id="addCourseForm">
+                <label for="topic">Topic:</label>
+                <input type="text" id="topic" name="topic" required>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <label for="video">Video URL:</label>
+                <input type="url" id="video" name="video" required>
+
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" required>
+
+                <button type="submit">Add Course</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="grid-container" id="coursesGrid"></div>
+
+    <script src="./js/Viewcourses.js"></script>
+    <script src="./js/addCourse.js"></script>
+</body>
+
+</html>

@@ -21,7 +21,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
             if (data.message === 'Login successful!') {
                 console.log(data.role)
                 if (data.role === 'student') {
-                    window.location.href = 'http://www.example.com/student';
+                    window.location.href = 'http://127.0.0.1:5500/public/courses.html';
                 } else if (data.role === 'enterprise') {
                     window.location.href = 'http://127.0.0.1:5500/public/viewAllQuizzes.html';
                 }
