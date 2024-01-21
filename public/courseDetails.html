@@ -1,3 +1,5 @@
+<!-- courses.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,28 +8,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Courses</title>
-
+    <title>Course Details</title>
 </head>
 
 <body>
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            /* margin: 20px; */
-        }
-    </style>
     <nav class="nav-container">
         <div style="display: flex; align-items: center">
             <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
             <span style="font-size: 30px">BA</span>
         </div>
     </nav>
-    <h1>All Courses</h1>
+    <br>
+    <div class="back-button">
+        <button onclick="goBack()">Back to All Courses</button>
+    </div>
 
-    <div class="grid-container" id="coursesGrid"></div>
+    <div class="course-details" id="courseDetails">
+        <!-- Course details will be dynamically added here -->
+    </div>
 
-    <script src="./js/Viewcourses.js"></script>
+
+    <script>
+        function goBack() {
+            window.location.href = "/public/courses.html";
+        }
+    </script>
+    <script src="./js/courseDetails.js"></script>
 </body>
 
 </html>
