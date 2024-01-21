@@ -37,8 +37,6 @@ async function writeFirestoreUser(user) {
   return writeFirestore(user, 'users');
 }
 
-// ... (Other functions remain unchanged)
-
 
 // Password validation function
 function validatePassword(password, username, email) {
@@ -143,20 +141,20 @@ async function getUser(req, res) {
   try {
     const { username } = req.params;
 
-    // Read the existing users data
-    const users = await readJSON('utils/users.json');
+    // Query Firestore for the user with the specified username
+    const usersSnapshot = await db.collection('users').where('username', '==', username).get();
 
-    // Find the user by username
-    const user = users.find((user) => user.username === username);
+    if (!usersSnapshot.empty) {
+      const userDoc = usersSnapshot.docs[0];
+      const user = userDoc.data();
 
-    if (user) {
-      // Respond with the user details including the password and passwordHash
+      // Respond with the user details
       return res.status(200).json({
-        id: user.id,
+        id: userDoc.id,
         username: user.username,
         email: user.email,
-        password: user.password,
-        passwordHash: user.passwordHash,
+        password: user.password, 
+        passwordHash: user.passwordHash, 
         fullName: user.fullName,
         role: user.role,
         contactNumber: user.contactNumber,
@@ -166,10 +164,11 @@ async function getUser(req, res) {
       return res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    console.error('Failed to get user:', error);
+    // console.error('Failed to get user:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
 
 // Function for login
 async function login(req, res) {

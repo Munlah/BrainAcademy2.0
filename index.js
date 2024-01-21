@@ -60,7 +60,7 @@ app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
 
 
 app.post('/register', registerUser);
-// app.get('/getUser/:username', getUser);
+app.get('/getUser/:username', getUser);
 app.post('/login', login);
 // app.put('/updateUser/:id', updateUser);
 // app.delete('/deleteUser/:id', deleteUser);
