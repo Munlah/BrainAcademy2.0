@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>View All uizzes Admin</title>
+  <title>View All Quizzes Admin</title>
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
 </head>
 
@@ -18,10 +18,12 @@
   <div class="all-quiz-main-div">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
       <h1>All Quizzes</h1>
-      <button style="border-radius: 4px" class="normal-button">Add Quiz</button>
+      <button style="border-radius: 4px" class="normal-button" id="redirectAddQuiz">Add Quiz</button>
     </div>
   </div>
   <div id="display-all-courses"></div>
+
+
 
   <template id="course-template">
     <div class="course">
@@ -53,6 +55,14 @@
       </div>
     </div>
   <script src="./js/viewAllQuizzes.js"></script>
+  <script src="./js/addQuiz.js"></script>
+
+  <script>
+    document.getElementById('redirectAddQuiz').addEventListener('click', function() {
+      // Redirect to another page
+      window.location.href = 'http://127.0.0.1:5500/public/addQuiz.html';
+    });
+    </script>
 </body>
 
 </html>
