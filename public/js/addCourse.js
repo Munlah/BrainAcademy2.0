@@ -8,8 +8,6 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
-
-
 document.getElementById('addCourseForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
@@ -34,7 +32,7 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
         closeModal();
         // Clear form fields
         document.getElementById('addCourseForm').reset();
-    
+
         getAllCourses();
         // Display success message
         alert('Course added successfully!');
@@ -54,6 +52,8 @@ async function getAllCourses() {
 
         if (response.ok) {
             const coursesGrid = document.getElementById('coursesGrid');
+
+            coursesGrid.innerHTML = '';
 
             data.courses.forEach(course => {
                 const topicBox = document.createElement('div');
@@ -75,4 +75,3 @@ async function getAllCourses() {
     }
 }
 
-window.onload = getAllCourses;
