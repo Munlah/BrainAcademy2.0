@@ -221,22 +221,16 @@ p {
     display: flex;
     flex-direction: column;
     gap: 20px;
-<<<<<<< HEAD
   }
   
-  .question-container {
-=======
-}
 
 /* Style for each question container */
 .question-container {
->>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-<<<<<<< HEAD
   
   .question-container textarea {
     margin-right: 10px;
@@ -244,7 +238,6 @@ p {
   }
   
   .question-container textarea:last-child {
-=======
 
 
 /* Center options horizontally */
@@ -255,20 +248,16 @@ p {
 
 /* Clearfix for the last option to prevent it from sticking to the right */
 .question-container textarea:last-child {
->>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
     margin-right: 0;
 }
 
-<<<<<<< HEAD
   .form-select {
     height: 30px; 
   }
-=======
 .form-select {
     height: 30px;
     /* You can adjust the height value to your preference */
 }
->>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
 
 .back-arrow {
     position: absolute;
@@ -315,18 +304,15 @@ p {
 }
 
 .video-container {
-<<<<<<< HEAD
     margin: 0 auto; 
     max-width: 800px; 
     text-align: center; 
-=======
     margin: 0 auto;
     /* Center the element horizontally */
     max-width: 800px;
     /* Set a maximum width for the container if needed */
     text-align: center;
     /* Center the content inside the container */
->>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
 }
 
 
@@ -372,7 +358,6 @@ p {
     margin-top: 10px;
 }
 
-<<<<<<< HEAD
 /* validate quiz */
 
 #submitQuiz{
@@ -402,13 +387,17 @@ p {
     justify-content: 'centre';
 }
 
+#buttons-container{
+    justify-content: 'centre';
+
+}
+
 #content-container {
     justify-content: space-between;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
   }
-=======
 
 .profile-container {
     display: flex;
@@ -465,9 +454,9 @@ input[type="getemail"],
     list-style: none;
     display: flex;
   }
-  
+
   .custom-spacing .spacing {
     margin-right: 10px; /* Adjust the value as needed for the desired spacing */
   }
   
->>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
+  }
