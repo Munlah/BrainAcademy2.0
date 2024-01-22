@@ -360,37 +360,19 @@ p {
 
 /* validate quiz */
 
-#submitQuiz{
-    max-width: 800px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: 'centre';
-}
+  
+  #submitQuiz,
+  #results,
+  #redoQuiz {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  
 
-#results {
-    max-width: 145px;
-    margin: 0 auto;
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* gap: 10px; */
-    justify-content: 'centre';
-}
-
-#redoQuiz {
-    max-width: 145px;
-    margin: 0 auto;
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* gap: 10px; */
-    justify-content: 'centre';
-}
-
-#buttons-container{
-    justify-content: 'centre';
-
-}
 
 #content-container {
     justify-content: space-between;
