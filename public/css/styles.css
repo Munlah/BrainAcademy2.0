@@ -334,4 +334,13 @@ p {
     margin-right: 50px;
     margin-top: 10px;
 }
+/* Add this style in your CSS file or within a style tag in your HTML */
+#logoutLink {
+    color: #ffffff; /* Set the default color */
+    transition: color 0.2s ease; /* Add a smooth transition for the color change */
+}
+
+#logoutLink:hover {
+    color: #000000; /* Change the color on hover */
+}
 

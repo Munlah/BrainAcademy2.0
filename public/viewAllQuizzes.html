@@ -5,15 +5,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>View All Quizzes Admin</title>
+  <script src="./js/logout.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
 </head>
 
 <body>
   <nav class="nav-container">
-    <div style="display: flex; align-items: center;">
-      <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%;">
-      <span style="font-size: 30px;">BA</span>
+    <div style="display: flex; align-items: center">
+      <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
+      <span style="font-size: 30px">BA</span>
     </div>
+    <a href="#" id="logoutLink" style="margin-right: 5%">Logout</a>
   </nav>
   <div class="all-quiz-main-div">
     <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -54,14 +56,14 @@
         <button id="cancel-delete">No</button>
       </div>
     </div>
-  <script src="./js/viewAllQuizzes.js"></script>
-  <script src="./js/addQuiz.js"></script>
+    <script src="./js/viewAllQuizzes.js"></script>
+    <script src="./js/addQuiz.js"></script>
 
-  <script>
-    document.getElementById('redirectAddQuiz').addEventListener('click', function() {
-      // Redirect to another page
-      window.location.href = 'http://127.0.0.1:5500/public/addQuiz.html';
-    });
+    <script>
+      document.getElementById('redirectAddQuiz').addEventListener('click', function () {
+        // Redirect to another page
+        window.location.href = 'http://127.0.0.1:5500/public/addQuiz.html';
+      });
     </script>
 </body>
 
