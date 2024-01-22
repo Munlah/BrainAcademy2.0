@@ -1,89 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Quiz Admin</title>
-    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-    crossorigin="anonymous"
-  />
-  </head>
 
-  <body>
-    <nav class="nav-container">
-      <div style="display: flex; align-items: center">
-        <img
-          src="./image/Icon.png"
-          alt="BA Icon"
-          style="height: 50px; margin: 10%; margin-left: 20%"
-        />
-        <span style="font-size: 30px">BA</span>
-      </div>
-    </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Quiz Admin</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    crossorigin="anonymous" />
+</head>
 
-    <!--main content to add quiz-->
-    <br/>
-    <div class="quiz-container">
+<body>
+  <nav class="nav-container">
+    <div style="display: flex; align-items: center">
+      <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
+      <span style="font-size: 30px">BA</span>
+    </div>
+    <ul class="custom-spacing">
+      <li><a href="addCourse.html">Courses</a></li>
+      <span class="spacing"></span>
+      <li><a href="viewAllQuizzes.html">Quizzes</a></li>
+    </ul>
+    <ul>
+      <li><a href="#" id="logoutLink">Logout</a></li>
+    </ul>
+  </nav>
 
-      <i id='backArrow'class="fas fa-arrow-left back-arrow"></i>
+  <!--main content to add quiz-->
+  <br />
+  <div class="quiz-container">
 
-      <h2 style="text-align: center;"><strong>Add New Quiz</strong></h2>
+    <i id='backArrow' class="fas fa-arrow-left back-arrow"></i>
 
-      <form id="addQuizForm">
-        <label for="quizTitle"><strong>Quiz Title</strong></label>
-        <input
-          type="text"
-          id="quizTitle"
-          name="quizTitle"
-          placeholder="Enter quiz title"
-          maxlength="25"
-        />
-        <br />
-        <label for="quizCourse"><strong>Quiz Course</strong></label>
-        <select class="form-control form-select" id="quizCourse">
-          <option value="Math">Math</option>
-          <option value="English">English</option>
-        </select>
-        <br />
+    <h2 style="text-align: center;"><strong>Add New Quiz</strong></h2>
+
+    <form id="addQuizForm">
+      <label for="quizTitle"><strong>Quiz Title</strong></label>
+      <input type="text" id="quizTitle" name="quizTitle" placeholder="Enter quiz title" maxlength="25" />
+      <br />
+      <label for="quizCourse"><strong>Quiz Course</strong></label>
+      <select class="form-control form-select" id="quizCourse">
+        <option value="Math">Math</option>
+        <option value="English">English</option>
+      </select>
+      <br />
 
 
-        <div class="questions-body">
-       <!--question 1-->
+      <div class="questions-body">
+        <!--question 1-->
         <div class="question-container">
           <label for="questionOneTitle"><strong>Question 1 Title</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionOneTitle"
-            placeholder="Enter the question 1 Title"
-          ></input>
+          <input type="text" class="form-control" id="questionOneTitle"
+            placeholder="Enter the question 1 Title"></input>
 
           <label for="questionOneOptionOne"><strong>Option 1</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionOneOptionOne"
-            placeholder="Enter option 1"
-          ></input>
+          <input type="text" class="form-control" id="questionOneOptionOne" placeholder="Enter option 1"></input>
 
           <label for="questionOneOptionTwo"><strong>Option 2</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionOneOptionTwo"
-            placeholder="Enter option 2"
-          ></input>
+          <input type="text" class="form-control" id="questionOneOptionTwo" placeholder="Enter option 2"></input>
 
           <label for="questionOneOptionThree"><strong>Option 3</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionOneOptionThree"
-            placeholder="Enter option 3"
-          ></input>
+          <input type="text" class="form-control" id="questionOneOptionThree" placeholder="Enter option 3"></input>
 
           <label for="questionOneCorrectOption"><strong>Correct Option</strong></label>
           <select class="form-control form-select" id="questionOneCorrectOption">
@@ -96,36 +73,17 @@
         <!--qn 2-->
         <div class="question-container">
           <label for="questionTwoTitle"><strong>Question 2 Title</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionTwoTitle"
-            placeholder="Enter the question 2 Title"
-          ></input>
+          <input type="text" class="form-control" id="questionTwoTitle"
+            placeholder="Enter the question 2 Title"></input>
 
           <label for="questionTwoOptionOne"><strong>Option 1</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionTwoOptionOne"
-            placeholder="Enter option 1"
-          ></input>
+          <input type="text" class="form-control" id="questionTwoOptionOne" placeholder="Enter option 1"></input>
 
           <label for="questionTwoOptionTwo"><strong>Option 2</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionTwoOptionTwo"
-            placeholder="Enter option 2"
-          ></input>
+          <input type="text" class="form-control" id="questionTwoOptionTwo" placeholder="Enter option 2"></input>
 
           <label for="questionTwoOptionThree"><strong>Option 3</strong></label>
-          <input
-            type="text"
-            class="form-control"
-            id="questionTwoOptionThree"
-            placeholder="Enter option 3"
-          ></input>
+          <input type="text" class="form-control" id="questionTwoOptionThree" placeholder="Enter option 3"></input>
 
           <label for="questionTwoCorrectOption"><strong>Correct Option</strong></label>
           <select class="form-control form-select" id="questionTwoCorrectOption">
@@ -135,16 +93,17 @@
           </select>
         </div>
 
-            <button type="submit" style="border-radius: 4px" class="normal-button">Submit</button>
+        <button type="submit" style="border-radius: 4px" class="normal-button">Submit</button>
 
-      </form>
-    </div>
-    <script>
-      document.getElementById('backArrow').addEventListener('click', function() {
-        // Redirect to another page
-        window.location.href = 'http://127.0.0.1:5500/public/viewAllQuizzes.html';
-      });
-      </script>
-    <script src="./js/addQuiz.js"></script>
-  </body>
+    </form>
+  </div>
+  <script>
+    document.getElementById('backArrow').addEventListener('click', function () {
+      // Redirect to another page
+      window.location.href = 'http://127.0.0.1:5500/public/viewAllQuizzes.html';
+    });
+  </script>
+  <script src="./js/addQuiz.js"></script>
+</body>
+
 </html>

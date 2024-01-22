@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./js/logout.js"></script>
     <title>All Courses</title>
 </head>
 
@@ -15,7 +16,16 @@
             <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
             <span style="font-size: 30px">BA</span>
         </div>
-    </nav>
+        <ul class="custom-spacing">
+            <li><a href="addCourse.html">Courses</a></li>
+            <span class="spacing"></span>
+            <li><a href="viewAllQuizzes.html">Quizzes</a></li>
+          </ul>
+        <ul>
+            <li><a href="#" id="logoutLink">Logout</a></li>
+          </ul>
+    </nav>    
+
     <h1>All Courses</h1>
     <div class="add-button">
         <button onclick="addCourse()">Add Course</button>

@@ -48,7 +48,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #4782a9;
 }
 
 p {
@@ -157,7 +157,7 @@ p {
     padding: 2.5%;
 }
 
-.modal-content.show{
+.modal-content.show {
     opacity: 1;
 }
 
@@ -215,21 +215,28 @@ p {
 .quiz-container {
     max-width: 800px;
     margin: 0 auto;
-  }
-  
-  .questions-body {
+}
+
+.questions-body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+<<<<<<< HEAD
   }
   
   .question-container {
+=======
+}
+
+/* Style for each question container */
+.question-container {
+>>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
     display: flex;
     flex-direction: column;
     gap: 10px;
-  }
-  
+}
 
+<<<<<<< HEAD
   
   .question-container textarea {
     margin-right: 10px;
@@ -237,24 +244,43 @@ p {
   }
   
   .question-container textarea:last-child {
-    margin-right: 0;
-  }
+=======
 
+
+/* Center options horizontally */
+.question-container textarea {
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+/* Clearfix for the last option to prevent it from sticking to the right */
+.question-container textarea:last-child {
+>>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
+    margin-right: 0;
+}
+
+<<<<<<< HEAD
   .form-select {
     height: 30px; 
   }
+=======
+.form-select {
+    height: 30px;
+    /* You can adjust the height value to your preference */
+}
+>>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
 
-  .back-arrow {
+.back-arrow {
     position: absolute;
     font-size: 24px;
     cursor: pointer;
     text-decoration: none;
-    color: #000; 
-  }
+    color: #000;
+}
 
-  .grid-container {
+.grid-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
 }
 
@@ -266,16 +292,19 @@ p {
     text-align: center;
     cursor: pointer;
 }
+
 .back-button {
     margin-top: 20px;
     /* text-align: center; */
-    margin-left: 1300px; 
+    margin-left: 1300px;
 }
+
 .add-button {
     margin-top: 20px;
     /* text-align: center; */
-    margin-left: 1300px; 
+    margin-left: 1300px;
 }
+
 .course-details {
     max-width: 600px;
     margin: 0 auto;
@@ -284,10 +313,20 @@ p {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .video-container {
+<<<<<<< HEAD
     margin: 0 auto; 
     max-width: 800px; 
     text-align: center; 
+=======
+    margin: 0 auto;
+    /* Center the element horizontally */
+    max-width: 800px;
+    /* Set a maximum width for the container if needed */
+    text-align: center;
+    /* Center the content inside the container */
+>>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8
 }
 
 
@@ -317,7 +356,7 @@ p {
     border: #618bdd;
     padding: 20px;
     z-index: 1;
-    width:300px
+    width: 300px
 }
 
 .close {
@@ -326,12 +365,14 @@ p {
     right: 10px;
     cursor: pointer;
 }
-.grid-container{
+
+.grid-container {
     margin-left: 50px;
     margin-right: 50px;
     margin-top: 10px;
 }
 
+<<<<<<< HEAD
 /* validate quiz */
 
 #submitQuiz{
@@ -367,3 +408,66 @@ p {
     margin: 0 auto;
     padding: 20px;
   }
+=======
+
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.user-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-top: 20px;
+    margin-left: 15px;
+}
+
+
+.left-column {
+    flex: 1;
+}
+
+.middle-column {
+    flex: 2;
+    margin-top: 70px;
+    margin-left: 100px;
+
+}
+
+.right-column {
+    flex: 2;
+    margin-top: 70px;
+
+}
+
+.deletebutton {
+    margin-top: 230px;
+    margin-left: 140px;
+    background-color: rgb(168, 53, 53);
+}
+.deletebutton:hover {
+    margin-top: 230px;
+    margin-left: 140px;
+    background-color: rgb(255, 0, 0);
+}
+
+
+input[type="gettext"],
+input[type="getemail"],
+.delete-button {
+    max-width: 250px;
+}
+
+/* Add this CSS to your stylesheet */
+.custom-spacing {
+    list-style: none;
+    display: flex;
+  }
+  
+  .custom-spacing .spacing {
+    margin-right: 10px; /* Adjust the value as needed for the desired spacing */
+  }
+  
+>>>>>>> 59be1110711d5d95ef6e49ab538fcf43748b8da8

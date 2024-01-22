@@ -12,7 +12,7 @@ async function readFirestore(collectionName) {
   } catch (err) {
     // console.error('Error reading Firestore:', err);
     // throw err;
-    throw new Error ('Internal Server Error');
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -24,7 +24,7 @@ async function writeFirestore(data, collectionName) {
   } catch (err) {
     // console.error('Error writing to Firestore:', err);
     // throw err;
-    throw new Error ('Internal Server Error');
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -153,8 +153,8 @@ async function getUser(req, res) {
         id: userDoc.id,
         username: user.username,
         email: user.email,
-        password: user.password, 
-        passwordHash: user.passwordHash, 
+        password: user.password,
+        passwordHash: user.passwordHash,
         fullName: user.fullName,
         role: user.role,
         contactNumber: user.contactNumber,
@@ -208,95 +208,64 @@ async function login(req, res) {
   }
 }
 
-// // Function to update user data by id
-// async function updateUser(req, res) {
+async function deleteUser(req, res) {
+  try {
+    const { username } = req.params;
+
+    // Query Firestore for the user with the specified username
+    const usersSnapshot = await db.collection('users').where('username', '==', username).get();
+
+    if (!usersSnapshot.empty) {
+      const userDoc = usersSnapshot.docs[0];
+
+      // Delete the user from Firestore
+      await db.collection('users').doc(userDoc.id).delete();
+
+      return res.status(200).json({ message: 'User deleted successfully' });
+    } else {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    // console.error('Failed to delete user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+// async function deleteUser(req, res) {
+//   const username = req.params.username;
+
 //   try {
-//     const { id } = req.params;
-//     const { username, email, password, fullName, role, contactNumber } =
-//       req.body;
+//     // Read the existing users from Firestore
+//     const users = await readFirestoreUsers();
 
-//     // Read the existing users data
-//     const users = await readJSON('utils/users.json');
+//     // Find the index of the user with the given ID
+//     const userIndex = users.findIndex((user) => user.username === username);
 
-//     // Find the user and update their details
-//     const userIndex = users.findIndex((user) => user.id === id);
+//     // If the user with the given ID is not found, return an error
 //     if (userIndex === -1) {
-//       return res.status(404).json({ message: 'User not found' });
+//       console.error(`User not found: ${username}`);
+//       if (res && res.status && res.json) {
+//         return res.status(404).json({ message: 'User not found' });
+//       } 
 //     }
 
-//     // Check if the new username is already taken by another user
-//     if (
-//       username &&
-//       users.some((user) => user.username === username && user.id !== id)
-//     ) {
-//       return res.status(400).json({ message: 'Username is already taken' });
-//     }
+//     // Remove the user from Firestore
+//     await db.collection('users').doc(username).delete();
 
-//     // Validate the password if it's being changed
-//     if (password) {
-//       validatePassword(
-//         password,
-//         username || users[userIndex].username,
-//         email || users[userIndex].email
-//       );
-//       users[userIndex].passwordHash = await bcrypt.hash(password, saltRounds);
-//     }
-
-//     // Update the user details
-//     users[userIndex] = {
-//       ...users[userIndex],
-//       username: username || users[userIndex].username,
-//       email: email || users[userIndex].email,
-//       fullName: fullName || users[userIndex].fullName,
-//       role: role || users[userIndex].role,
-//       contactNumber: contactNumber || users[userIndex].contactNumber,
-//     };
-
-//     // Write the updated array back to the JSON file
-//     await writeJSON(users, 'utils/users.json');
-
-//     // Respond with the updated user details
-//     const updatedUser = { ...users[userIndex] };
-//     return res
-//       .status(200)
-//       .json({ message: 'User updated successfully', user: updatedUser });
+//     // Check if res.json exists before using it
+//     if (res && res.json) {
+//       return res.status(200).json({ message: 'User deleted successfully' });
+//     } 
 //   } catch (error) {
-//     return res.status(500).json({ message: error.message });
+//     // Log the error for debugging purposes
+//     console.error('Error deleting user:', error);
+
+//     // Return the error response
+//     if (res && res.status && res.json) {
+//       return res.status(500).json({ message: 'Internal server error while deleting user' });
+//     }
 //   }
 // }
 
-// Function to delete a user
-async function deleteUser(req, res) {
-  const userId = req.params.id;
-
-  // Read the existing users from the JSON file
-  const users = await readJSON('utils/users.json');
-
-  // Find the index of the user with the given ID
-  const userIndex = users.findIndex((user) => user.id === userId);
-
-  // If the user with the given ID is not found, return an error
-  if (userIndex === -1) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-
-  // Remove the user from the array
-  users.splice(userIndex, 1);
-
-  // Write the updated array back to the JSON file
-  try {
-    await fs.writeFile('utils/users.json', JSON.stringify(users), 'utf8');
-    return res.status(200).json({ message: 'User deleted successfully' });
-  } catch (writeError) {
-    // Log the error for testing purposes
-    console.error('Error writing to users.json:', writeError);
-
-    // Return the error response for testing purposes
-    return res
-      .status(500)
-      .json({ message: 'Internal server error while deleting user' });
-  }
-}
 
 module.exports = {
   readFirestoreUsers,
