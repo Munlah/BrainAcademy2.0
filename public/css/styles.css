@@ -48,7 +48,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #4782a9;
 }
 
 p {
@@ -380,7 +380,14 @@ p {
 .deletebutton {
     margin-top: 230px;
     margin-left: 140px;
+    background-color: rgb(168, 53, 53);
 }
+.deletebutton:hover {
+    margin-top: 230px;
+    margin-left: 140px;
+    background-color: rgb(255, 0, 0);
+}
+
 
 input[type="gettext"],
 input[type="getemail"],
