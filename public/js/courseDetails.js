@@ -21,10 +21,25 @@ async function getCourseById() {
                 <div class="video-container">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/${getYouTubeVideoId(course.video)}" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <p><strong>Description:</strong> ${course.description}</p>`
-                ;
+                <p><strong>Description:</strong> ${course.description}</p>`;
 
             courseDetails.innerHTML = courseInfo;
+
+            // Check if quizIds exist and show the "Start Quiz" button
+            if (course.quizIds && course.quizIds.length > 0) {
+                const startQuizButton = document.createElement('button');
+                startQuizButton.textContent = 'Start Quiz';
+                startQuizButton.style.borderRadius = '4px';
+                startQuizButton.classList.add('normal-button');
+                startQuizButton.id = 'redirectQuiz';
+                startQuizButton.addEventListener('click', function () {
+                    // Redirect to another page
+                    const quizId = course.quizIds[0]; // Assuming only one quiz for simplicity
+                    window.location.href = `http://127.0.0.1:5500/public/validateQuiz.html?quizId=${quizId}`;
+                });
+
+                courseDetails.appendChild(startQuizButton);
+            }
         } else {
             console.error('Error fetching course details:', data.message);
         }
@@ -32,10 +47,11 @@ async function getCourseById() {
         console.error('Error fetching course details:', error.message);
     }
 }
+
 function getYouTubeVideoId(url) {
     // Extract video ID from YouTube URL
     const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? match[1] : null;
 }
-window.onload = getCourseById;
 
+window.onload = getCourseById;

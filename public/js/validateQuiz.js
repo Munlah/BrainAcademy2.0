@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
-  var quiz_id = 'KLmmXcPd4kOGBL20zwXj';
+  // Extract quizId from the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const quizId = urlParams.get('quizId');
+
+  // Check if quizId is available
+  if (!quizId) {
+    console.error('Quiz ID is missing in the URL');
+    // You can handle this error, redirect to an error page, or take appropriate action
+    return;
+  }
+
   const displayQnsContainer = document.getElementById('display-qns');
-  var results = document.getElementById('results');
-  var submitButton = document.getElementById('submitQuiz');
-  var redoButton = document.getElementById('redoQuiz');
+  const results = document.getElementById('results');
+  const submitButton = document.getElementById('submitQuiz');
+  const redoButton = document.getElementById('redoQuiz');
 
   let correctOptions = []; // Global variable to store correct options
 
@@ -69,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Call getQuestions and then showQuestions
-  getQuestions(quiz_id)
+  getQuestions(quizId)
     .then(questions => {
       showQuestions(questions, displayQnsContainer);
     })
@@ -112,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Send user answers to the server for validation
-    validateAnswers(quiz_id, userAnswers);
+    validateAnswers(quizId, userAnswers);
   }
 
   function validateAnswers(quizId, userAnswers) {
