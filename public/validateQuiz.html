@@ -6,10 +6,15 @@
     <title>Main Quiz</title>
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-    crossorigin="anonymous"
-  />
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
   </head>
 
   <body>
@@ -23,15 +28,27 @@
         <span style="font-size: 30px">BA</span>
       </div>
     </nav>
+    <i id="backArrow" class="fas fa-arrow-left back-arrow"></i>
 
     <!--main content to display qns-->
-    <br/>
+    <br />
     <div id="display-qns"></div>
     <div id="results"></div>
 
-    <button id="submitQuiz">Get Results</button>
+    <div id="buttons-container">
+      <button id="submitQuiz">Get Results</button>
+      <button id="redoQuiz" style="display: none">Redo Quiz</button>
+    </div>
 
- 
+    <script>
+      document
+        .getElementById("backArrow")
+        .addEventListener("click", function () {
+          // Redirect to another page
+          window.location.href =
+            "http://127.0.0.1:5500/public/viewAllQuizzes.html";
+        });
+    </script>
     <script src="./js/validateQuiz.js"></script>
   </body>
 </html>

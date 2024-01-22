@@ -223,7 +223,6 @@ p {
     gap: 20px;
   }
   
-  /* Style for each question container */
   .question-container {
     display: flex;
     flex-direction: column;
@@ -232,19 +231,17 @@ p {
   
 
   
-  /* Center options horizontally */
   .question-container textarea {
     margin-right: 10px;
     box-sizing: border-box;
   }
   
-  /* Clearfix for the last option to prevent it from sticking to the right */
   .question-container textarea:last-child {
     margin-right: 0;
   }
 
   .form-select {
-    height: 30px; /* You can adjust the height value to your preference */
+    height: 30px; 
   }
 
   .back-arrow {
@@ -288,9 +285,9 @@ p {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .video-container {
-    margin: 0 auto; /* Center the element horizontally */
-    max-width: 800px; /* Set a maximum width for the container if needed */
-    text-align: center; /* Center the content inside the container */
+    margin: 0 auto; 
+    max-width: 800px; 
+    text-align: center; 
 }
 
 
@@ -335,3 +332,38 @@ p {
     margin-top: 10px;
 }
 
+/* validate quiz */
+
+#submitQuiz{
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: 'centre';
+}
+
+#results {
+    max-width: 145px;
+    margin: 0 auto;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* gap: 10px; */
+    justify-content: 'centre';
+}
+
+#redoQuiz {
+    max-width: 145px;
+    margin: 0 auto;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* gap: 10px; */
+    justify-content: 'centre';
+}
+
+#content-container {
+    justify-content: space-between;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
