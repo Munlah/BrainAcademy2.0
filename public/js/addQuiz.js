@@ -60,10 +60,13 @@ document.getElementById('addQuizForm').addEventListener('submit', function (even
       if (data.message === 'Quiz created successfully.') {
         console.log(data.message);
         window.location.href = 'http://127.0.0.1:5500/public/viewAllQuizzes.html';
+      } else {
+        alert(data.message); // Show backend validation message as an alert
       }
     })
     .catch(error => {
       console.error('Error:', error);
+      alert('Error creating quiz. Please try again.'); // Show a generic error alert
     });
 
 });

@@ -56,7 +56,6 @@ async function createQuizWithQuestions(req, res) {
     const courses = await readFirestore('courses');
 
     // Check if quiz title is already used
-    // Check if quiz title is already used
     const existingQuizWithTitle = quizzes.find(q => q.quizTitle === quizTitle);
     if (existingQuizWithTitle) {
       return res.status(409).json({ message: 'Quiz with this title already exists.' });
