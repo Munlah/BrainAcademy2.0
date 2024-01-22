@@ -20,7 +20,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
       .then(data => {
           if (data.message === 'Login successful!') {
               // Store user id and username in local storage
-              localStorage.setItem('userId', data.user.id);
+            
               localStorage.setItem('username', data.user.username);
 
               // Redirect based on user role
