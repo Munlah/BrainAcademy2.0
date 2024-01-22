@@ -394,3 +394,14 @@ input[type="getemail"],
 .delete-button {
     max-width: 250px;
 }
+
+/* Add this CSS to your stylesheet */
+.custom-spacing {
+    list-style: none;
+    display: flex;
+  }
+  
+  .custom-spacing .spacing {
+    margin-right: 10px; /* Adjust the value as needed for the desired spacing */
+  }
+  
