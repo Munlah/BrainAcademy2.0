@@ -1,94 +1,43 @@
-const { describe, it } = require('mocha');
 const { expect } = require('chai');
+const { MockFirestore } = require('firebase-mock');
 const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const { deleteUser } = require('../utils/UserUtil');
 const { admin } = require('../firebaseAdmin.js');
+const request = require('supertest');
+const { registerUser, deleteUser } = require('../utils/UserUtil.js');
+// Set the NODE_ENV to 'test'
+process.env.NODE_ENV = 'test';
 
-let originalFirestore;
+// Mocking Firebase for testing
+sinon.stub(admin, 'firestore').returns(new MockFirestore());
 
-const adminMockInternalError = {
-  firestore: () => ({
-    collection: sinon.stub().returns({
-      doc: sinon.stub().returns({
-        delete: sinon.stub().throws(new Error('Internal Server Error')),
-      }),
-    }),
-  }),
-};
+describe('Delete User API', () => {
+  // Assume registerUser is a function that registers a user, and deleteUser deletes a user
+  test('should delete a user by username', async () => {
+    // Register a user first (assuming registration works fine)
+    const registerResponse = await request(app)
+      .post('/register')
+      .send({
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'Test123!',
+        fullName: 'Test User',
+        role: 'user',
+        contactNumber: '1234567890',
+      });
 
-beforeEach(() => {
-  // Backup the original firestore object
-  originalFirestore = admin.firestore();
+    const userId = registerResponse.body.userId;
 
-  admin.firestore = () => ({
-    collection: sinon.stub().returns({
-      doc: sinon.stub().returns({
-        delete: sinon.stub(),
-      }),
-    }),
-  });
-});
+    // Now, attempt to delete the user
+    const deleteResponse = await request(app).delete(`/users/testuser`);
 
-afterEach(() => {
-  // Restore the original firestore object after each test
-  admin.firestore = originalFirestore;
-});
-
-// Proxyquire to mock internal errors
-const { deleteUser: deleteUserInternalError } = proxyquire('../utils/UserUtil.js', {
-  '../firebaseAdmin.js': { admin: adminMockInternalError },
-});
-
-describe('Testing delete User Function', () => {
-  it('should delete a user when a valid ID is provided', async () => {
-    // Arrange
-    const req = { params: { id: 'ivEMB3Cmd2oZT79bjLug' } };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
-
-    // Act
-    await deleteUser(req, res);
-
-    // Assert
-    sinon.assert.calledWith(res.status, 200);
-    sinon.assert.calledOnce(res.json);
-    expect(res.json.args[0][0].message).to.equal('User deleted successfully');
+    expect(deleteResponse.statusCode).to.equal(200);
+    expect(deleteResponse.body).to.have.property('message', 'User deleted successfully');
   });
 
-  it('should return a 404 status when the user ID is not found', async () => {
-    // Arrange
-    const req = { params: { id: 'ivEMB3Cmd2oZT79bjLuR' } };
-    const res = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
+  // Add more test cases as needed
 
-    // Act
-    await deleteUser(req, res);
-
-    // Assert
-    sinon.assert.calledWith(res.status, 404);
-    sinon.assert.calledOnce(res.json);
-    expect(res.json.args[0][0].message).to.equal('User not found');
+  // Clean up the sinon stub after the tests
+  after(() => {
+    sinon.restore();
   });
-
-//   it('should handle internal server errors and return a 500 status', async () => {
-//     // Arrange
-//     const req = { params: { id: 'validUserId' } };
-//     const res = {
-//       status: sinon.stub().returnsThis(),
-//       json: sinon.stub(),
-//     };
-
-//     // Act
-//     await deleteUserInternalError(req, res);
-
-//     // Assert
-//     sinon.assert.calledWith(res.status, 500);
-//     sinon.assert.calledOnce(res.json);
-//     // Add more assertions based on your expected behavior
-//   });
 });

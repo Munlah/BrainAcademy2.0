@@ -153,8 +153,8 @@ async function getUser(req, res) {
         id: userDoc.id,
         username: user.username,
         email: user.email,
-        password: user.password, 
-        passwordHash: user.passwordHash, 
+        password: user.password,
+        passwordHash: user.passwordHash,
         fullName: user.fullName,
         role: user.role,
         contactNumber: user.contactNumber,
@@ -208,108 +208,63 @@ async function login(req, res) {
   }
 }
 
-// // Function to update user data by id
-// async function updateUser(req, res) {
-//   try {
-//     const { id } = req.params;
-//     const { username, email, password, fullName, role, contactNumber } =
-//       req.body;
-
-//     // Read the existing users data
-//     const users = await readJSON('utils/users.json');
-
-//     // Find the user and update their details
-//     const userIndex = users.findIndex((user) => user.id === id);
-//     if (userIndex === -1) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     // Check if the new username is already taken by another user
-//     if (
-//       username &&
-//       users.some((user) => user.username === username && user.id !== id)
-//     ) {
-//       return res.status(400).json({ message: 'Username is already taken' });
-//     }
-
-//     // Validate the password if it's being changed
-//     if (password) {
-//       validatePassword(
-//         password,
-//         username || users[userIndex].username,
-//         email || users[userIndex].email
-//       );
-//       users[userIndex].passwordHash = await bcrypt.hash(password, saltRounds);
-//     }
-
-//     // Update the user details
-//     users[userIndex] = {
-//       ...users[userIndex],
-//       username: username || users[userIndex].username,
-//       email: email || users[userIndex].email,
-//       fullName: fullName || users[userIndex].fullName,
-//       role: role || users[userIndex].role,
-//       contactNumber: contactNumber || users[userIndex].contactNumber,
-//     };
-
-//     // Write the updated array back to the JSON file
-//     await writeJSON(users, 'utils/users.json');
-
-//     // Respond with the updated user details
-//     const updatedUser = { ...users[userIndex] };
-//     return res
-//       .status(200)
-//       .json({ message: 'User updated successfully', user: updatedUser });
-//   } catch (error) {
-//     return res.status(500).json({ message: error.message });
-//   }
-// }
-
-
 async function deleteUser(req, res) {
-  const userId = req.params.id;
-
   try {
-    // Read the existing users from Firestore
-    const users = await readFirestoreUsers();
+    const { username } = req.params;
 
-    // Find the index of the user with the given ID
-    const userIndex = users.findIndex((user) => user.id === userId);
+    // Query Firestore for the user with the specified username
+    const usersSnapshot = await db.collection('users').where('username', '==', username).get();
 
-    // If the user with the given ID is not found, return an error
-    if (userIndex === -1) {
-      console.error(`User not found: ${userId}`);
-      if (res && res.status && res.json) {
-        return res.status(404).json({ message: 'User not found' });
-      } else {
-        console.error('Error: res is undefined or missing required methods');
-        return; // or return some default response
-      }
-    }
+    if (!usersSnapshot.empty) {
+      const userDoc = usersSnapshot.docs[0];
 
-    // Remove the user from Firestore
-    await db.collection('users').doc(userId).delete();
+      // Delete the user from Firestore
+      await db.collection('users').doc(userDoc.id).delete();
 
-    // Check if res.json exists before using it
-    if (res && res.json) {
       return res.status(200).json({ message: 'User deleted successfully' });
     } else {
-      console.error('Error: res.json is undefined');
-      return; // or return some default response
+      return res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    // Log the error for debugging purposes
-    console.error('Error deleting user:', error);
-
-    // Return the error response
-    if (res && res.status && res.json) {
-      return res.status(500).json({ message: 'Internal server error while deleting user' });
-    } else {
-      console.error('Error: res is undefined or missing required methods');
-      return; // or return some default response
-    }
+    // console.error('Failed to delete user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
+// async function deleteUser(req, res) {
+//   const username = req.params.username;
+
+//   try {
+//     // Read the existing users from Firestore
+//     const users = await readFirestoreUsers();
+
+//     // Find the index of the user with the given ID
+//     const userIndex = users.findIndex((user) => user.username === username);
+
+//     // If the user with the given ID is not found, return an error
+//     if (userIndex === -1) {
+//       console.error(`User not found: ${username}`);
+//       if (res && res.status && res.json) {
+//         return res.status(404).json({ message: 'User not found' });
+//       } 
+//     }
+
+//     // Remove the user from Firestore
+//     await db.collection('users').doc(username).delete();
+
+//     // Check if res.json exists before using it
+//     if (res && res.json) {
+//       return res.status(200).json({ message: 'User deleted successfully' });
+//     } 
+//   } catch (error) {
+//     // Log the error for debugging purposes
+//     console.error('Error deleting user:', error);
+
+//     // Return the error response
+//     if (res && res.status && res.json) {
+//       return res.status(500).json({ message: 'Internal server error while deleting user' });
+//     }
+//   }
+// }
 
 
 module.exports = {

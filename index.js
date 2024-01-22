@@ -63,7 +63,7 @@ app.post('/register', registerUser);
 app.get('/getUser/:username', getUser);
 app.post('/login', login);
 // app.put('/updateUser/:id', updateUser);
-// app.delete('/deleteUser/:id', deleteUser);
+app.delete('/deleteUser/:username', deleteUser);
 
 app.post('/addCourse', addCourse);
 app.get('/getAllCourses', getAllCourses);
