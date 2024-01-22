@@ -344,15 +344,6 @@ p {
     margin-top: 10px;
 }
 
-#logoutLink {
-    color: #ffffff;
-    transition: color 0.2s ease;
-}
-
-#logoutLink:hover {
-    color: #000000;
-}
-
 
 .profile-container {
     display: flex;
