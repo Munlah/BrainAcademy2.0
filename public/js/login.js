@@ -9,7 +9,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
         return;
     }
 
-    fetch('/login', {
+    fetch('http://localhost:5050/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -19,8 +19,12 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
         .then(response => response.json())
         .then(data => {
             if (data.message === 'Login successful!') {
-                // Redirect to another page or do something else
-                window.location.href = 'http://www.example.com';
+                console.log(data.role)
+                if (data.role === 'student') {
+                    window.location.href = 'http://127.0.0.1:5500/public/courses.html';
+                } else if (data.role === 'enterprise') {
+                    window.location.href = 'http://127.0.0.1:5500/public/viewAllQuizzes.html';
+                }
             } else {
                 // Show error message
                 if (data.message === 'Invalid username') {
@@ -33,8 +37,5 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
                     errorElement.style.display = 'block';
                 }
             }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
         });
 });

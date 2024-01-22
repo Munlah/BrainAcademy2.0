@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
+    margin: 0px;
 }
 
 .login-container {
@@ -62,33 +62,38 @@ p {
     align-items: center;
     background-color: #344F98;
 }
+
 .nav-container img {
     height: 10px;
     margin-left: 1%;
 }
+
 .nav-container ul {
     list-style-type: none;
     margin-right: 1%;
 }
+
 .nav-container ul li {
     display: inline;
     margin: 0 10px;
 }
+
 .nav-container a {
     text-decoration: none;
     color: white;
 }
+
 .nav-container span {
     color: white;
 }
 
-.all-quiz-main-div{
+.all-quiz-main-div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left:40px;
-    margin-right:40px;
-    margin-top:20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 20px;
 }
 
 .normal-button {
@@ -103,3 +108,230 @@ p {
 .normal-button:hover {
     background-color: #233566;
 }
+
+.quiz {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.edit-button,
+.delete-button {
+    margin-left: 5px;
+}
+
+.delete-button {
+    color: white;
+    background-color: red;
+}
+
+#display-all-courses {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 1.8%;
+}
+
+.course-button {
+    margin: 5px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #000;
+    background-color: white;
+    padding: 2.5%;
+}
+
+.modal-content.show{
+    opacity: 1;
+}
+
+.modal-content p {
+    font-size: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+#cancel-delete {
+    background-color: grey;
+}
+
+.password-errors ul {
+    color: red;
+    font-size: smaller;
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+
+.register-container {
+    width: 300px;
+    padding: 50px;
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field {
+    flex-grow: 1;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 9px;
+    right: 10px;
+    cursor: pointer;
+    color: #777;
+}
+
+/* add quiz css */
+.quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .questions-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Style for each question container */
+  .question-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+
+  
+  /* Center options horizontally */
+  .question-container textarea {
+    margin-right: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Clearfix for the last option to prevent it from sticking to the right */
+  .question-container textarea:last-child {
+    margin-right: 0;
+  }
+
+  .form-select {
+    height: 30px; /* You can adjust the height value to your preference */
+  }
+
+  .back-arrow {
+    position: absolute;
+    font-size: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000; 
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 20px;
+}
+
+.topic-box {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+}
+.back-button {
+    margin-top: 20px;
+    /* text-align: center; */
+    margin-left: 1300px; 
+}
+.add-button {
+    margin-top: 20px;
+    /* text-align: center; */
+    margin-left: 1300px; 
+}
+.course-details {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.video-container {
+    margin: 0 auto; /* Center the element horizontally */
+    max-width: 800px; /* Set a maximum width for the container if needed */
+    text-align: center; /* Center the content inside the container */
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+    animation: slide-down 0.5s ease;
+}
+
+.slide-down {
+    animation: slide-down 0.5s ease;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e6ede6;
+    color: #000000;
+    border: #618bdd;
+    padding: 20px;
+    z-index: 1;
+    width:300px
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+.grid-container{
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 10px;
+}
+
