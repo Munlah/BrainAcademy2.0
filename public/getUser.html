@@ -1,98 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <script src="./js/logout.js"></script>
-  </head>
 
-  <body>
-    <nav class="nav-container">
-      <div style="display: flex; align-items: center">
-        <img
-          src="./image/Icon.png"
-          alt="BA Icon"
-          style="height: 50px; margin: 10%; margin-left: 20%"
-        />
-        <span style="font-size: 30px">BA</span>
-      </div>
-      <ul>
-        <li><a href="#" id="logoutLink">Logout</a></li>
-      </ul>
-    </nav>
-    <div class="profile-container">
-      <div class="left-column">
-        <img
-          src="./image/default.jpg"
-          alt="User Photo"
-          class="user-photo"
-          id="userPhoto"
-        />
-      </div>
+<head>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <script src="./js/logout.js"></script>
+</head>
 
-      <div class="middle-column">
-        <form id="profileForm" class="profile-form">
-          <label for="getfullName">Full Name:</label>
-          <input
-            type="gettext"
-            id="fullName"
-            name="fullName"
-            placeholder="Full Name"
-            readonly
-          />
-          <br />
-
-          <label for="username">Username:</label>
-          <input
-            type="gettext"
-            id="username"
-            name="username"
-            placeholder="Username"
-            readonly
-          />
-          <br />
-
-          <label for="email">Email:</label>
-          <input
-            type="getemail"
-            id="email"
-            name="email"
-            placeholder="Email"
-            readonly
-          />
-        </form>
-      </div>
-
-      <div class="right-column">
-        <form id="contactRoleForm" class="contact-role-form">
-          <label for="contactNumber">Contact Number:</label>
-          <input
-            type="gettext"
-            id="contactNumber"
-            name="contactNumber"
-            placeholder="Contact Number"
-            readonly
-          />
-          <br />
-
-          <label for="role">Role:</label>
-          <input
-            type="gettext"
-            id="role"
-            name="role"
-            placeholder="Role"
-            readonly
-          />
-
-          <div class="form-actions">
-            <button type="button" id="deleteButton" class="deletebutton" onclick="deleteUser()">
-              Delete Account
-            </button>
-          </div>
-        </form>
-      </div>
+<body>
+  <nav class="nav-container">
+    <div style="display: flex; align-items: center">
+      <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
+      <span style="font-size: 30px">BA</span>
+    </div>
+    <ul class="custom-spacing">
+      <li><a href="courses.html">Courses</a></li>
+      <span class="spacing"></span>
+      <li><a href="viewAllQuizzes.html">Quizzes</a></li>
+    </ul>
+    
+    <ul>
+      <li><a href="getUser.html">Profile</a></li>
+      <span>|</span>
+      <li><a href="#" id="logoutLink">Logout</a></li>
+    </ul>
+  </nav>
+  <div class="profile-container">
+    <div class="left-column">
+      <img src="./image/default.jpg" alt="User Photo" class="user-photo" id="userPhoto" />
     </div>
 
-    <script src="./js/getUser.js"></script>
-    <script src="./js/deleteUser.js"></script>
-  </body>
+    <div class="middle-column">
+      <form id="profileForm" class="profile-form">
+        <label for="getfullName">Full Name:</label>
+        <input type="gettext" id="fullName" name="fullName" placeholder="Full Name" readonly />
+        <br />
+
+        <label for="username">Username:</label>
+        <input type="gettext" id="username" name="username" placeholder="Username" readonly />
+        <br />
+
+        <label for="email">Email:</label>
+        <input type="getemail" id="email" name="email" placeholder="Email" readonly />
+      </form>
+    </div>
+
+    <div class="right-column">
+      <form id="contactRoleForm" class="contact-role-form">
+        <label for="contactNumber">Contact Number:</label>
+        <input type="gettext" id="contactNumber" name="contactNumber" placeholder="Contact Number" readonly />
+        <br />
+
+        <label for="role">Role:</label>
+        <input type="gettext" id="role" name="role" placeholder="Role" readonly />
+
+        <div class="form-actions">
+          <button type="button" id="deleteButton" class="deletebutton" onclick="deleteUser()">
+            Delete Account
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="./js/getUser.js"></script>
+  <script src="./js/deleteUser.js"></script>
+</body>
+
 </html>
