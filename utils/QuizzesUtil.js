@@ -69,9 +69,9 @@ async function createQuizWithQuestions(req, res) {
     // }
 
     // Check if quiz course has already been used in a quiz
-    if (quizzes.some(q => q.quizCourse === quizCourse)) {
-      return res.status(404).json({ message: 'Quiz with this course topic already exists.' });
-    }
+    // if (quizzes.some(q => q.quizCourse === quizCourse)) {
+    //   return res.status(404).json({ message: 'Quiz with this course topic already exists.' });
+    // }
 
     // Write the new quiz to Firestore
     const quizId = await writeFirestore(newQuiz.toFirestore(), 'quizzes');
