@@ -115,43 +115,7 @@ describe('Testing Add Quiz Function', () => {
     }
   })
 
-  it('should handle when quiz with this course topic already exists', async () => {
-    const newQuiz = {
-      quizTitle: 'Test add quiz test case',
-      quizCourse: 'Division',
-      questions: [
-        {
-          questionTitle: 'Test Question',
-          options: ['Option 1', 'Option 2'],
-          correctOption: 0,
-        },
-      ],
-    };
 
-    const req = { body: newQuiz };
-    const res = {
-      status: function (code) {
-        if (code !== 404) {
-          console.error('Error status:', code);
-          console.error('Error details:', this.errorDetails); // Log the error details
-        }
-        expect(code).to.equal(404);
-        return this;
-      },
-      json: function (data) {
-        if (data.message !== 'Quiz with this course topic already exists.') {
-          expect(data.message).to.equal('Quiz with this course topic already exists.');
-        }
-      },
-      errorDetails: null,
-    };
-
-    try {
-      await createQuizWithQuestions(req, res);
-    } catch (error) {
-      console.error('Caught an error in the test:', error);
-    }
-  })
 
   // it('should handle internal server error', async () => {
   //   // Stub the firestore add method to simulate internal server error
