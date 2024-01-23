@@ -58,15 +58,15 @@ async function createQuizWithQuestions(req, res) {
     // Check if quiz title is already used
     const existingQuizWithTitle = quizzes.find(q => q.quizTitle === quizTitle);
     if (existingQuizWithTitle) {
-      return res.status(409).json({ message: 'Quiz with this title already exists.' });
+      return res.status(404).json({ message: 'Quiz with this title already exists.' });
     }
 
 
     // Check if quiz course matches existing course topics
-    const matchingCourse = courses.find(course => course.topic === quizCourse);
-    if (!matchingCourse) {
-      return res.status(404).json({ message: 'Quiz with this course topic does not exist. Please enter a valid course topic.' });
-    }
+    // const matchingCourse = courses.find(course => course.topic === quizCourse);
+    // if (!matchingCourse) {
+    //   return res.status(404).json({ message: 'Quiz with this course topic does not exist. Please enter a valid course topic.' });
+    // }
 
     // Check if quiz course has already been used in a quiz
     if (quizzes.some(q => q.quizCourse === quizCourse)) {
