@@ -168,7 +168,7 @@ describe('Testing get Course by Id Function', () => {
         sinon.assert.calledWith(res.status, 200);
         sinon.assert.calledOnce(res.json);
 
-        expect(res.json.args[0][0].course).to.exist; // Assuming the response has a 'course' property
+        expect(res.json.args[0][0].course).to.exist; 
     });
 
     it('should return a 404 status when the course ID is not found', async () => {
@@ -207,7 +207,7 @@ describe('Testing get Course by Id Function', () => {
 
     it('should handle internal server errors and return a 500 status', async () => {
         // Arrange
-        const req = { params: { id: 'validCourseId' } };
+        const req = { params: { id: '2eOC6Pd7Tcx6OFqGKcPA' } };
         const res = {
             status: sinon.stub().returnsThis(),
             json: sinon.stub(),

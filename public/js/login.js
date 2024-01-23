@@ -22,6 +22,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
               // Store user id and username in local storage
             
               localStorage.setItem('username', data.user.username);
+              localStorage.setItem('userId', data.user.id);
 
               // Redirect based on user role
               if (data.user.role === 'student') {

@@ -27,7 +27,6 @@ const {
   registerUser,
   getUser,
   login,
-  updateUser,
   deleteUser,
 } = require('./utils/UserUtil');
 
@@ -39,8 +38,7 @@ const {
 } = require('./utils/CourseUtil');
 
 app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
-//app.get('/getcourse/:id', getCourse);
-//app.get('/getcourse', getAllCourses);
+
 
 app.post('/validate-answers', async (req, res) => {
   try {
@@ -62,8 +60,7 @@ app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
 app.post('/register', registerUser);
 app.get('/getUser/:username', getUser);
 app.post('/login', login);
-// app.put('/updateUser/:id', updateUser);
-app.delete('/deleteUser/:username', deleteUser);
+app.delete('/deleteUser/:userId', deleteUser);
 
 app.post('/addCourse', addCourse);
 app.get('/getAllCourses', getAllCourses);
