@@ -1,4 +1,6 @@
 const { Course } = require('../models/Course');
+const { Quiz } = require('../models/Quiz');
+
 const { admin } = require('../firebaseAdmin.js');
 const fs = require('fs').promises;
 
@@ -12,10 +14,10 @@ async function readFirestore(collectionName) {
     //console.error('Error reading Firestore:', err);  // Uncomment for debugging
 
     // Check if the error is due to a missing document
-    if (err.code === 'not-found') {
-      //console.error('Document not found');
-      return [];
-    }
+    // if (err.code === 'not-found') {
+    //   //console.error('Document not found');
+    //   return [];
+    // }
 
     throw new Error('Internal Server Error');
   }
@@ -29,7 +31,7 @@ async function writeFirestore(data, collectionName) {
   } catch (err) {
     // console.error('Error writing to Firestore:', err);
     // throw err;
-    throw new Error ('Internal Server Error');
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -41,7 +43,7 @@ async function readFirestoreCourse() {
 }
 
 async function writeFirestoreCourse(course) {
-  return writeFirestore(course,'courses' );
+  return writeFirestore(course, 'courses');
 }
 
 async function addCourse(req, res) {
@@ -92,7 +94,7 @@ async function addCourse(req, res) {
     // Add the new course details to Firestore in the 'course' collection
     //await writeFirestoreCourse(newCourse);
 
-    return res.status(201).json({ message: 'Add Course successful!' , courseId});
+    return res.status(201).json({ message: 'Add Course successful!', courseId });
   } catch (error) {
     // console.error('Error in addCourse:', error);
     return res.status(500).json({ message: 'Internal Server Error', error: error.message });
@@ -132,12 +134,24 @@ async function getCourseById(req, res) {
 
     const foundCourse = { id: courseSnapshot.id, ...courseSnapshot.data() };
 
+    // Fetch quizzes based on the course's topic
+    const quizzesSnapshot = await db.collection('quizzes')
+      .where('quizCourse', '==', foundCourse.topic)
+      .get();
+
+    // Check if any quizzes are found
+    if (!quizzesSnapshot.empty) {
+      const quizIds = quizzesSnapshot.docs.map(doc => doc.id);
+      foundCourse.quizIds = quizIds;
+    }
+
     return res.status(200).json({ course: foundCourse });
   } catch (error) {
     // Handle errors
     return res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 }
+
 
 module.exports = {
   addCourse,

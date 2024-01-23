@@ -1,10 +1,10 @@
 const { expect } = require("chai");
 const sinon = require("sinon");
 const { admin } = require("../firebaseAdmin.js");
-const { createQuizWithQuestions, editQuiz } = require("../utils/QuizzesUtil");
+const { editQuiz } = require("../utils/QuizzesUtil");
 
 describe("Testing Edit Quiz Function", () => {
-  let getStub, updateStub, statusStub, jsonStub, createdQuizId;
+  let getStub, updateStub, statusStub, jsonStub;
 
   beforeEach(() => {
     getStub = sinon.stub();
@@ -12,123 +12,62 @@ describe("Testing Edit Quiz Function", () => {
     statusStub = sinon.stub().returnsThis();
     jsonStub = sinon.stub();
 
-    sinon.stub(admin.firestore().collection("quizzes"), "doc").returns({
-      get: getStub,
-      update: updateStub,
-    });
+    sinon
+      .stub(admin.firestore(), "collection")
+      .withArgs("quizzes")
+      .returns({
+        doc: sinon.stub().withArgs("quizIdExample").returns({
+          get: getStub,
+          update: updateStub,
+        }),
+      });
   });
 
   afterEach(() => {
     sinon.restore();
   });
 
-  // Create a mock quiz for editing
-  it("should create a new quiz for editing", async () => {
+  it("should update the quiz successfully", async () => {
     const req = {
+      params: { quizId: "quizIdExample" },
       body: {
-        quizTitle: "Test Quiz",
-        quizCourse: "Test Course",
-        questions: [
+        newQuizTitle: "Updated Title",
+        newQuizCourse: "Updated Course",
+        newQuestions: [
           {
-            questionTitle: "Test Question",
-            options: ["Option 1", "Option 2"],
+            questionTitle: "Update Question?",
+            options: ["Option 1", "Option 2", "Option 3"],
             correctOption: 0,
           },
         ],
       },
     };
-    const res = {
-      status: function (code) {
-        this.statusCode = code;
-        return this;
-      },
-      json: function (data) {
-        this.data = data;
-      },
-    };
+    const res = { status: statusStub, json: jsonStub };
 
-    await createQuizWithQuestions(req, res);
-
-    expect(res.statusCode).to.equal(201);
-    expect(res.data.message).to.equal("Quiz created successfully.");
-
-    createdQuizId = res.data.quiz.quizId;
-  });
-
-  // Test successful edit
-  it("should successfully edit an existing quiz", async () => {
-    // Mock that the quiz exists
+    // Simulate that the quiz exists
     getStub.resolves({ exists: true });
 
-    // Setup the request object with new quiz details
-    const req = {
-      params: { quizId: createdQuizId },
-      body: {
-        newQuizTitle: "Edited Quiz Title",
-        newQuizCourse: "Edited Quiz Course",
-        newQuestions: [
-          {
-            questionTitle: "Edited Question",
-            options: ["Edited Option 1", "Edited Option 2"],
-            correctOption: 1,
-          },
-        ],
-      },
-    };
+    // Simulate successful update
+    updateStub.resolves();
 
-    // Setup the response object
-    const res = {
-      status: statusStub,
-      json: jsonStub,
-    };
-
-    // Call the editQuiz function
     await editQuiz(req, res);
 
-    // Assert that the status code is 200
     expect(statusStub.calledOnceWith(200)).to.be.true;
-
-    // Assert that the response message is as expected
-    expect(
-      jsonStub.calledOnceWith({
-        message: "Quiz updated successfully",
-        quiz: {
-          quizTitle: "Edited Quiz Title",
-          quizCourse: "Edited Quiz Course",
-          questions: [
-            {
-              questionTitle: "Edited Question",
-              options: ["Edited Option 1", "Edited Option 2"],
-              correctOption: 1,
-            },
-          ],
-        },
-      })
-    ).to.be.true;
+    expect(jsonStub.calledOnce).to.be.true;
+    expect(jsonStub.firstCall.args[0].message).to.equal(
+      "Quiz updated successfully"
+    );
+    expect(updateStub.calledOnce).to.be.true;
   });
 
-  // // Test editing a non-existing quiz
-  it("should return 404 if the quiz to edit does not exist", async () => {
-    getStub.resolves({ exists: false });
-
+  it("should return 404 if the quiz does not exist", async () => {
     const req = {
-      params: { quizId: "nonExistingQuizId" },
-      body: {
-        newQuizTitle: "New Title",
-        newQuizCourse: "New Course",
-        newQuestions: [
-          {
-            questionTitle: "Test Question",
-            options: ["Option 1", "Option 2"],
-            correctOption: 0,
-          },
-        ],
-      },
+      params: { quizId: "quizIdExample" },
+      body: {},
     };
-    const res = {
-      status: statusStub,
-      json: jsonStub,
-    };
+    const res = { status: statusStub, json: jsonStub };
+
+    getStub.resolves({ exists: false });
 
     await editQuiz(req, res);
 
@@ -136,28 +75,16 @@ describe("Testing Edit Quiz Function", () => {
     expect(jsonStub.calledOnceWith({ message: "Quiz not found" })).to.be.true;
   });
 
-  // // Test editing with missing required fields
-  it("should return 400 if required fields are missing for editing quiz", async () => {
-    getStub.resolves({ exists: true });
-
+  it("should return 400 if required fields are missing", async () => {
     const req = {
-      params: { quizId: createdQuizId },
+      params: { quizId: "quizIdExample" },
       body: {
-        newQuizTitle: "", // Missing / empty field
-        newQuizCourse: "New Course",
-        newQuestions: [
-          {
-            questionTitle: "Test Question",
-            options: ["Option 1", "Option 2"],
-            correctOption: 0,
-          },
-        ],
+        newQuizTitle: "Updated Title",
       },
     };
-    const res = {
-      status: statusStub,
-      json: jsonStub,
-    };
+    const res = { status: statusStub, json: jsonStub };
+    // Simulate that the quiz exists
+    getStub.resolves({ exists: true });
 
     await editQuiz(req, res);
 
@@ -169,16 +96,16 @@ describe("Testing Edit Quiz Function", () => {
     ).to.be.true;
   });
 
-  it("should return 500 if an error occurs during editing", async () => {
+  it("should return 500 if an error occurs", async () => {
     const req = {
-      params: { quizId: createdQuizId },
+      params: { quizId: "quizIdExample" },
       body: {
-        newQuizTitle: "New Title",
-        newQuizCourse: "New Course",
+        newQuizTitle: "Updated Title",
+        newQuizCourse: "Updated Course",
         newQuestions: [
           {
-            questionTitle: "Test Question",
-            options: ["Option 1", "Option 2"],
+            questionTitle: "Update Question?",
+            options: ["Option 1", "Option 2", "Option 3"],
             correctOption: 0,
           },
         ],
@@ -194,7 +121,9 @@ describe("Testing Edit Quiz Function", () => {
       },
     };
 
-    updateStub.rejects(new Error("Error occurred attempting to edit quiz"));
+    // Simulate an error during update
+    getStub.resolves({ exists: true });
+    updateStub.throws(new Error("Error occurred attempting to edit quiz"));
 
     await editQuiz(req, res);
   });

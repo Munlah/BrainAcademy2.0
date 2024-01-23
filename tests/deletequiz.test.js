@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { admin } = require('../firebaseAdmin.js');
-const { createQuizWithQuestions, deleteQuiz } = require('../utils/QuizzesUtil');
+const { deleteQuiz } = require('../utils/QuizzesUtil');
 
 describe('Testing Delete Quiz Function', () => {
     let getStub, deleteStub, statusStub, jsonStub;
@@ -12,9 +12,11 @@ describe('Testing Delete Quiz Function', () => {
         statusStub = sinon.stub().returnsThis();
         jsonStub = sinon.stub();
 
-        sinon.stub(admin.firestore().collection('quizzes'), 'doc').returns({
-            get: getStub,
-            delete: deleteStub,
+        sinon.stub(admin.firestore(), 'collection').withArgs('quizzes').returns({
+            doc: sinon.stub().withArgs('ZKdcI1Jue7HQGaiMTMU5').returns({
+                get: getStub,
+                delete: deleteStub,
+            }),
         });
     });
 
@@ -22,51 +24,21 @@ describe('Testing Delete Quiz Function', () => {
         sinon.restore();
     });
 
-    let createdQuizId;
-
-    it('should create a new quiz', async () => {
-        const req = {
-            body: {
-                quizTitle: 'Test Quiz',
-                quizCourse: 'Test Course',
-                questions: [
-                    {
-                        questionTitle: 'Test Question',
-                        options: ['Option 1', 'Option 2'],
-                        correctOption: 0
-                    },
-                ]
-            }
-        };
-        const res = {
-            status: function (code) {
-                this.statusCode = code;
-                return this;
-            },
-            json: function (data) {
-                this.data = data;
-            },
-        };
-
-        await createQuizWithQuestions(req, res);
-
-        expect(res.statusCode).to.equal(201);
-        expect(res.data.message).to.equal('Quiz created successfully.');
-
-        createdQuizId = res.data.quiz.quizId;
-    });
-
-    it('should delete a quiz if it exists', async () => {
-        const req = { params: { quizId: createdQuizId } };
+    it('should delete the quiz successfully', async () => {
+        const req = { params: { quizId: 'ZKdcI1Jue7HQGaiMTMU5' } };
         const res = { status: statusStub, json: jsonStub };
 
+        // Simulate that the quiz exists
         getStub.resolves({ exists: true });
+
+        // Simulate successful deletion
         deleteStub.resolves();
 
         await deleteQuiz(req, res);
 
         expect(statusStub.calledOnceWith(200)).to.be.true;
         expect(jsonStub.calledOnceWith({ message: 'Quiz deleted successfully' })).to.be.true;
+        expect(deleteStub.calledOnce).to.be.true;
     });
 
     it('should return 404 if the quiz does not exist', async () => {
@@ -92,13 +64,12 @@ describe('Testing Delete Quiz Function', () => {
                 expect(data.message).to.equal('Error occurred attempting to delete quiz');
             },
         };
-    
-        const getStub = sinon.stub(admin.firestore().collection('quizzes').doc(req.params.quizId), 'get')
-            .throws(new Error('Error occurred attempting to delete quiz'));
-    
-        await require('../utils/QuizzesUtil').deleteQuiz(req, res);
-    
-        getStub.restore();
+
+        // Simulate an error during deletion
+        getStub.withArgs('ZKdcI1Jue7HQGaiMTMU5').throws(new Error('Error occurred attempting to delete quiz'));
+
+        await deleteQuiz(req, res);
     });
+
 
 });

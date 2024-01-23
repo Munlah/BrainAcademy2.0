@@ -1,6 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 var app = express();
+
+app.use(cors());
 
 const PORT = process.env.PORT || 5050;
 var startPage = 'index.html';
@@ -16,6 +19,7 @@ const {
   validateUserAnswers, viewAllQuizzesByCourse,
   editQuiz,
   deleteQuiz,
+  viewAllQuizzes
 } = require('./utils/QuizzesUtil');
 
 // Users
@@ -23,21 +27,18 @@ const {
   registerUser,
   getUser,
   login,
-  updateUser,
   deleteUser,
 } = require('./utils/UserUtil');
 
 // Courses
 const {
   addCourse,
-  getAllCourses, 
+  getAllCourses,
   getCourseById
 } = require('./utils/CourseUtil');
 
 app.get('/view-all-questions-for-quiz/:quizId', viewQuestionsPerQuiz);
-app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
-//app.get('/getcourse/:id', getCourse);
-//app.get('/getcourse', getAllCourses);
+
 
 app.post('/validate-answers', async (req, res) => {
   try {
@@ -52,12 +53,14 @@ app.post('/validate-answers', async (req, res) => {
 app.post('/create-new-quiz', createQuizWithQuestions);
 app.put('/edit-quiz/:quizId', editQuiz);
 app.delete('/delete-quiz/:quizId', deleteQuiz);
+app.get('/get-all-quizzes', viewAllQuizzes)
+app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
+
 
 app.post('/register', registerUser);
-// app.get('/getUser/:username', getUser);
+app.get('/getUser/:username', getUser);
 app.post('/login', login);
-// app.put('/updateUser/:id', updateUser);
-// app.delete('/deleteUser/:id', deleteUser);
+app.delete('/deleteUser/:userId', deleteUser);
 
 app.post('/addCourse', addCourse);
 app.get('/getAllCourses', getAllCourses);

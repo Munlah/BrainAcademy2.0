@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Quiz Admin</title>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <nav class="nav-container">
+      <div style="display: flex; align-items: center">
+        <img
+          src="./image/Icon.png"
+          alt="BA Icon"
+          style="height: 50px; margin: 10%; margin-left: 20%"
+        />
+        <span style="font-size: 30px">BA</span>
+      </div>
+      <ul class="custom-spacing">
+        <li><a href="addCourse.html">Courses</a></li>
+        <span class="spacing"></span>
+        <li><a href="viewAllQuizzes.html">Quizzes</a></li>
+      </ul>
+      <ul>
+        <li><a href="#" id="logoutLink">Logout</a></li>
+      </ul>
+    </nav>
+
+    <!--main content to edit quiz-->
+    <br />
+    <div class="quiz-container">
+      <i id="backArrow" class="fas fa-arrow-left back-arrow"></i>
+
+      <h2 style="text-align: center"><strong>Edit Quiz</strong></h2>
+
+      <form id="editQuizForm">
+        <label for="quizTitle"><strong>Quiz Title</strong></label>
+        <input type="text" id="quizTitle" name="quizTitle" />
+        <br />
+
+        <label for="quizCourse"> <strong>Quiz Course</strong></label>
+        <input type="text" id="quizCourse" name="quizCourse" />
+        <br />
+
+        <!-- Question 1 -->
+        <div class="question-container" id="question1">
+          <label for="question1Title"><strong>Question 1 Title</strong></label>
+          <input type="text" id="question1Title" />
+
+          <label for="question1Option1"><strong>Option 1</strong></label>
+          <input type="text" id="question1Option1" />
+
+          <label for="question1Option2"><strong>Option 2</strong></label>
+          <input type="text" id="question1Option2" />
+
+          <label for="question1Option3"><strong>Option 3</strong></label>
+          <input type="text" id="question1Option3" />
+
+          <label for="question1CorrectOption"
+            ><strong>Correct Option</strong></label
+          >
+          <select class="form-control form-select" id="question1CorrectOption">
+            <option value="0">Option 1</option>
+            <option value="1">Option 2</option>
+            <option value="2">Option 3</option>
+          </select>
+        </div>
+        <br />
+
+        <!-- Question 2 -->
+        <div class="question-container" id="question2">
+          <label for="question2Title"><strong>Question 2 Title</strong></label>
+          <input type="text" id="question2Title" />
+
+          <label for="question2Option1"><strong>Option 1</strong></label>
+          <input type="text" id="question2Option1" />
+
+          <label for="question2Option2"><strong>Option 2</strong></label>
+          <input type="text" id="question2Option2" />
+
+          <label for="question2Option3"><strong>Option 3</strong></label>
+          <input type="text" id="question2Option3" />
+
+          <label for="question2CorrectOption"
+            ><strong>Correct Option</strong></label
+          >
+          <select class="form-control form-select" id="question2CorrectOption">
+            <option value="0">Option 1</option>
+            <option value="1">Option 2</option>
+            <option value="2">Option 3</option>
+          </select>
+        </div>
+        <br />
+
+        <button type="submit">Update Quiz</button>
+        <br />
+        <br />
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("backArrow")
+        .addEventListener("click", function () {
+          window.location.href =
+            "http://127.0.0.1:5500/public/viewAllQuizzes.html";
+        });
+    </script>
+    <script src="./js/editQuiz.js"></script>
+  </body>
+</html>

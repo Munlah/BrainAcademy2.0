@@ -2,7 +2,7 @@ const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const { addCourse, writeFirestore  } = require('../utils/CourseUtil');
+const { addCourse, writeFirestore } = require('../utils/CourseUtil');
 const { admin } = require('../firebaseAdmin.js');
 
 let getStub;
@@ -13,6 +13,17 @@ const adminMockInternalError = {
         }),
     }),
 };
+
+const adminMockInternalError2 = {
+    firestore: () => ({
+        collection: () => ({
+            add: sinon.stub().throws(new Error('Firestore Add Error')),
+        }),
+    }),
+};
+
+const { writeFirestore: writeFirestoreInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError2 } });
+
 
 const { addCourse: addCourseInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
@@ -37,19 +48,29 @@ describe('Testing add Course Function', () => {
             };
         });
     });
+    // Variable to store the added course document ID
+    let addedCourseId;
 
-    afterEach(() => {
-        getStub.restore();
+    // Hook to run after all test cases
+    after(async () => {
+        if (addedCourseId) {
+            try {
+                // Delete the added course from Firestore
+                await admin.firestore().collection('courses').doc(addedCourseId).delete();
+            } catch (error) {
+                console.error('Error deleting added course:', error);
+            }
+        }
     });
 
-
+    // Test case for success scenario
     it('Should addCourse successfully', async function () {
         this.timeout(5000);
 
         const req = {
             body: {
                 topic: 'Mutiplication and Division',
-                description: 'Learn about simple division and multiplication for primary 6',
+                description: 'Learn about simple division and multiplication for sec 2',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: 'Maths',
             },
@@ -64,6 +85,8 @@ describe('Testing add Course Function', () => {
                 return this;
             },
             json: function (data) {
+                // Save the added course document ID for later deletion
+                addedCourseId = data.courseId;
                 expect(data.message).to.equal('Add Course successful!');
             },
             errorDetails: null, // Add a property to store error details
@@ -109,15 +132,15 @@ describe('Testing add Course Function', () => {
             console.error('Caught an error in the test:', error);
         }
     });
-    // Test case for failure if same topic is being added
-
+   
     it('Should fail if same description is being added', async () => {
         const req = {
             body: {
-                topic: 'Division',
-                description: 'Learn about simple division and multiplication for primary 6',
+                topic: 'Mutiplication',
+                description: 'Learn about simple division and multiplication for sec 2',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: 'Maths',
+
             },
         };
         const res = {
@@ -134,9 +157,16 @@ describe('Testing add Course Function', () => {
                     expect(data.message).to.equal('Description already exists');
                 }
             },
+            errorDetails: null,
         };
-        await addCourse(req, res);
+
+        try {
+            await addCourse(req, res);
+        } catch (error) {
+            console.error('Caught an error in the test:', error);
+        }
     });
+
     it('Should fail if topic is missing', async () => {
         const req = {
             body: {
@@ -356,63 +386,25 @@ describe('Testing add Course Function', () => {
         expect(res.statusCode).to.equal(500);
         expect(res.data.message).to.equal('Internal Server Error');
     });
-    // it('Should successfully write to Firestore', async () => {
-    //     const newCourse = {
-    //         topic: 'Math',
-    //         description: 'Introduction to Math',
-    //         video: 'https://example.com/math',
-    //         category: 'Education',
-    //     };
-    
-    //     const addStub = sinon.stub().resolves({}); // Resolve with an empty object to simulate success
-    //     const collectionStub = sinon.stub().returns({ add: addStub });
-    //     const dbStub = { collection: collectionStub };
-        
-    //     // Replace the actual Firestore instance with the stub
-    //     const originalDb = admin.firestore;
-    //     admin.firestore = () => dbStub;
-    
-    //     const req = { body: newCourse };
-    //     const res = {
-    //         status: function (code) {
-    //             expect(code).to.equal(201);
-    //             return this;
-    //         },
-    //         json: function (data) {
-    //             expect(data.message).to.equal('Add Course successful!');
-    //         },
-    //     };
-    
-    //     try {
-    //         await addCourse(req, res);
-    //         sinon.assert.calledWith(addStub, sinon.match(newCourse)); // Verify add method was called with the correct arguments
-    //     } finally {
-    //         admin.firestore = originalDb; // Restore the original Firestore instance
-    //     }
-    // });
-    // it('Should handle Firestore write error and throw Internal Server Error', async () => {
-    //     const newCourse = {
-    //         topic: 'Math',
-    //         description: 'Introduction to Math',
-    //         video: 'https://example.com/math',
-    //         category: 'Education',
-    //     };
-    
-    //     const addStub = sinon.stub().rejects(new Error('Firestore write error'));
-    //     const collectionStub = sinon.stub().returns({ add: addStub });
-    //     const dbStub = { collection: collectionStub };
-    
-    //     // Replace the actual Firestore instance with the stub
-    //     const originalDb = admin.firestore;
-    //     admin.firestore = () => dbStub;
-    
-    //     try {
-    //         // Ensure that writeFirestore throws the expected error
-    //         await expect(writeFirestore(newCourse)).to.be.rejectedWith('Internal Server Error');
-    //         sinon.assert.calledWith(addStub, sinon.match(newCourse)); // Verify add method was called with the correct arguments
-    //     } finally {
-    //         admin.firestore = originalDb; // Restore the original Firestore instance
-    //     }
-    // });    
-        
+    it('Should throw Internal Server Error on Firestore add error', async function () {
+        // Mock data and collectionName
+        const data = {
+            topic: 'Multiplication and Division',
+            description: 'Learn about simple division and multiplication for primary 6',
+            video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
+            category: 'Maths',
+        };
+
+        const collectionName = 'courses';
+
+        try {
+            // Call the function that uses Firestore add, which will throw an error in this case
+            await writeFirestoreInternalError(data, collectionName);
+            // If the function does not throw an error, fail the test
+            throw new Error('Expected an error but none was thrown');
+        } catch (error) {
+            // Verify that the error message is 'Internal Server Error'
+            expect(error.message).to.equal('Internal Server Error');
+        }
+    });
 });

@@ -12,7 +12,7 @@ async function readFirestore(collectionName) {
   } catch (err) {
     // console.error('Error reading Firestore:', err);
     // throw err;
-    throw new Error ('Internal Server Error');
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -24,7 +24,7 @@ async function writeFirestore(data, collectionName) {
   } catch (err) {
     // console.error('Error writing to Firestore:', err);
     // throw err;
-    throw new Error ('Internal Server Error');
+    throw new Error('Internal Server Error');
   }
 }
 
@@ -36,8 +36,6 @@ async function readFirestoreUsers() {
 async function writeFirestoreUser(user) {
   return writeFirestore(user, 'users');
 }
-
-// ... (Other functions remain unchanged)
 
 
 // Password validation function
@@ -143,16 +141,16 @@ async function getUser(req, res) {
   try {
     const { username } = req.params;
 
-    // Read the existing users data
-    const users = await readJSON('utils/users.json');
+    // Query Firestore for the user with the specified username
+    const usersSnapshot = await db.collection('users').where('username', '==', username).get();
 
-    // Find the user by username
-    const user = users.find((user) => user.username === username);
+    if (!usersSnapshot.empty) {
+      const userDoc = usersSnapshot.docs[0];
+      const user = userDoc.data();
 
-    if (user) {
-      // Respond with the user details including the password and passwordHash
+      // Respond with the user details
       return res.status(200).json({
-        id: user.id,
+        id: userDoc.id,
         username: user.username,
         email: user.email,
         password: user.password,
@@ -166,10 +164,11 @@ async function getUser(req, res) {
       return res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    console.error('Failed to get user:', error);
+    // console.error('Failed to get user:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
 
 // Function for login
 async function login(req, res) {
@@ -203,105 +202,38 @@ async function login(req, res) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    return res.status(200).json({ message: 'Login successful!' });
+    return res.status(200).json({ message: 'Login successful!', user });
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
 
-// // Function to update user data by id
-// async function updateUser(req, res) {
-//   try {
-//     const { id } = req.params;
-//     const { username, email, password, fullName, role, contactNumber } =
-//       req.body;
-
-//     // Read the existing users data
-//     const users = await readJSON('utils/users.json');
-
-//     // Find the user and update their details
-//     const userIndex = users.findIndex((user) => user.id === id);
-//     if (userIndex === -1) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     // Check if the new username is already taken by another user
-//     if (
-//       username &&
-//       users.some((user) => user.username === username && user.id !== id)
-//     ) {
-//       return res.status(400).json({ message: 'Username is already taken' });
-//     }
-
-//     // Validate the password if it's being changed
-//     if (password) {
-//       validatePassword(
-//         password,
-//         username || users[userIndex].username,
-//         email || users[userIndex].email
-//       );
-//       users[userIndex].passwordHash = await bcrypt.hash(password, saltRounds);
-//     }
-
-//     // Update the user details
-//     users[userIndex] = {
-//       ...users[userIndex],
-//       username: username || users[userIndex].username,
-//       email: email || users[userIndex].email,
-//       fullName: fullName || users[userIndex].fullName,
-//       role: role || users[userIndex].role,
-//       contactNumber: contactNumber || users[userIndex].contactNumber,
-//     };
-
-//     // Write the updated array back to the JSON file
-//     await writeJSON(users, 'utils/users.json');
-
-//     // Respond with the updated user details
-//     const updatedUser = { ...users[userIndex] };
-//     return res
-//       .status(200)
-//       .json({ message: 'User updated successfully', user: updatedUser });
-//   } catch (error) {
-//     return res.status(500).json({ message: error.message });
-//   }
-// }
-
-// Function to delete a user
 async function deleteUser(req, res) {
-  const userId = req.params.id;
-
-  // Read the existing users from the JSON file
-  const users = await readJSON('utils/users.json');
-
-  // Find the index of the user with the given ID
-  const userIndex = users.findIndex((user) => user.id === userId);
-
-  // If the user with the given ID is not found, return an error
-  if (userIndex === -1) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-
-  // Remove the user from the array
-  users.splice(userIndex, 1);
-
-  // Write the updated array back to the JSON file
   try {
-    await fs.writeFile('utils/users.json', JSON.stringify(users), 'utf8');
-    return res.status(200).json({ message: 'User deleted successfully' });
-  } catch (writeError) {
-    // Log the error for testing purposes
-    console.error('Error writing to users.json:', writeError);
+    const { userId } = req.params; 
 
-    // Return the error response for testing purposes
-    return res
-      .status(500)
-      .json({ message: 'Internal server error while deleting user' });
+    // Query Firestore for the user with the specified ID
+    const userDoc = await db.collection('users').doc(userId).get();
+
+    if (userDoc.exists) {
+      // Delete the user from Firestore
+      await db.collection('users').doc(userId).delete();
+
+      return res.status(200).json({ message: 'User deleted successfully' });
+    } else {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    //console.error('Failed to delete user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
 
 module.exports = {
   readFirestoreUsers,
   writeFirestoreUser,
+  writeFirestore,
   registerUser,
   getUser,
   login,

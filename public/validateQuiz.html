@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main Quiz</title>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <nav class="nav-container">
+      <div style="display: flex; align-items: center">
+        <img
+          src="./image/Icon.png"
+          alt="BA Icon"
+          style="height: 50px; margin: 10%; margin-left: 20%"
+        />
+        <span style="font-size: 30px">BA</span>
+      </div>
+    </nav>
+    <br />
+    <i id="backArrow" class="fas fa-arrow-left back-arrow"></i>
+
+    <!--main content to display qns-->
+    <br />
+    <div id="display-qns"></div>
+    <div id="results"></div>
+
+    <button id="submitQuiz">Get Results</button>
+    <button id="redoQuiz" style="display: none">Redo Quiz</button>
+
+    <script>
+      document
+        .getElementById("backArrow")
+        .addEventListener("click", function () {
+          // Redirect to another page
+          window.location.href = "http://127.0.0.1:5500/public/courses.html";
+        });
+    </script>
+    <script src="./js/validateQuiz.js"></script>
+  </body>
+</html>

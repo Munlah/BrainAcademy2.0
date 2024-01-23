@@ -51,19 +51,38 @@ async function createQuizWithQuestions(req, res) {
     // Create a new Quiz instance
     const newQuiz = new Quiz(quizTitle, quizCourse, newQuestions);
 
+    // Check for duplicate topic or description
+    const quizzes = await readFirestore('quizzes');
+    const courses = await readFirestore('courses');
+
+    // Check if quiz title is already used
+    const existingQuizWithTitle = quizzes.find(q => q.quizTitle === quizTitle);
+    if (existingQuizWithTitle) {
+      return res.status(409).json({ message: 'Quiz with this title already exists.' });
+    }
+
+
+    // Check if quiz course matches existing course topics
+    const matchingCourse = courses.find(course => course.topic === quizCourse);
+    if (!matchingCourse) {
+      return res.status(404).json({ message: 'Quiz with this course topic does not exist. Please enter a valid course topic.' });
+    }
+
+    // Check if quiz course has already been used in a quiz
+    if (quizzes.some(q => q.quizCourse === quizCourse)) {
+      return res.status(404).json({ message: 'Quiz with this course topic already exists.' });
+    }
+
     // Write the new quiz to Firestore
     const quizId = await writeFirestore(newQuiz.toFirestore(), 'quizzes');
-
-    // Log the response before sending it
-    //console.log('Response:', JSON.stringify({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } }));
-
-    return res.status(201).json({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } });
+    return res.status(201).json({ message: 'Quiz created successfully.', quizId});
 
   } catch (error) {
-
+    console.error('Error:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 
 async function viewQuestionsPerQuiz(req, res) {
   try {
@@ -132,26 +151,31 @@ async function validateUserAnswers(quizId, userAnswers) {
   }
 }
 
-
-
 // View all quizzes function by course
 async function viewAllQuizzesByCourse(req, res) {
   try {
-    // Request the course from the URL
     const course = req.params.course;
 
-    // Read from the Firestore collection
     const allQuizzes = await readFirestore('quizzes');
 
-    // Filter quizzes by course
     const quizzesByCourse = allQuizzes.filter(quiz => quiz.quizCourse === course);
 
     if (quizzesByCourse.length === 0) {
       return res.status(404).json({ message: 'No quizzes found' });
     }
 
-    // Return the quizzes
     return res.status(200).json(quizzesByCourse);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error reading from Firestore' });
+  }
+}
+
+// View all quizzes function
+async function viewAllQuizzes(req, res) {
+  try {
+    const allQuizzes = await readFirestore('quizzes');
+
+    return res.status(200).json(allQuizzes);
   } catch (error) {
     return res.status(500).json({ message: 'Error reading from Firestore' });
   }
@@ -225,7 +249,7 @@ async function deleteQuiz(req, res) {
 module.exports = {
 
   viewQuestionsPerQuiz, validateUserAnswers, createQuizWithQuestions,
-  viewAllQuizzesByCourse, editQuiz, deleteQuiz
+  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes, readFirestore, writeFirestore
 };
 
 
