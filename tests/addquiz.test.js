@@ -4,19 +4,6 @@ const proxyquire = require('proxyquire');
 const { admin } = require('../firebaseAdmin.js');
 const { createQuizWithQuestions, deleteQuiz } = require('../utils/QuizzesUtil');
 
-// Mocking the entire firebaseAdmin module to simulate an internal server error
-const adminMockInternalError = {
-  firestore: () => ({
-    collection: () => ({
-      add: sinon.stub().throws(new Error('Internal Server Error')), // Simulate internal server error here
-    }),
-  }),
-};
-
-const { createQuizWithQuestions: createQuizWithQuestionsInternalError } = proxyquire('../utils/QuizzesUtil', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
-
-
-
 describe('Testing Add Quiz Function', () => {
   let addStub;
   let addedQuizId; // Variable to store the addedQuizId
@@ -42,6 +29,38 @@ describe('Testing Add Quiz Function', () => {
         console.error('Error deleting added quiz:', error);
       }
     }
+  });
+
+  it('should handle internal server error', async () => {
+    // Stub the firestore add method to simulate internal server error
+    addStub = sinon.stub(admin.firestore().collection('quizzes'), 'add').throws(new Error('Internal Server Error'));
+
+    const newQuiz = {
+      quizTitle: 'Test Quiz123',
+      quizCourse: 'Algebra',
+      questions: [
+        {
+          questionTitle: 'Test Question',
+          options: ['Option 1', 'Option 2'],
+          correctOption: 0,
+        },
+      ],
+    };
+
+    const req = { body: newQuiz };
+    const res = {
+      status: function (code) {
+          expect(code).to.equal(500);
+          return this;
+      },
+      json: function (data) {
+          expect(data.message).to.equal('Internal Server Error');
+      },
+  };
+
+    // Use createQuizWithQuestionsInternalError here
+    await createQuizWithQuestions(req, res);
+
   });
 
   it('should create a new quiz', async () => {
@@ -119,7 +138,7 @@ describe('Testing Add Quiz Function', () => {
 
 
 
- 
+
 
   it('should handle invalid data', async () => {
 
