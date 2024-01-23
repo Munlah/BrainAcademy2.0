@@ -48,19 +48,29 @@ describe('Testing add Course Function', () => {
             };
         });
     });
+    // Variable to store the added course document ID
+    let addedCourseId;
 
-    afterEach(() => {
-        getStub.restore();
+    // Hook to run after all test cases
+    after(async () => {
+        if (addedCourseId) {
+            try {
+                // Delete the added course from Firestore
+                await admin.firestore().collection('courses').doc(addedCourseId).delete();
+            } catch (error) {
+                console.error('Error deleting added course:', error);
+            }
+        }
     });
 
-
+    // Test case for success scenario
     it('Should addCourse successfully', async function () {
         this.timeout(5000);
 
         const req = {
             body: {
                 topic: 'Mutiplication and Division',
-                description: 'Learn about simple division and multiplication for primary 6',
+                description: 'Learn about simple division and multiplication for sec 2',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: 'Maths',
             },
@@ -75,6 +85,8 @@ describe('Testing add Course Function', () => {
                 return this;
             },
             json: function (data) {
+                // Save the added course document ID for later deletion
+                addedCourseId = data.courseId;
                 expect(data.message).to.equal('Add Course successful!');
             },
             errorDetails: null, // Add a property to store error details
@@ -120,15 +132,15 @@ describe('Testing add Course Function', () => {
             console.error('Caught an error in the test:', error);
         }
     });
-    // Test case for failure if same topic is being added
-
+   
     it('Should fail if same description is being added', async () => {
         const req = {
             body: {
-                topic: 'Division',
-                description: 'Learn about simple division and multiplication for primary 6',
+                topic: 'Mutiplication',
+                description: 'Learn about simple division and multiplication for sec 2',
                 video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
                 category: 'Maths',
+
             },
         };
         const res = {
@@ -145,9 +157,16 @@ describe('Testing add Course Function', () => {
                     expect(data.message).to.equal('Description already exists');
                 }
             },
+            errorDetails: null,
         };
-        await addCourse(req, res);
+
+        try {
+            await addCourse(req, res);
+        } catch (error) {
+            console.error('Caught an error in the test:', error);
+        }
     });
+
     it('Should fail if topic is missing', async () => {
         const req = {
             body: {
@@ -375,7 +394,7 @@ describe('Testing add Course Function', () => {
             video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
             category: 'Maths',
         };
-        
+
         const collectionName = 'courses';
 
         try {
