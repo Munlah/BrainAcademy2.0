@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const { admin } = require('../firebaseAdmin.js');
 const { deleteUser } = require('../utils/UserUtil.js');
 
-describe.only('Testing Delete user Function', () => {
+describe('Testing Delete user Function', () => {
     let getStub, deleteStub, statusStub, jsonStub;
 
     beforeEach(() => {
