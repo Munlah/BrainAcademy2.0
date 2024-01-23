@@ -13,7 +13,12 @@ const adminMockInternalError = {
   }),
 };
 
+// Use the createQuizWithQuestionsInternalError here
 const { createQuizWithQuestions: createQuizWithQuestionsInternalError } = proxyquire('../utils/QuizzesUtil', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
+
+
+
+
 
 describe('Testing Add Quiz Function', () => {
   let addStub;
@@ -41,6 +46,46 @@ describe('Testing Add Quiz Function', () => {
       }
     }
   });
+
+
+ it('should handle internal server error', async () => {
+    // Stub the firestore add method to simulate internal server error
+    addStub = sinon.stub(admin.firestore().collection('quizzes'), 'add').throws(new Error('Internal Server Error'));
+
+    const newQuiz = {
+      quizTitle: 'Test Quiz123',
+      quizCourse: 'Algebra',
+      questions: [
+        {
+          questionTitle: 'Test Question',
+          options: ['Option 1', 'Option 2'],
+          correctOption: 0,
+        },
+      ],
+    };
+
+    const req = { body: newQuiz };
+    const res = {
+      status: function (code) {
+        this.statusCode = code;
+        return this;
+      },
+      json: function (data) {
+        this.data = data;
+      },
+    };
+
+    // Use createQuizWithQuestionsInternalError here
+    await createQuizWithQuestionsInternalError(req, res);
+
+    // Expectations for internal server error
+    expect(res.statusCode).to.equal(500);
+    expect(res.data.message).to.equal('Internal Server Error');
+  });
+
+
+
+
 
   it('should create a new quiz', async () => {
     // Stub the firestore add method to simulate successful quiz creation
@@ -117,39 +162,6 @@ describe('Testing Add Quiz Function', () => {
 
 
 
-  // it('should handle internal server error', async () => {
-  //   // Stub the firestore add method to simulate internal server error
-  //   addStub = sinon.stub(admin.firestore().collection('quizzes'), 'add').throws(new Error('Internal Server Error'));
-
-  //   const newQuiz = {
-  //     quizTitle: 'Test Quiz123',
-  //     quizCourse: 'Algebra',
-  //     questions: [
-  //       {
-  //         questionTitle: 'Test Question',
-  //         options: ['Option 1', 'Option 2'],
-  //         correctOption: 0,
-  //       },
-  //     ],
-  //   };
-
-  //   const req = { body: newQuiz };
-  //   const res = {
-  //     status: function (code) {
-  //       this.statusCode = code;
-  //       return this;
-  //     },
-  //     json: function (data) {
-  //       this.data = data;
-  //     },
-  //   };
-
-  //   await createQuizWithQuestionsInternalError(req, res);
-
-  //   // Expectations for internal server error
-  //   expect(res.statusCode).to.equal(500);
-  //   expect(res.data.message).to.equal('Internal Server Error');
-  // });
 
 
   it('should handle invalid data', async () => {
@@ -255,5 +267,7 @@ describe('Testing Add Quiz Function', () => {
     expect(res.statusCode).to.equal(400);
     expect(res.data.message).to.equal('Invalid correct option provided for creating quiz.');
   });
+
+
 
 });
