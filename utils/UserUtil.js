@@ -210,61 +210,24 @@ async function login(req, res) {
 
 async function deleteUser(req, res) {
   try {
-    const { username } = req.params;
+    const { userId } = req.params; 
 
-    // Query Firestore for the user with the specified username
-    const usersSnapshot = await db.collection('users').where('username', '==', username).get();
+    // Query Firestore for the user with the specified ID
+    const userDoc = await db.collection('users').doc(userId).get();
 
-    if (!usersSnapshot.empty) {
-      const userDoc = usersSnapshot.docs[0];
-
+    if (userDoc.exists) {
       // Delete the user from Firestore
-      await db.collection('users').doc(userDoc.id).delete();
+      await db.collection('users').doc(userId).delete();
 
       return res.status(200).json({ message: 'User deleted successfully' });
     } else {
       return res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
-    // console.error('Failed to delete user:', error);
+    //console.error('Failed to delete user:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
-// async function deleteUser(req, res) {
-//   const username = req.params.username;
-
-//   try {
-//     // Read the existing users from Firestore
-//     const users = await readFirestoreUsers();
-
-//     // Find the index of the user with the given ID
-//     const userIndex = users.findIndex((user) => user.username === username);
-
-//     // If the user with the given ID is not found, return an error
-//     if (userIndex === -1) {
-//       console.error(`User not found: ${username}`);
-//       if (res && res.status && res.json) {
-//         return res.status(404).json({ message: 'User not found' });
-//       } 
-//     }
-
-//     // Remove the user from Firestore
-//     await db.collection('users').doc(username).delete();
-
-//     // Check if res.json exists before using it
-//     if (res && res.json) {
-//       return res.status(200).json({ message: 'User deleted successfully' });
-//     } 
-//   } catch (error) {
-//     // Log the error for debugging purposes
-//     console.error('Error deleting user:', error);
-
-//     // Return the error response
-//     if (res && res.status && res.json) {
-//       return res.status(500).json({ message: 'Internal server error while deleting user' });
-//     }
-//   }
-// }
 
 
 module.exports = {
