@@ -14,10 +14,10 @@ async function readFirestore(collectionName) {
     //console.error('Error reading Firestore:', err);  // Uncomment for debugging
 
     // Check if the error is due to a missing document
-    if (err.code === 'not-found') {
-      //console.error('Document not found');
-      return [];
-    }
+    // if (err.code === 'not-found') {
+    //   //console.error('Document not found');
+    //   return [];
+    // }
 
     throw new Error('Internal Server Error');
   }
