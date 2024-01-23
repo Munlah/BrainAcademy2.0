@@ -75,7 +75,7 @@ async function createQuizWithQuestions(req, res) {
 
     // Write the new quiz to Firestore
     const quizId = await writeFirestore(newQuiz.toFirestore(), 'quizzes');
-    return res.status(201).json({ message: 'Quiz created successfully.', quiz: { quizId, ...newQuiz } });
+    return res.status(201).json({ message: 'Quiz created successfully.', quizId});
 
   } catch (error) {
     console.error('Error:', error);
