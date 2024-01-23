@@ -233,6 +233,7 @@ async function deleteUser(req, res) {
 module.exports = {
   readFirestoreUsers,
   writeFirestoreUser,
+  writeFirestore,
   registerUser,
   getUser,
   login,

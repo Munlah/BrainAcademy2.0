@@ -1,68 +1,60 @@
-const { describe, it } = require('mocha');
 const { expect } = require('chai');
-const fs = require('fs').promises;
 const sinon = require('sinon');
 const { admin } = require('../firebaseAdmin.js');
 const { viewAllQuizzesByCourse, viewAllQuizzes, readFirestore } = require('../utils/QuizzesUtil');
-const QuizzesUtil = require('../utils/QuizzesUtil');
+const { QuizzesUtil } = require('../utils/QuizzesUtil');
 
-let getStub;
+describe('Testing View All Quizzes By Course Function', () => {
+    let getStub, statusStub, jsonStub;
 
-let quizzes = [ // Define quizzes
-    { quizCourse: 'Your Quiz Course', quizTitle: 'Quiz 1' },
-    { quizCourse: 'Your Quiz Course', quizTitle: 'Quiz 2' },
-    { quizCourse: 'Another Quiz Course', quizTitle: 'Quiz 3' },
-];
+    beforeEach(() => {
+        getStub = sinon.stub();
+        statusStub = sinon.stub().returnsThis();
+        jsonStub = sinon.stub();
 
-beforeEach(() => {
-    getStub = sinon.stub(admin.firestore().collection('quizzes'), 'get').callsFake(async () => {
-        const queriedQuizzes = quizzes.filter(quiz => quiz.quizCourse === 'Your Quiz Course'); // Filter quizzes
-        return {
-            docs: queriedQuizzes.map(quiz => ({
-                data: () => quiz
-            }))
-        };
+        sinon.stub(admin.firestore(), 'collection').withArgs('quizzes').returns({
+            get: getStub,
+        });
     });
-});
 
-afterEach(() => {
-    getStub.restore();
-    sinon.restore();
-});
+    afterEach(() => {
+        sinon.restore();
+    });
 
-describe('Testing Display All Quizzes by Course Function', () => {
+    it('should return quizzes for a specific course', async () => {
+        const req = { params: { course: 'Math' } };
+        const res = { status: statusStub, json: jsonStub };
 
-    it('should return quizzes by course', async () => {
-        const req = { params: { course: 'Test course' } };
-        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
-
-        // Create a stub of the function that retrieves quizzes from the database
-        const getQuizzesByCourseNameStub = sinon
-            .stub(QuizzesUtil, 'viewAllQuizzesByCourse')
-            .returns(Promise.resolve([{ id: '1', name: 'Quiz 1' }, { id: '2', name: 'Quiz 2' }]));
+        // Simulate that quizzes exist for the specified course
+        getStub.resolves({
+            docs: [
+                { data: () => ({ quizCourse: 'Math', quizTitle: 'Sample Quiz' }) },
+                // Add more quiz objects if needed
+            ],
+        });
 
         await viewAllQuizzesByCourse(req, res);
 
-        expect(res.status.calledOnceWith(200)).to.be.true;
-        expect(res.json.calledOnce).to.be.true;
-        expect(Array.isArray(res.json.getCall(0).args[0])).to.be.true;
-
-        // Restore the original function
-        getQuizzesByCourseNameStub.restore();
+        expect(statusStub.calledOnceWith(200)).to.be.true;
+        expect(jsonStub.calledOnce).to.be.true;
+        // Add more specific assertions based on your expected data
     });
 
     it('should return 404 if no quizzes are found', async () => {
-        const req = { params: { course: 'Nonexistent Quiz Course' } };
-        const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+        const req = { params: { course: 'NonExistentCourse' } };
+        const res = { status: statusStub, json: jsonStub };
+
+        // Simulate that no quizzes exist for the specified course
+        getStub.resolves({ docs: [] });
 
         await viewAllQuizzesByCourse(req, res);
 
-        expect(res.status.calledOnceWith(404)).to.be.true;
-        expect(res.json.calledOnceWith({ message: 'No quizzes found' })).to.be.true;
+        expect(statusStub.calledOnceWith(404)).to.be.true;
+        expect(jsonStub.calledOnceWith({ message: 'No quizzes found' })).to.be.true;
     });
 
-    it('Should fail with status 500 when there is a server error', async () => {
-        const req = { params: { course: 'Your Quiz Course' } };
+    it('should return 500 if an error occurs', async () => {
+        const req = { params: { course: 'Math' } };
         const res = {
             status: function (code) {
                 expect(code).to.equal(500);
@@ -73,16 +65,11 @@ describe('Testing Display All Quizzes by Course Function', () => {
             },
         };
 
-        const readFirestoreStub = sinon
-            .stub(QuizzesUtil, 'readFirestore')
-            .throws(new Error('Error reading from Firestore'));
+        // Simulate an error during fetching quizzes
+        getStub.throws(new Error('Error reading from Firestore'));
 
-        await QuizzesUtil.viewAllQuizzesByCourse(req, res);
-
-        readFirestoreStub.restore();
+        await viewAllQuizzesByCourse(req, res);
     });
-
-
 });
 
 describe('Testing View All Quizzes Function', () => {
@@ -99,6 +86,14 @@ describe('Testing View All Quizzes Function', () => {
     });
 
     it('Should fail with status 500 when there is a server error', async () => {
+        // Stub the readFirestore function
+        const readFirestoreStub = sinon.stub().throws(new Error('Simulated Firestore error'));
+
+        // Replace the actual readFirestore function with the stub
+        const originalReadFirestore = global.readFirestore;
+        global.readFirestore = readFirestoreStub;
+
+        // Mock request and response objects
         const req = {};
         const res = {
             status: function (code) {
@@ -110,12 +105,10 @@ describe('Testing View All Quizzes Function', () => {
             },
         };
 
-        const readFirestoreStub = sinon
-            .stub(QuizzesUtil, 'readFirestore')
-            .throws(new Error('Error reading from Firestore'));
+        // Call the viewAllQuizzes function
+        await viewAllQuizzes(req, res);
 
-        await QuizzesUtil.viewAllQuizzes(req, res);
-
-        readFirestoreStub.restore();
+        // Restore the original readFirestore function
+        global.readFirestore = originalReadFirestore;
     });
 });

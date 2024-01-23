@@ -15,7 +15,7 @@ const adminMockInternalError = {
 
 const { createQuizWithQuestions: createQuizWithQuestionsInternalError } = proxyquire('../utils/QuizzesUtil', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
-describe.only('Testing Add Quiz Function', () => {
+describe('Testing Add Quiz Function', () => {
   let addStub;
   let addedQuizId; // Variable to store the addedQuizId
 
