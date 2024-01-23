@@ -169,6 +169,24 @@ async function viewAllQuizzesByCourse(req, res) {
     return res.status(500).json({ message: 'Error reading from Firestore' });
   }
 }
+// View all quizzes function by course
+async function viewQuizzesBytopic(req, res) {
+  try {
+    const course = req.params.course;
+
+    const allQuizzes = await readFirestore('quizzes');
+
+    const quizzesByCourse = allQuizzes.filter(quiz => quiz.quizCourse === topic);
+
+    if (quizzesByCourse.length === 0) {
+      return res.status(404).json({ message: 'No quizzes found' });
+    }
+
+    return res.status(200).json(quizzesByCourse);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error reading from Firestore' });
+  }
+}
 
 // View all quizzes function
 async function viewAllQuizzes(req, res) {
@@ -249,7 +267,7 @@ async function deleteQuiz(req, res) {
 module.exports = {
 
   viewQuestionsPerQuiz, validateUserAnswers, createQuizWithQuestions,
-  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes, readFirestore, writeFirestore
+  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes, readFirestore,writeFirestore, viewQuizzesBytopic
 };
 
 
