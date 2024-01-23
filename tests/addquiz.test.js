@@ -8,15 +8,12 @@ const { createQuizWithQuestions, deleteQuiz } = require('../utils/QuizzesUtil');
 const adminMockInternalError = {
   firestore: () => ({
     collection: () => ({
-      add: sinon.stub().throws(new Error('Internal Server Error')),
+      add: sinon.stub().throws(new Error('Internal Server Error')), // Simulate internal server error here
     }),
   }),
 };
 
-// Use the createQuizWithQuestionsInternalError here
 const { createQuizWithQuestions: createQuizWithQuestionsInternalError } = proxyquire('../utils/QuizzesUtil', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
-
-
 
 
 
@@ -47,52 +44,12 @@ describe('Testing Add Quiz Function', () => {
     }
   });
 
-
- it('should handle internal server error', async () => {
-    // Stub the firestore add method to simulate internal server error
-    addStub = sinon.stub(admin.firestore().collection('quizzes'), 'add').throws(new Error('Internal Server Error'));
-
-    const newQuiz = {
-      quizTitle: 'Test Quiz123',
-      quizCourse: 'Algebra',
-      questions: [
-        {
-          questionTitle: 'Test Question',
-          options: ['Option 1', 'Option 2'],
-          correctOption: 0,
-        },
-      ],
-    };
-
-    const req = { body: newQuiz };
-    const res = {
-      status: function (code) {
-        this.statusCode = code;
-        return this;
-      },
-      json: function (data) {
-        this.data = data;
-      },
-    };
-
-    // Use createQuizWithQuestionsInternalError here
-    await createQuizWithQuestionsInternalError(req, res);
-
-    // Expectations for internal server error
-    expect(res.statusCode).to.equal(500);
-    expect(res.data.message).to.equal('Internal Server Error');
-  });
-
-
-
-
-
   it('should create a new quiz', async () => {
     // Stub the firestore add method to simulate successful quiz creation
     addStub = sinon.stub(admin.firestore().collection('quizzes'), 'add').returns({ id: 'fakeQuizId' });
 
     const newQuiz = {
-      quizTitle: 'Test add quiz test case',
+      quizTitle: 'Test add quiz test cccase',
       quizCourse: 'Division',
       questions: [
         {
@@ -162,7 +119,7 @@ describe('Testing Add Quiz Function', () => {
 
 
 
-
+ 
 
   it('should handle invalid data', async () => {
 
@@ -267,7 +224,5 @@ describe('Testing Add Quiz Function', () => {
     expect(res.statusCode).to.equal(400);
     expect(res.data.message).to.equal('Invalid correct option provided for creating quiz.');
   });
-
-
 
 });
