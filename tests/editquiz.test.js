@@ -27,7 +27,7 @@ describe("Testing Edit Quiz Function", () => {
     const req = {
       body: {
         quizTitle: "Test Quiz",
-        quizCourse: "Test Course",
+        quizCourse: "Mutiplication and Division",
         questions: [
           {
             questionTitle: "Test Question",
