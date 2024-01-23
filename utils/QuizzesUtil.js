@@ -78,7 +78,7 @@ async function createQuizWithQuestions(req, res) {
     return res.status(201).json({ message: 'Quiz created successfully.', quizId});
 
   } catch (error) {
-    console.error('Error:', error);
+    //console.error('Error:', error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }

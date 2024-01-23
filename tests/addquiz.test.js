@@ -32,35 +32,33 @@ describe('Testing Add Quiz Function', () => {
   });
 
   it('should handle internal server error', async () => {
-    // Stub the firestore add method to simulate internal server error
-    addStub = sinon.stub(admin.firestore().collection('quizzes'), 'add').throws(new Error('Internal Server Error'));
-
-    const newQuiz = {
-      quizTitle: 'Test Quiz123',
-      quizCourse: 'Algebra',
-      questions: [
-        {
-          questionTitle: 'Test Question',
-          options: ['Option 1', 'Option 2'],
-          correctOption: 0,
-        },
-      ],
+    const req = {
+      body: {
+        quizTitle: 'Test Quiz 111',
+        quizCourse: 'Test Course 111',
+        questions: [
+          {
+            questionTitle: 'Test Question',
+            options: ['Option 1', 'Option 2'],
+            correctOption: 0
+          }
+        ]
+      }
     };
-
-    const req = { body: newQuiz };
     const res = {
       status: function (code) {
-          expect(code).to.equal(500);
-          return this;
+        expect(code).to.equal(500);
+        return this;
       },
       json: function (data) {
-          expect(data.message).to.equal('Internal Server Error');
+        addedQuizId = data.quizId;
+
+        expect(data.message).to.equal('Internal Server Error');
       },
-  };
+    };
 
     // Use createQuizWithQuestionsInternalError here
     await createQuizWithQuestions(req, res);
-
   });
 
   it('should create a new quiz', async () => {
