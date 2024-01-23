@@ -2,7 +2,7 @@ const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const { addCourse, writeFirestore  } = require('../utils/CourseUtil');
+const { addCourse, writeFirestore } = require('../utils/CourseUtil');
 const { admin } = require('../firebaseAdmin.js');
 
 let getStub;
@@ -13,6 +13,17 @@ const adminMockInternalError = {
         }),
     }),
 };
+
+const adminMockInternalError2 = {
+    firestore: () => ({
+        collection: () => ({
+            add: sinon.stub().throws(new Error('Firestore Add Error')),
+        }),
+    }),
+};
+
+const { writeFirestore: writeFirestoreInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError2 } });
+
 
 const { addCourse: addCourseInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
@@ -356,63 +367,25 @@ describe('Testing add Course Function', () => {
         expect(res.statusCode).to.equal(500);
         expect(res.data.message).to.equal('Internal Server Error');
     });
-    // it('Should successfully write to Firestore', async () => {
-    //     const newCourse = {
-    //         topic: 'Math',
-    //         description: 'Introduction to Math',
-    //         video: 'https://example.com/math',
-    //         category: 'Education',
-    //     };
-    
-    //     const addStub = sinon.stub().resolves({}); // Resolve with an empty object to simulate success
-    //     const collectionStub = sinon.stub().returns({ add: addStub });
-    //     const dbStub = { collection: collectionStub };
+    it('Should throw Internal Server Error on Firestore add error', async function () {
+        // Mock data and collectionName
+        const data = {
+            topic: 'Multiplication and Division',
+            description: 'Learn about simple division and multiplication for primary 6',
+            video: 'https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV',
+            category: 'Maths',
+        };
         
-    //     // Replace the actual Firestore instance with the stub
-    //     const originalDb = admin.firestore;
-    //     admin.firestore = () => dbStub;
-    
-    //     const req = { body: newCourse };
-    //     const res = {
-    //         status: function (code) {
-    //             expect(code).to.equal(201);
-    //             return this;
-    //         },
-    //         json: function (data) {
-    //             expect(data.message).to.equal('Add Course successful!');
-    //         },
-    //     };
-    
-    //     try {
-    //         await addCourse(req, res);
-    //         sinon.assert.calledWith(addStub, sinon.match(newCourse)); // Verify add method was called with the correct arguments
-    //     } finally {
-    //         admin.firestore = originalDb; // Restore the original Firestore instance
-    //     }
-    // });
-    // it('Should handle Firestore write error and throw Internal Server Error', async () => {
-    //     const newCourse = {
-    //         topic: 'Math',
-    //         description: 'Introduction to Math',
-    //         video: 'https://example.com/math',
-    //         category: 'Education',
-    //     };
-    
-    //     const addStub = sinon.stub().rejects(new Error('Firestore write error'));
-    //     const collectionStub = sinon.stub().returns({ add: addStub });
-    //     const dbStub = { collection: collectionStub };
-    
-    //     // Replace the actual Firestore instance with the stub
-    //     const originalDb = admin.firestore;
-    //     admin.firestore = () => dbStub;
-    
-    //     try {
-    //         // Ensure that writeFirestore throws the expected error
-    //         await expect(writeFirestore(newCourse)).to.be.rejectedWith('Internal Server Error');
-    //         sinon.assert.calledWith(addStub, sinon.match(newCourse)); // Verify add method was called with the correct arguments
-    //     } finally {
-    //         admin.firestore = originalDb; // Restore the original Firestore instance
-    //     }
-    // });    
-        
+        const collectionName = 'courses';
+
+        try {
+            // Call the function that uses Firestore add, which will throw an error in this case
+            await writeFirestoreInternalError(data, collectionName);
+            // If the function does not throw an error, fail the test
+            throw new Error('Expected an error but none was thrown');
+        } catch (error) {
+            // Verify that the error message is 'Internal Server Error'
+            expect(error.message).to.equal('Internal Server Error');
+        }
+    });
 });
