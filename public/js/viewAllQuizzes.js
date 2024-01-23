@@ -93,10 +93,10 @@ function fetchAndDisplayCourses() {
         const courseElement = template.content.cloneNode(true);
 
         const courseButton = courseElement.querySelector(".course-button");
-        courseButton.textContent = course.category;
+        courseButton.textContent = course.topic;
 
         courseButton.addEventListener("click", () =>
-          fetchAndDisplayQuizzesByCourse(course.category)
+          fetchAndDisplayQuizzesByCourse(course.topic)
         );
 
         container.appendChild(courseElement);
@@ -127,14 +127,51 @@ function fetchAndDisplayQuizzesByCourse(course) {
     .then((quizzes) => {
       if (quizzes) {
         const container = document.getElementById("display-all-quizzes");
-        container.innerHTML = "";
-
         const template = document.getElementById("quiz-template");
 
         quizzes.forEach((quiz) => {
           const quizElement = template.content.cloneNode(true);
 
           quizElement.querySelector(".quiz-title").textContent = quiz.quizTitle;
+
+          const editButton = quizElement.querySelector(".edit-button");
+          editButton.addEventListener("click", () => {
+            window.location.href = `editQuiz.html?quizId=${quiz.id}`;
+          });
+
+          const deleteButton = quizElement.querySelector(".delete-button");
+          deleteButton.addEventListener("click", () => {
+            const quizToDelete = quiz.id;
+
+            const modal = document.getElementById("myModal");
+            const confirmDeleteButton = document.getElementById("confirm-delete");
+            const cancelDeleteButton = document.getElementById("cancel-delete");
+
+            modal.style.display = "block";
+
+            confirmDeleteButton.addEventListener("click", () => {
+              fetch(`http://localhost:5050/delete-quiz/${quizToDelete}`, {
+                method: "DELETE",
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                  }
+                  fetchAndDisplayQuizzesByCourse(course);
+                })
+                .catch((e) =>
+                  console.log(
+                    "There was a problem with your fetch operation: " + e.message
+                  )
+                );
+
+              modal.style.display = "none";
+            });
+
+            cancelDeleteButton.addEventListener("click", () => {
+              modal.style.display = "none";
+            });
+          });
 
           container.appendChild(quizElement);
         });
