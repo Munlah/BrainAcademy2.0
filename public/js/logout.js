@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
 
             localStorage.removeItem('username');
-            // localStorage.removeItem('userId');
+            localStorage.removeItem('userId');
 
             // Navigate to index.html
             window.location.href = 'index.html';

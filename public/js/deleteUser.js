@@ -6,16 +6,16 @@ document.addEventListener('DOMContentLoaded', function () {
       const confirmed = confirm('Are you sure you want to delete your account?');
 
       if (confirmed) {
-        // Retrieve the username from local storage
-        const username = localStorage.getItem('username');
+        // Retrieve the userId from local storage
+        const userId = localStorage.getItem('userId');
 
-        if (!username) {
-          alert('Username not found in local storage.');
+        if (!userId) {
+          alert('userId not found in local storage.');
           return;
         }
 
         try {
-          const response = await fetch(`http://localhost:5050/deleteUser/${username}`, {
+          const response = await fetch(`http://localhost:5050/deleteUser/${userId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if (response.ok) {
             alert(data.message); 
             window.location.href = "index.html"; // Redirect to login page
+            localStorage.removeItem('userId');
             localStorage.removeItem('username');
           } else {
             alert(data.message); 
