@@ -152,7 +152,7 @@ afterEach(() => {
 // Proxyquire to mock internal errors
 const { getCourseById: getCourseByIdInternalError } = proxyquire('../utils/CourseUtil.js', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
-describe.only('Testing get Course by Id Function', () => {
+describe('Testing get Course by Id Function', () => {
     it('should return a course when a valid ID is provided', async () => {
         // Arrange
         const req = { params: { id: '2eOC6Pd7Tcx6OFqGKcPA' } };
