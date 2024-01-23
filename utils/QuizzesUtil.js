@@ -172,7 +172,7 @@ async function viewAllQuizzesByCourse(req, res) {
 // View all quizzes function by course
 async function viewQuizzesBytopic(req, res) {
   try {
-    const course = req.params.course;
+    const topic = req.params.topic;
 
     const allQuizzes = await readFirestore('quizzes');
 
