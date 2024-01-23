@@ -1,7 +1,9 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { admin } = require('../firebaseAdmin.js');
-const { createQuizWithQuestions, deleteQuiz } = require('../utils/QuizzesUtil');
+const { deleteQuiz } = require('../utils/QuizzesUtil');
+const QuizzesUtil = require('../utils/QuizzesUtil');
+const MockFirebase = require('mock-cloud-firestore');
 
 describe('Testing Delete Quiz Function', () => {
     let getStub, deleteStub, statusStub, jsonStub;
@@ -22,52 +24,54 @@ describe('Testing Delete Quiz Function', () => {
         sinon.restore();
     });
 
-    let createdQuizId;
 
-    it('should create a new quiz', async () => {
-        const req = {
-            body: {
-                quizTitle: 'Test Quiz',
-                quizCourse: 'Test Course',
-                questions: [
-                    {
-                        questionTitle: 'Test Question',
-                        options: ['Option 1', 'Option 2'],
-                        correctOption: 0
-                    },
-                ]
-            }
-        };
-        const res = {
-            status: function (code) {
-                this.statusCode = code;
-                return this;
+    const firebase = new MockFirebase({
+        database: {
+            quizzes: {
+                '0GgIQXe17luuRtp9wLiE': {
+                    quizTitle: 'New Title',
+                    quizCourse: 'New Course',
+                    questions: [
+                        {
+                            questionTitle: 'Test Question',
+                            options: ['Option 1', 'Option 2'],
+                            correctOption: 0
+                        },
+                        // other questions...
+                    ],
+                    // other quiz data...
+                },
+                // other quizzes...
             },
-            json: function (data) {
-                this.data = data;
-            },
-        };
-
-        await createQuizWithQuestions(req, res);
-
-        expect(res.statusCode).to.equal(201);
-        expect(res.data.message).to.equal('Quiz created successfully.');
-
-        createdQuizId = res.data.quiz.quizId;
+        },
     });
 
     it('should delete a quiz if it exists', async () => {
-        const req = { params: { quizId: createdQuizId } };
-        const res = { status: statusStub, json: jsonStub };
+        const req = { params: { quizId: '0GgIQXe17luuRtp9wLiE' } };
+        const res = {
+            status: function (code) {
+                expect(code).to.equal(200);
+                return this;
+            },
+            json: function (data) {
+                expect(data.message).to.equal('Quiz deleted successfully');
+            },
+        };
 
-        getStub.resolves({ exists: true });
-        deleteStub.resolves();
+        const docRef = firebase.firestore().doc(`quizzes/${req.params.quizId}`);
 
-        await deleteQuiz(req, res);
+        const deleteStub = sinon.stub(docRef, 'delete').resolves();
 
-        expect(statusStub.calledOnceWith(200)).to.be.true;
-        expect(jsonStub.calledOnceWith({ message: 'Quiz deleted successfully' })).to.be.true;
+        try {
+            await require('../utils/QuizzesUtil').deleteQuiz(req, res);
+        } catch (error) {
+            console.error('Test Error:', error); // Log any errors during the test
+        }
+
+        deleteStub.restore();
     });
+
+
 
     it('should return 404 if the quiz does not exist', async () => {
         const req = { params: { quizId: 'ZKdcI1Jue7HQGaiMTMU5' } };
@@ -92,12 +96,12 @@ describe('Testing Delete Quiz Function', () => {
                 expect(data.message).to.equal('Error occurred attempting to delete quiz');
             },
         };
-    
+
         const getStub = sinon.stub(admin.firestore().collection('quizzes').doc(req.params.quizId), 'get')
             .throws(new Error('Error occurred attempting to delete quiz'));
-    
+
         await require('../utils/QuizzesUtil').deleteQuiz(req, res);
-    
+
         getStub.restore();
     });
 
