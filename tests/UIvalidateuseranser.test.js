@@ -7,7 +7,7 @@ courseId = '2eOC6Pd7Tcx6OFqGKcPA';
 quizId = 'LK22AI2UANYHoDamMZAG';
 
 
-describe.only('Redirect to quiz', function () {
+describe('Redirect to quiz', function () {
   this.timeout(30000);
   let driver;
 
