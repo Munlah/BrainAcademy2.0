@@ -8,7 +8,7 @@
       "utils/UserUtil.js",
       "utils/QuizzesUtil.js",
       "utils/CourseUtil.js",
-      "public/js/**.js"
+      "public/js/*.js"
     ],
     "exclude": [],
     "reporter": [
@@ -25,7 +25,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "nyc mocha tests/*.test.js",
-    "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css && del .\\coverage-frontend\\*.json"
+    "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css",
+    "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary"
   },
   "author": "",
   "license": "ISC",
@@ -49,6 +50,7 @@
   "devDependencies": {
     "@firebase/testing": "^0.20.11",
     "chai": "^4.4.0",
+    "chai-as-promised": "^7.1.1",
     "istanbul": "^0.4.5",
     "sinon": "^17.0.1"
   }
