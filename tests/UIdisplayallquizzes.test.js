@@ -2,7 +2,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const { describe, it, after, before } = require('mocha');
 const { expect } = require('chai');
 
-describe.only('Testing View All Quizzes Admin Page', function () {
+describe('Testing View All Quizzes Admin Page', function () {
     this.timeout(30000);
 
     let driver;
