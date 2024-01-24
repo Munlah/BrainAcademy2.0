@@ -2,7 +2,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 
-describe.only('Testing Add Course in Chrome', function () {
+describe('Testing Add Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     before(async () => {
