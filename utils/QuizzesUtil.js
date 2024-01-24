@@ -51,31 +51,17 @@ async function createQuizWithQuestions(req, res) {
     // Create a new Quiz instance
     const newQuiz = new Quiz(quizTitle, quizCourse, newQuestions);
 
-    // Check for duplicate topic or description
     const quizzes = await readFirestore('quizzes');
-    const courses = await readFirestore('courses');
 
     // Check if quiz title is already used
     const existingQuizWithTitle = quizzes.find(q => q.quizTitle === quizTitle);
     if (existingQuizWithTitle) {
-      return res.status(404).json({ message: 'Quiz with this title already exists.' });
+      return res.status(409).json({ message: 'Quiz with this title already exists.' });
     }
-
-
-    // Check if quiz course matches existing course topics
-    // const matchingCourse = courses.find(course => course.topic === quizCourse);
-    // if (!matchingCourse) {
-    //   return res.status(404).json({ message: 'Quiz with this course topic does not exist. Please enter a valid course topic.' });
-    // }
-
-    // Check if quiz course has already been used in a quiz
-    // if (quizzes.some(q => q.quizCourse === quizCourse)) {
-    //   return res.status(404).json({ message: 'Quiz with this course topic already exists.' });
-    // }
 
     // Write the new quiz to Firestore
     const quizId = await writeFirestore(newQuiz.toFirestore(), 'quizzes');
-    return res.status(201).json({ message: 'Quiz created successfully.', quizId});
+    return res.status(201).json({ message: 'Quiz created successfully.', quizId });
 
   } catch (error) {
     //console.error('Error:', error);
@@ -267,7 +253,7 @@ async function deleteQuiz(req, res) {
 module.exports = {
 
   viewQuestionsPerQuiz, validateUserAnswers, createQuizWithQuestions,
-  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes, readFirestore,writeFirestore, viewQuizzesBytopic
+  viewAllQuizzesByCourse, editQuiz, deleteQuiz, viewAllQuizzes, readFirestore, writeFirestore, viewQuizzesBytopic
 };
 
 

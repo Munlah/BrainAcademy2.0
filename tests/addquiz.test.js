@@ -112,11 +112,11 @@ describe('Testing Add Quiz Function', () => {
     const req = { body: newQuiz };
     const res = {
       status: function (code) {
-        if (code !== 404) {
+        if (code !== 409) {
           // console.error('Error status:', code);
           // console.error('Error details:', this.errorDetails); // Log the error details
         }
-        expect(code).to.equal(404);
+        expect(code).to.equal(409);
         return this;
       },
       json: function (data) {
