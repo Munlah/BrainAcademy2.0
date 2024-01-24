@@ -4,6 +4,7 @@ const { describe, it, before, after } = require('mocha');
 const { expect } = require('chai');
 const fetch = require('node-fetch');
 const sinon = require('sinon');
+const fs = require('fs').promises;
 
 const chrome = require('selenium-webdriver/chrome');
 const chromeOptions = new chrome.Options();
@@ -11,6 +12,7 @@ const chromeOptions = new chrome.Options();
 
 let driver;
 let quizId; // Declare global variable for quizId
+var counter = 0;
 
 // let driver = new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
 
@@ -32,6 +34,21 @@ describe('Add Quiz UI', function () {
     await driver.get('http://127.0.0.1:5500/public/addQuiz.html');
   });
 
+  afterEach(async function () {
+    await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
+      if (coverageData) {
+        // Save coverage data to a file
+        await fs.writeFile('coverage-frontend/coverage' + counter++ + '.json',
+          JSON.stringify(coverageData), (err) => {
+            if (err) {
+              console.error('Error writing coverage data:', err);
+            } else {
+              console.log('Coverage data written to coverage.json');
+            }
+          });
+      }
+    });
+  });
 
   after(async function () {
     await driver.quit();
@@ -251,7 +268,7 @@ describe('Add Quiz UI', function () {
     });
   
   */
- 
+
   // it('should show error alert if there is internal server error', async function () {
   //   // Stub the fetch function to simulate an internal server error
   //   const fetchStub = sinon.stub(global, 'fetch');
@@ -286,8 +303,8 @@ describe('Add Quiz UI', function () {
 
 
 
-after(async function () {
+//after(async function () {
   // await driver.quit();
   // await server.close();
-  process.exit(0);
-});
+  //process.exit(0);
+//});

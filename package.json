@@ -7,7 +7,8 @@
     "include": [
       "utils/UserUtil.js",
       "utils/QuizzesUtil.js",
-      "utils/CourseUtil.js"
+      "utils/CourseUtil.js",
+      "public/**/*.js"
     ],
     "exclude": [],
     "reporter": [

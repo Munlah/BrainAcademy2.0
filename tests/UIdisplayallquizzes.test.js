@@ -1,11 +1,13 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const { describe, it, after, before } = require('mocha');
 const { expect } = require('chai');
+const fs = require('fs').promises;
 
 describe('Testing View All Quizzes Admin Page', function () {
     this.timeout(30000);
-
+    var counter = 0;
     let driver;
+
     before(async () => {
         driver = await new Builder().forBrowser('chrome').build();
         await driver.get('http://127.0.0.1:5500/public/viewAllQuizzes.html');
@@ -64,6 +66,22 @@ describe('Testing View All Quizzes Admin Page', function () {
         await addQuizButton.click();
 
         expect(await driver.getCurrentUrl()).to.equal('http://127.0.0.1:5500/public/addQuiz.html');
+    });
+
+    afterEach(async function () {
+        await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
+            if (coverageData) {
+                // Save coverage data to a file
+                await fs.writeFile('coverage-frontend/coverage' + counter++ + '.json',
+                    JSON.stringify(coverageData), (err) => {
+                        if (err) {
+                            console.error('Error writing coverage data:', err);
+                        } else {
+                            console.log('Coverage data written to coverage.json');
+                        }
+                    });
+            }
+        });
     });
 
 });
