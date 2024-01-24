@@ -128,7 +128,7 @@ function fetchAndDisplayQuizzesByCourse(course) {
       if (quizzes) {
         const container = document.getElementById("display-all-quizzes");
 
-        container.innerHTML = '';
+        container.innerHTML = "";
 
         const template = document.getElementById("quiz-template");
 
