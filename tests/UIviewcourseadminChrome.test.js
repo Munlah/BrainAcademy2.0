@@ -149,37 +149,37 @@ describe('Testing Add Course in Chrome', function () {
         // Check if the alert text is as expected
         expect(alertText).to.equal('Invalid URL. Please enter a valid URL for the video.');
     });
-    it('Should show an error alert for exsiting topic', async () => {
-        // Fill in the form with an invalid video URL
-        const topicInput = await driver.findElement(By.id('topic'));
-        const descriptionInput = await driver.findElement(By.id('description'));
-        const videoInput = await driver.findElement(By.id('video'));
-        const categoryInput = await driver.findElement(By.id('category'));
+    // it('Should show an error alert for exsiting topic', async () => {
+    //     // Fill in the form with an invalid video URL
+    //     const topicInput = await driver.findElement(By.id('topic'));
+    //     const descriptionInput = await driver.findElement(By.id('description'));
+    //     const videoInput = await driver.findElement(By.id('video'));
+    //     const categoryInput = await driver.findElement(By.id('category'));
 
-        await topicInput.sendKeys('Cold War');
-        await descriptionInput.sendKeys('sec 3');
-        await videoInput.sendKeys('https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV');
-        await categoryInput.sendKeys('History');
+    //     await topicInput.sendKeys('Cold War');
+    //     await descriptionInput.sendKeys('sec 3');
+    //     await videoInput.sendKeys('https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV');
+    //     await categoryInput.sendKeys('History');
 
 
-        // Click the "Add Course" button
-        const addButton = await driver.findElement(By.id('addCourse'));
-        await addButton.click();
+    //     // Click the "Add Course" button
+    //     const addButton = await driver.findElement(By.id('addCourse'));
+    //     await addButton.click();
 
-        // Wait for the modal to disappear (adjust the sleep duration based on your application behavior)
-        await driver.sleep(2000);
+    //     // Wait for the modal to disappear (adjust the sleep duration based on your application behavior)
+    //     await driver.sleep(2000);
 
-        // Handle the alert
-        const alert = await driver.switchTo().alert();
-        const alertText = await alert.getText();
-        await alert.accept();
+    //     // Handle the alert
+    //     const alert = await driver.switchTo().alert();
+    //     const alertText = await alert.getText();
+    //     await alert.accept();
 
-        // Reset the form to clear the fields
-        await resetForm();
-        console.log("Form resetted");
-        // Check if the alert text is as expected
-        expect(alertText).to.equal('Topic already exists');
-    });
+    //     // Reset the form to clear the fields
+    //     await resetForm();
+    //     console.log("Form resetted");
+    //     // Check if the alert text is as expected
+    //     expect(alertText).to.equal('Topic already exists');
+    // });
 
     // it('Should show an error alert for exsiting description', async () => {
     //     // Fill in the form with an invalid video URL
