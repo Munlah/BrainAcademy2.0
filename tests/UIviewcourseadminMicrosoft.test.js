@@ -15,10 +15,10 @@ const fs = require('fs').promises;
 //     before(async () => {
 
       
-        driver = new Builder().forBrowser('MicrosoftEdge').setEdgeOptions(new edge.Options()).build();
+  //      driver = new Builder().forBrowser('MicrosoftEdge').setEdgeOptions(new edge.Options()).build();
         // Open your web application in Firefox
-        await driver.get('http://localhost:5500/public/instrumented/addCourse.html');
-    });
+//        await driver.get('http://localhost:5500/public/instrumented/addCourse.html');
+//});
 
 //         driver = new Builder().forBrowser('MicrosoftEdge').setEdgeOptions(new edge.Options()).build();
 //         // Open your web application in Firefox
