@@ -8,6 +8,11 @@ function closeModal() {
     modal.style.display = 'none';
 }
 
+function resetForm() {
+    // Clear form fields
+    document.getElementById('addCourseForm').reset();
+}
+
 document.getElementById('addCourseForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
@@ -31,7 +36,8 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
         // Course added successfully
         closeModal();
         // Clear form fields
-        document.getElementById('addCourseForm').reset();
+        //document.getElementById('addCourseForm').reset();
+        resetForm();
 
         getAllCourses();
         // Display success message
@@ -47,19 +53,20 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
                 alert('Please fill in all fields.');
             } else if (result.message === 'Invalid input length') {
                 alert('Invalid input length. Please check the length of your input.');
-            } else if (result.message === 'Topic already exists' || result.message === 'Description already exists') {
-                alert(result.message);
+            } else if (result.message === 'Topic already exists') {
+                alert('Topic already exists');
+            } else if (result.message === 'Description already exists') {
+                alert('Description already exists');
             } else {
                 alert('Error adding course. Please try again.');
             }
+            resetForm();
         } else {
             console.error('Unexpected error:', result);
             alert(result.message, 'Please try again.');
         }
     }
 });
-
-
 
 async function getAllCourses() {
     try {
