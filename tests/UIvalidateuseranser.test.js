@@ -17,7 +17,7 @@ describe('Redirect to quiz', function () {
   });
 
   after(async () => {
-    // await driver.quit();
+     await driver.quit();
   });
 
   it('redirect to quiz when start quiz button is pressed', async function () {
