@@ -6,6 +6,7 @@ const edge = require('selenium-webdriver/edge');
 describe('Testing View Course in Microsoft', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
+    var counter = 0;
     before(async () => {
 
       
@@ -187,5 +188,20 @@ describe('Testing View Course in Microsoft', function () {
         const isDisplayed = await modal.isDisplayed();
 
         expect(isDisplayed).to.be.false;
+    });
+    afterEach(async function () {
+        await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
+            if (coverageData) {
+                // Save coverage data to a file
+                await fs.writeFile('coverage-frontend/coverage' + counter++ + '.json',
+                    JSON.stringify(coverageData), (err) => {
+                        if (err) {
+                            console.error('Error writing coverage data:', err);
+                        } else {
+                            console.log('Coverage data written to coverage.json');
+                        }
+                    });
+            }
+        });
     });
 });
