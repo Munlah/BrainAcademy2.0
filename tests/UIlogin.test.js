@@ -5,7 +5,7 @@ const fs = require('fs').promises;
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
-describe.only('Login Page UI Testing', function () {
+describe('Login Page UI Testing', function () {
     this.timeout(30000);
     let driver;
     var counter = 0;
