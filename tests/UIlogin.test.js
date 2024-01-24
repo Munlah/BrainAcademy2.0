@@ -1,10 +1,12 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const { describe, it, after, before } = require('mocha');
 const { expect } = require('chai');
+const fs = require('fs').promises;
 
 describe('Login Page UI Testing', function () {
     this.timeout(30000);
     let driver;
+    var counter = 0;
 
     before(async () => {
         driver = await new Builder().forBrowser('chrome').build();
@@ -42,6 +44,7 @@ describe('Login Page UI Testing', function () {
     });
 
     it('Should redirect to courses page for student role', async function () {
+        await driver.get('http://127.0.0.1:5500/public/index.html');
         await driver.findElement(By.id('username')).sendKeys('jennieeain2');
         await driver.findElement(By.id('password')).sendKeys('Ilovefood123@');
         await driver.findElement(By.xpath("//button[contains(text(), 'LOGIN')]")).click();
@@ -102,4 +105,19 @@ describe('Login Page UI Testing', function () {
         await alert.accept();
     });
 
+    afterEach(async function () {
+        await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
+            if (coverageData) {
+                // Save coverage data to a file
+                await fs.writeFile('coverage-frontend/coverage' + counter++ + '.json',
+                    JSON.stringify(coverageData), (err) => {
+                        if (err) {
+                            console.error('Error writing coverage data:', err);
+                        } else {
+                            console.log('Coverage data written to coverage.json');
+                        }
+                    });
+            }
+        });
+    });
 });
