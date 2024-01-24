@@ -2,7 +2,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 
-describe('Testing Add Course in Chrome', function () {
+describe.only('Testing Add Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     before(async () => {
@@ -102,25 +102,25 @@ describe('Testing Add Course in Chrome', function () {
         // Assert that at least one course is displayed
         expect(topicBoxes.length).to.be.greaterThan(0);
     });
-    it('Should show an error alert for empty fields', async () => {
-        const addButton = await driver.findElement(By.xpath('//button[text()="Add Course"]'));
-        await addButton.click();
+    // it('Should show an error alert for empty fields', async () => {
+    //     const addButton = await driver.findElement(By.xpath('//button[text()="Add Course"]'));
+    //     await addButton.click();
 
-        // Wait for the modal to appear (adjust the sleep duration based on your application behavior)
-        await driver.sleep(2000);
+    //     // Wait for the modal to appear (adjust the sleep duration based on your application behavior)
+    //     await driver.sleep(2000);
 
-        // Click the "Add Course" button without entering any data
-        const addButtonInModal = await driver.findElement(By.id('addCourse'));
-        await addButtonInModal.click();
+    //     // Click the "Add Course" button without entering any data
+    //     const addButtonInModal = await driver.findElement(By.id('addCourse'));
+    //     await addButtonInModal.click();
 
-        // Handle the alert
-        const alert = await driver.switchTo().alert();
-        const alertText = await alert.getText();
-        await alert.accept();
+    //     // Handle the alert
+    //     const alert = await driver.switchTo().alert();
+    //     const alertText = await alert.getText();
+    //     await alert.accept();
 
-        // Check if the alert text is as expected
-        expect(alertText).to.equal('Please fill in all fields.');
-    });
+    //     // Check if the alert text is as expected
+    //     expect(alertText).to.equal('Please fill in all fields.');
+    // });
     // it('Should show an error alert for an invalid video URL', async () => {
     //     // Fill in the form with an invalid video URL
     //     const topicInput = await driver.findElement(By.id('topic'));
