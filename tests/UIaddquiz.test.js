@@ -21,7 +21,7 @@ let quizId; // Declare global variable for quizId
 //   await driver.get('http://127.0.0.1:5500/public/addQuiz.html');
 // });
 
-describe.only('Add Quiz UI', function () {
+describe('Add Quiz UI', function () {
 
   this.timeout(30000);
 
@@ -145,7 +145,7 @@ describe.only('Add Quiz UI', function () {
   });
 
 
-  it.only('should redirect to view all quizzes page after successfully adding', async function () {
+  it('should redirect to view all quizzes page after successfully adding', async function () {
     // Find quiz title field
     const quizTitleElement = await driver.findElement(By.id('quizTitle'));
     await quizTitleElement.click();
