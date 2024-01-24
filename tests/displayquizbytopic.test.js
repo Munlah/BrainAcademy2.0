@@ -64,10 +64,6 @@ describe('Testing View All Quizzes By Topic Function', () => {
                 expect(data.message).to.equal('Error reading from Firestore');
             },
         };
-
-        // Simulate an error during fetching quizzes
-        //getStub.throws(new Error('Error reading from Firestore'));
-
         await viewQuizzesBytopic(req, res);
     });
 });
