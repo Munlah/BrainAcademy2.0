@@ -14,7 +14,8 @@ global.localStorage = dom.window.localStorage;
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-describe.only('Login Form Tests', function () {
+describe('Login Page UI Testing', function () {
+    this.timeout(30000);
     let driver;
     var counter = 0;
     this.timeout(30000);
