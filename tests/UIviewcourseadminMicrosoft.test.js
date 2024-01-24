@@ -2,6 +2,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const edge = require('selenium-webdriver/edge');
+const fs = require('fs').promises;
 
 describe('Testing View Course in Microsoft', function () {
     this.timeout(30000);
@@ -12,7 +13,7 @@ describe('Testing View Course in Microsoft', function () {
       
         driver = new Builder().forBrowser('MicrosoftEdge').setEdgeOptions(new edge.Options()).build();
         // Open your web application in Firefox
-        await driver.get('http://localhost:5500/public/addCourse.html');
+        await driver.get('http://localhost:5500/public/instrumented/addCourse.html');
     });
 
     after(async () => {

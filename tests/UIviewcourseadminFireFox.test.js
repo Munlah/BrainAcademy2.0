@@ -2,6 +2,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const firefox = require('selenium-webdriver/firefox');
+const fs = require('fs').promises;
 
 describe('Testing View Course in FireFox', function () {
     this.timeout(30000);
@@ -12,7 +13,7 @@ describe('Testing View Course in FireFox', function () {
         driver = await new Builder().forBrowser('firefox').setFirefoxOptions(new firefox.Options()).build();
     
         // Open your web application in Firefox
-        await driver.get('http://localhost:5500/public/addCourse.html');
+        await driver.get('http://localhost:5500/public/instrumented/addCourse.html');
     });
     
     after(async () => {

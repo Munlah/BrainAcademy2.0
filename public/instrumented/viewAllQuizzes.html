@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View All Quizzes Admin</title>
+  <script src="./js/logout.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+</head>
+
+<body>
+  <nav class="nav-container">
+    <div style="display: flex; align-items: center">
+      <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
+      <span style="font-size: 30px">BA</span>
+    </div>
+    <ul class="custom-spacing">
+      <li><a href="addCourse.html">Courses</a></li>
+      <span class="spacing"></span>
+      <li><a href="viewAllQuizzes.html">Quizzes</a></li>
+    </ul>
+
+    <ul>
+      <li><a href="#" id="logoutLink">Logout</a></li>
+    </ul>
+  </nav>
+  <div class="all-quiz-main-div">
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <h1>All Quizzes</h1>
+      <button style="border-radius: 4px" class="normal-button" id="redirectAddQuiz">Add Quiz</button>
+    </div>
+  </div>
+  <div id="display-all-courses"></div>
+
+
+
+  <template id="course-template">
+    <div class="course">
+      <button class="course-button"></button>
+    </div>
+  </template>
+
+  <div id="display-all-quizzes">
+  </div>
+
+  <template id="quiz-template">
+    <div class="quiz">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h4 class="quiz-title"></h4>
+        <div>
+          <button class="edit-button">Edit</button>
+          <button class="delete-button" id="quiz-id">Delete</button>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </template>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <p>Are you sure you want to delete this quiz?</p>
+      <div class="button-container">
+        <button id="confirm-delete">Yes</button>
+        <button id="cancel-delete">No</button>
+      </div>
+    </div>
+    <script src="./js/viewAllQuizzes.js"></script>
+    <script src="./js/addQuiz.js"></script>
+
+    <script>
+      document.getElementById('redirectAddQuiz').addEventListener('click', function () {
+        // Redirect to another page
+        window.location.href = 'http://127.0.0.1:5500/public/addQuiz.html';
+      });
+    </script>
+</body>
+
+</html>
