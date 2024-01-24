@@ -2,7 +2,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const { describe, it, after, before } = require('mocha');
 const { expect } = require('chai');
 
-describe.only('Login Page UI Testing', function () {
+describe('Login Page UI Testing', function () {
     this.timeout(30000);
     let driver;
 
