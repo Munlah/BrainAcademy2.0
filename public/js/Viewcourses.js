@@ -12,10 +12,25 @@ async function getAllCourses() {
                 topicBox.className = 'topic-box';
                 topicBox.textContent = course.topic;
 
+                // // Add click event to navigate to details page
+                // topicBox.addEventListener('click', () => {
+                //     window.location.href = `http://127.0.0.1:5500/public/courseDetails.html?courseId=${course.id}`;
+                // });
+                // Assuming course is an object with properties like id and topic
                 // Add click event to navigate to details page
                 topicBox.addEventListener('click', () => {
-                    window.location.href = `http://127.0.0.1:5500/public/courseDetails.html?courseId=${course.id}`;
+                    const courseId = course.id;
+                    const topic = course.topic;
+                    console.log(topic);
+
+                    // Encode the parameters to ensure they are properly formatted in the URL
+                    const encodedCourseId = encodeURIComponent(courseId);
+                    const encodedTopic = encodeURIComponent(topic);
+
+                    // Update the URL to include both course ID and topic
+                    window.location.href = `http://127.0.0.1:5500/public/courseDetails.html?courseId=${encodedCourseId}&topic=${encodedTopic}`;
                 });
+
 
                 coursesGrid.appendChild(topicBox);
             });

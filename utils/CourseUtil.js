@@ -11,13 +11,6 @@ async function readFirestore(collectionName) {
     const snapshot = await db.collection(collectionName).get();
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (err) {
-    //console.error('Error reading Firestore:', err);  // Uncomment for debugging
-
-    // Check if the error is due to a missing document
-    // if (err.code === 'not-found') {
-    //   //console.error('Document not found');
-    //   return [];
-    // }
 
     throw new Error('Internal Server Error');
   }
@@ -134,17 +127,6 @@ async function getCourseById(req, res) {
 
     const foundCourse = { id: courseSnapshot.id, ...courseSnapshot.data() };
 
-    // Fetch quizzes based on the course's topic
-    const quizzesSnapshot = await db.collection('quizzes')
-      .where('quizCourse', '==', foundCourse.topic)
-      .get();
-
-    // Check if any quizzes are found
-    if (!quizzesSnapshot.empty) {
-      const quizIds = quizzesSnapshot.docs.map(doc => doc.id);
-      foundCourse.quizIds = quizIds;
-    }
-
     return res.status(200).json({ course: foundCourse });
   } catch (error) {
     // Handle errors
@@ -161,50 +143,3 @@ module.exports = {
   readFirestore
 };
 
-
-
-// async function getCourse(req, res) {
-//   try {
-//     const courseId = parseInt(req.params.id);
-
-//     if (isNaN(courseId)) {
-//       return res.status(400).json({ message: 'Invalid course ID' });
-//     }
-
-//     // Read existing courses from the JSON file
-//     const allCourses = await readJSON('utils/course.json');
-
-//     // Find the course with the specified ID
-//     const course = allCourses.find((course) => course.id === courseId);
-
-//     if (course) {
-//       return res.status(200).json(course);
-//     } else {
-//       return res.status(404).json({ message: 'Course not found' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// }
-
-// async function getAllCourses(req, res) {
-//   try {
-//     const allCourses = await readJSON('utils/course.json');
-
-//     if (allCourses.length === 0) {
-//       return res.status(200).json({ message: 'No courses available' });
-//     }
-
-
-//     return res.status(200).json(allCourses);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// }
-
-
-// module.exports = {
-//   addCourse
-// };
