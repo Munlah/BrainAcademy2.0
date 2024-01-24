@@ -59,7 +59,7 @@
 // window.onload = getCourseById;
 
 
-let topic; 
+let topic;
 
 async function getCourseById() {
     try {
@@ -117,7 +117,7 @@ async function getquiz(topic) {
         if (response.ok) {
             const data = await response.json();
             console.log('Received quiz data:', data); // Add this line for debugging
-            const quiz = document.getElementById('quiz');
+            const quiz = document.getElementById('start-quiz-button');
 
             if (data && Array.isArray(data)) {
                 data.forEach(quizData => {
