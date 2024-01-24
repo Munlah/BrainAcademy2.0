@@ -11,13 +11,6 @@ async function readFirestore(collectionName) {
     const snapshot = await db.collection(collectionName).get();
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (err) {
-    //console.error('Error reading Firestore:', err);  // Uncomment for debugging
-
-    // Check if the error is due to a missing document
-    // if (err.code === 'not-found') {
-    //   //console.error('Document not found');
-    //   return [];
-    // }
 
     throw new Error('Internal Server Error');
   }
