@@ -25,7 +25,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "nyc mocha tests/*.test.js",
-    "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css && del .\\coverage-frontend\\*.json"  },
+    "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css && del .\\coverage-frontend\\*.json"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -38,6 +39,7 @@
     "firebase": "^10.7.1",
     "firebase-admin": "^12.0.0",
     "fs": "^0.0.1-security",
+    "jsdom": "^24.0.0",
     "mocha": "^10.2.0",
     "mock-cloud-firestore": "^0.12.0",
     "nyc": "^15.1.0",
