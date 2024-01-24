@@ -31,7 +31,7 @@ describe('Add Quiz UI', function () {
 
   before(async () => {
     driver = await new Builder().forBrowser('chrome').build();
-    await driver.get('http://127.0.0.1:5500/public/addQuiz.html');
+    await driver.get('http://127.0.0.1:5500/public/instrumented/addQuiz.html');
   });
 
   afterEach(async function () {

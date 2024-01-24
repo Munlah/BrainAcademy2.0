@@ -1,6 +1,7 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const { describe, it, after, before } = require('mocha');
 const { expect } = require('chai');
+const fs = require('fs').promises;
 
 //redirect to the quiz qn ui page from the course
 courseId = '2eOC6Pd7Tcx6OFqGKcPA';
@@ -10,14 +11,31 @@ quizId = 'LK22AI2UANYHoDamMZAG';
 describe('Redirect to quiz', function () {
   this.timeout(30000);
   let driver;
+  var counter = 0;
 
   before(async () => {
     driver = await new Builder().forBrowser('chrome').build();
-    await driver.get('http://127.0.0.1:5500/public/courseDetails.html?courseId=2eOC6Pd7Tcx6OFqGKcPA&topic=Division');
+    await driver.get('http://127.0.0.1:5500/public/instrumented/courseDetails.html?courseId=2eOC6Pd7Tcx6OFqGKcPA&topic=Division');
   });
 
   after(async () => {
-     await driver.quit();
+    await driver.quit();
+  });
+
+  afterEach(async function () {
+    await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
+      if (coverageData) {
+        // Save coverage data to a file
+        await fs.writeFile('coverage-frontend/coverage' + counter++ + '.json',
+          JSON.stringify(coverageData), (err) => {
+            if (err) {
+              console.error('Error writing coverage data:', err);
+            } else {
+              console.log('Coverage data written to coverage.json');
+            }
+          });
+      }
+    });
   });
 
   it('redirect to quiz when start quiz button is pressed', async function () {
@@ -31,7 +49,7 @@ describe('Redirect to quiz', function () {
     await startQuizButton.click();
 
     //Wait for the redirection to complete
-    await driver.wait(until.urlIs('http://127.0.0.1:5500/public/validateQuiz.html?quizId=LK22AI2UANYHoDamMZAG'), 5000);
+    await driver.wait(until.urlIs('http://127.0.0.1:5500/public/instrumented/validateQuiz.html?quizId=LK22AI2UANYHoDamMZAG'), 5000);
 
     //Assert that the URL is redirected to the expected URL
     expect(await driver.getCurrentUrl()).to.equal('http://127.0.0.1:5500/public/validateQuiz.html?quizId=LK22AI2UANYHoDamMZAG');

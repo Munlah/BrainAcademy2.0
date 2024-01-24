@@ -10,7 +10,7 @@ describe('Testing View All Quizzes Admin Page', function () {
 
     before(async () => {
         driver = await new Builder().forBrowser('chrome').build();
-        await driver.get('http://127.0.0.1:5500/public/viewAllQuizzes.html');
+        await driver.get('http://127.0.0.1:5500/public/instrumented/viewAllQuizzes.html');
     });
 
     after(async () => {

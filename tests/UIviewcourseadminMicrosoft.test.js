@@ -1,3 +1,8 @@
+const { Builder, By, Key, until } = require('selenium-webdriver');
+const { describe, it } = require('mocha');
+const { expect } = require('chai');
+const edge = require('selenium-webdriver/edge');
+const fs = require('fs').promises;
 // const { Builder, By, Key, until } = require('selenium-webdriver');
 // const { describe, it } = require('mocha');
 // const { expect } = require('chai');
@@ -10,6 +15,11 @@
 //     before(async () => {
 
       
+        driver = new Builder().forBrowser('MicrosoftEdge').setEdgeOptions(new edge.Options()).build();
+        // Open your web application in Firefox
+        await driver.get('http://localhost:5500/public/instrumented/addCourse.html');
+    });
+
 //         driver = new Builder().forBrowser('MicrosoftEdge').setEdgeOptions(new edge.Options()).build();
 //         // Open your web application in Firefox
 //         await driver.get('http://localhost:5500/public/addCourse.html');
