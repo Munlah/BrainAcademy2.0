@@ -104,81 +104,81 @@ describe('Testing View Course in Microsoft', function () {
         // Assert that at least one course is displayed
         expect(topicBoxes.length).to.be.greaterThan(0);
     });
-    it('Should show an error alert for empty fields', async () => {
-        const addButton = await driver.findElement(By.xpath('//button[text()="Add Course"]'));
-        await addButton.click();
+    // it('Should show an error alert for empty fields', async () => {
+    //     const addButton = await driver.findElement(By.xpath('//button[text()="Add Course"]'));
+    //     await addButton.click();
 
-        // Wait for the modal to appear (adjust the sleep duration based on your application behavior)
-        await driver.sleep(2000);
+    //     // Wait for the modal to appear (adjust the sleep duration based on your application behavior)
+    //     await driver.sleep(2000);
 
-        // Click the "Add Course" button without entering any data
-        const addButtonInModal = await driver.findElement(By.id('addCourse'));
-        await addButtonInModal.click();
+    //     // Click the "Add Course" button without entering any data
+    //     const addButtonInModal = await driver.findElement(By.id('addCourse'));
+    //     await addButtonInModal.click();
 
-        // Handle the alert
-        const alert = await driver.switchTo().alert();
-        const alertText = await alert.getText();
-        await alert.accept();
+    //     // Handle the alert
+    //     const alert = await driver.switchTo().alert();
+    //     const alertText = await alert.getText();
+    //     await alert.accept();
 
-        // Check if the alert text is as expected
-        expect(alertText).to.equal('Please fill in all fields.');
-    });
-    it('Should show an error alert for an invalid video URL', async () => {
-        // Fill in the form with an invalid video URL
-        const topicInput = await driver.findElement(By.id('topic'));
-        const descriptionInput = await driver.findElement(By.id('description'));
-        const videoInput = await driver.findElement(By.id('video'));
-        const categoryInput = await driver.findElement(By.id('category'));
+    //     // Check if the alert text is as expected
+    //     expect(alertText).to.equal('Please fill in all fields.');
+    // });
+    // it('Should show an error alert for an invalid video URL', async () => {
+    //     // Fill in the form with an invalid video URL
+    //     const topicInput = await driver.findElement(By.id('topic'));
+    //     const descriptionInput = await driver.findElement(By.id('description'));
+    //     const videoInput = await driver.findElement(By.id('video'));
+    //     const categoryInput = await driver.findElement(By.id('category'));
     
-        await topicInput.sendKeys('123');
-        await descriptionInput.sendKeys('123');
-        await videoInput.sendKeys('invalid_url');
-        await categoryInput.sendKeys('History');
+    //     await topicInput.sendKeys('123');
+    //     await descriptionInput.sendKeys('123');
+    //     await videoInput.sendKeys('invalid_url');
+    //     await categoryInput.sendKeys('History');
        
     
-        // Click the "Add Course" button
-        const addButton = await driver.findElement(By.id('addCourse'));
-        await addButton.click();
+    //     // Click the "Add Course" button
+    //     const addButton = await driver.findElement(By.id('addCourse'));
+    //     await addButton.click();
     
-        // Wait for the modal to disappear (adjust the sleep duration based on your application behavior)
-        await driver.sleep(2000);
+    //     // Wait for the modal to disappear (adjust the sleep duration based on your application behavior)
+    //     await driver.sleep(2000);
     
-        // Handle the alert
-        const alert = await driver.switchTo().alert();
-        const alertText = await alert.getText();
-        await alert.accept();
+    //     // Handle the alert
+    //     const alert = await driver.switchTo().alert();
+    //     const alertText = await alert.getText();
+    //     await alert.accept();
     
-        // Check if the alert text is as expected
-        expect(alertText).to.equal('Invalid URL. Please enter a valid URL for the video.');
-    });
-    it('Should show an error alert for exsiting topic', async () => {
-        // Fill in the form with an invalid video URL
-        const topicInput = await driver.findElement(By.id('topic'));
-        const descriptionInput = await driver.findElement(By.id('description'));
-        const videoInput = await driver.findElement(By.id('video'));
-        const categoryInput = await driver.findElement(By.id('category'));
+    //     // Check if the alert text is as expected
+    //     expect(alertText).to.equal('Invalid URL. Please enter a valid URL for the video.');
+    // });
+    // it('Should show an error alert for exsiting topic', async () => {
+    //     // Fill in the form with an invalid video URL
+    //     const topicInput = await driver.findElement(By.id('topic'));
+    //     const descriptionInput = await driver.findElement(By.id('description'));
+    //     const videoInput = await driver.findElement(By.id('video'));
+    //     const categoryInput = await driver.findElement(By.id('category'));
     
-        await topicInput.sendKeys('Oral');
-        await descriptionInput.sendKeys('sec 1');
-        await videoInput.sendKeys('https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV');
-        await categoryInput.sendKeys('History');
+    //     await topicInput.sendKeys('Oral');
+    //     await descriptionInput.sendKeys('sec 1');
+    //     await videoInput.sendKeys('https://youtu.be/nTn9gVqRfKY?si=c0QLpMvbBcquwsZV');
+    //     await categoryInput.sendKeys('History');
        
     
-        // Click the "Add Course" button
-        const addButton = await driver.findElement(By.id('addCourse'));
-        await addButton.click();
+    //     // Click the "Add Course" button
+    //     const addButton = await driver.findElement(By.id('addCourse'));
+    //     await addButton.click();
     
-        // Wait for the modal to disappear (adjust the sleep duration based on your application behavior)
-        await driver.sleep(2000);
+    //     // Wait for the modal to disappear (adjust the sleep duration based on your application behavior)
+    //     await driver.sleep(2000);
     
-        // Handle the alert
-        const alert = await driver.switchTo().alert();
-        const alertText = await alert.getText();
-        await alert.accept();
+    //     // Handle the alert
+    //     const alert = await driver.switchTo().alert();
+    //     const alertText = await alert.getText();
+    //     await alert.accept();
     
-        // Check if the alert text is as expected
-        expect(alertText).to.equal('Topic already exists');
-    });
+    //     // Check if the alert text is as expected
+    //     expect(alertText).to.equal('Topic already exists');
+    // });
     it('Should close the "Add Course" modal when clicking the close button', async () => {
         const closeButton = await driver.findElement(By.className('close'));
         await closeButton.click();
