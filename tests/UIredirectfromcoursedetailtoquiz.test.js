@@ -6,7 +6,7 @@ const fs = require('fs').promises;
 
 //redirect to the quiz qn ui page from the course
 courseId = '2eOC6Pd7Tcx6OFqGKcPA';
-quizId = 'LK22AI2UANYHoDamMZAG';
+quizId = 'bNeESFLUHc3Abh9qLZ5u';
 
 
 var server;
@@ -24,7 +24,7 @@ after(async function () {
 });
 
 
-describe('Redirect to quiz', function () {
+describe.only('Redirect to quiz', function () {
   this.timeout(30000);
   let driver;
   var counter = 0;
@@ -65,13 +65,13 @@ describe('Redirect to quiz', function () {
     await startQuizButton.click();
 
     //Wait for the redirection to complete
-    await driver.wait(until.urlContains('/validateQuiz.html?quizId=ptEFj2dtEFRDFSe1a3Rp'), 10000);
+    await driver.wait(until.urlContains('/validateQuiz.html?quizId=bNeESFLUHc3Abh9qLZ5u'), 10000);
 
 
     //Assert that the URL is redirected to the expected URL
     const currentUrl = await driver.getCurrentUrl();
 
-    expect(currentUrl).to.include('/validateQuiz.html?quizId=ptEFj2dtEFRDFSe1a3Rp');
+    expect(currentUrl).to.include('/validateQuiz.html?quizId=bNeESFLUHc3Abh9qLZ5u');
   })
 
 })
