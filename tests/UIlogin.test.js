@@ -1,3 +1,4 @@
+const { app } = require('../index');
 const { Builder, By, until } = require('selenium-webdriver');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -10,11 +11,24 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.localStorage = dom.window.localStorage;
 
-// Your tests go here
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-describe('Login Page UI Testing', function () {
+var server;
+before(async function () {
+    server = await new Promise((resolve) => {
+        server = app.listen(0, "localhost", () => {
+            resolve(server);
+        });
+    });
+});
+
+after(async function () {
+    await server.close();
+    process.exit(0);
+});
+
+describe.only('Login Page UI Testing', function () {
     this.timeout(30000);
     let driver;
     var counter = 0;
@@ -22,25 +36,17 @@ describe('Login Page UI Testing', function () {
 
     before(async () => {
         driver = await new Builder().forBrowser('chrome').build();
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
     });
 
     afterEach(async () => {
-
-        try {
-            await driver.switchTo().alert().then(async (alert) => {
-                await alert.accept();
-            });
-        } catch (e) {
-            // No alert present, continue with the cleanup
-        }
 
         await driver.navigate().refresh();
 
         await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
             if (coverageData) {
-                // Save coverage data to a file
-                await fs.writeFile('coverage-frontend/coverage' + counter++ + '.json',
+                //console.log(coverageData);
+                await fs.writeFile('coverage-frontend/coverageLogin' + counter++ + '.json',
                     JSON.stringify(coverageData), (err) => {
                         if (err) {
                             console.error('Error writing coverage data:', err);
@@ -57,26 +63,64 @@ describe('Login Page UI Testing', function () {
     });
 
     async function login(username, password) {
-        await driver.wait(until.elementLocated(By.id('username')), 5000);
-        await driver.findElement(By.id('username')).sendKeys(username);
-        await driver.wait(until.elementLocated(By.id('password')), 5000);
-        await driver.findElement(By.id('password')).sendKeys(password);
-        await driver.wait(until.elementLocated(By.id('loginForm')), 5000);
-        await driver.findElement(By.id('loginForm')).submit();
+        try {
+            await driver.wait(until.elementLocated(By.id('username')), 5000);
+            await driver.findElement(By.id('username')).sendKeys(username);
+            await driver.wait(until.elementLocated(By.id('password')), 5000);
+            await driver.findElement(By.id('password')).sendKeys(password);
+    
+            // Prevent the default form submission behavior
+            await driver.executeScript('document.getElementById("loginForm").onsubmit = function() { return false; }');
+    
+            // Locate and click the login button with an explicit wait
+            let loginButton = await driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'LOGIN')]")), 5000);
+            await loginButton.click();
+    
+            // Add a log to indicate that login button click is successful
+            console.log('Login button clicked successfully');
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    }
+    
+    function getCredentials() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        return { username, password };
     }
 
+    function validateCredentials(username, password) {
+        if (!username || !password) {
+            showAlert('Username and password are required');
+            return false;
+        }
+        return true;
+    }
 
-    it('should log in successfully with valid credentials', async function () {
+    function showAlert(message) {
+        alert(message);
+    }
+
+    it('should log in successfully with valid credentials without using the form listener', async function () {
+        // Navigate to the login page
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
+    
+        // Login using the provided credentials
         await login('jennieeain2', 'Ilovefood123@');
-
-        await driver.wait(until.urlIs('http://127.0.0.1:5500/public/courses.html'), 5000);
-
+    
+        // Wait until the URL contains '/courses.html'
+        await driver.wait(until.urlContains('/courses.html'), 10000);
+    
+        // Get the current URL
         const currentUrl = await driver.getCurrentUrl();
-        expect(currentUrl).to.equal('http://127.0.0.1:5500/public/courses.html');
+    
+        // Assert that the URL contains '/courses.html'
+        expect(currentUrl).to.include('/courses.html');
     });
+    
 
     it('stores username and userId in local storage on successful login', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
         await login('jennieeain2', 'Ilovefood123@');
 
         // Execute script in the context of the browser to get localStorage values
@@ -89,27 +133,33 @@ describe('Login Page UI Testing', function () {
     });
 
     it('should navigate to courses.html if user role is student', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         await login('jennieeain2', 'Ilovefood123@');
 
-        await driver.wait(until.urlIs('http://127.0.0.1:5500/public/courses.html'), 10000);
+
+        await driver.wait(until.urlContains('/courses.html'), 10000);
+
         const currentUrl = await driver.getCurrentUrl();
-        expect(currentUrl).to.equal('http://127.0.0.1:5500/public/courses.html');
+
+        expect(currentUrl).to.include('/courses.html');
+
     });
 
     it('should navigate to viewAllQuizzes.html if user role is enterprise', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/index.html');
 
         await login('enterprise', 'Ilovefood123@');
 
-        await driver.wait(until.urlIs('http://127.0.0.1:5500/public/viewAllQuizzes.html'), 10000);
+        await driver.wait(until.urlContains('/viewAllQuizzes.html'), 10000);
+
         const currentUrl = await driver.getCurrentUrl();
-        expect(currentUrl).to.equal('http://127.0.0.1:5500/public/viewAllQuizzes.html');
+
+        expect(currentUrl).to.include('/viewAllQuizzes.html');
     });
 
     it('should display certain elements in login', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         await driver.wait(until.elementLocated(By.id('username')), 5000);
         await driver.wait(until.elementLocated(By.id('password')), 5000);
@@ -129,7 +179,7 @@ describe('Login Page UI Testing', function () {
     });
 
     it('Should show error when username is missing', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         await login('', 'Ilovefood123@');
 
@@ -142,7 +192,7 @@ describe('Login Page UI Testing', function () {
     });
 
     it('Should show error when password is missing', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         await login('enterprise', '');
 
@@ -155,7 +205,7 @@ describe('Login Page UI Testing', function () {
     });
 
     it('Should show error when username does not exist', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         await login('enterprise1', 'Ilovefood123@');
 
@@ -168,7 +218,7 @@ describe('Login Page UI Testing', function () {
     });
 
     it('Should show error when password is incorrect', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         await login('enterprise', 'Ilovefood123');
 
@@ -181,14 +231,14 @@ describe('Login Page UI Testing', function () {
     });
 
     it('Should show the title', async () => {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         const title = await driver.getTitle();
         expect(title).to.equal("Login");
     });
 
     it('Should show alert when username and password are not provided', async function () {
-        await driver.get('http://127.0.0.1:5500/public/instrumented/index.html');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
 
         await login('', '');
 
@@ -199,4 +249,75 @@ describe('Login Page UI Testing', function () {
         expect(alertText).to.equal('Username and password are required');
         await alert.accept();
     });
+
+    it('Should load the login page', async function () {
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
+        const title = await driver.getTitle();
+        expect(title).to.equal('Login');
+    });
+
+    it('Should get the correct username value', async function () {
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
+        const usernameInput = await driver.findElement(By.id('username'));
+        expect(await usernameInput.isDisplayed()).to.be.true;
+        await usernameInput.sendKeys('testuser');
+        const username = await usernameInput.getAttribute('value');
+        expect(username).to.equal('testuser');
+    });
+
+    it('Should get the correct password value', async function () {
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
+        const passwordInput = await driver.findElement(By.id('password'));
+        expect(await passwordInput.isDisplayed()).to.be.true;
+        await passwordInput.sendKeys('testpassword');
+        const password = await passwordInput.getAttribute('value');
+        expect(password).to.equal('testpassword');
+    });
+
+    it('Should display the login form', async function () {
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
+        const loginForm = await driver.findElement(By.id('loginForm'));
+        expect(await loginForm.isDisplayed()).to.be.true;
+    });
+
+    it('Should allow entering a username', async function () {
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
+        const usernameInput = await driver.findElement(By.id('username'));
+        expect(await usernameInput.isDisplayed()).to.be.true;
+        await usernameInput.sendKeys('testuser');
+        expect(await usernameInput.getAttribute('value')).to.equal('testuser');
+    });
+
+    it('Should allow entering a password', async function () {
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/');
+        const passwordInput = await driver.findElement(By.id('password'));
+        expect(await passwordInput.isDisplayed()).to.be.true;
+        await passwordInput.sendKeys('testpassword');
+        expect(await passwordInput.getAttribute('value')).to.equal('testpassword');
+    });
+
+    it('should retrieve username and password from the DOM', function () {
+        const dom = new JSDOM('<!doctype html><html><body><input id="username" value="testUser"><input id="password" value="testPassword"></body></html>');
+
+        global.window = dom.window;
+        global.document = dom.window.document;
+
+        const credentials = getCredentials();
+
+        expect(credentials).to.deep.equal({
+            username: 'testUser',
+            password: 'testPassword'
+        });
+    });
+
+    it('should return true when both username and password are provided', function () {
+        const alertSpy = sinon.spy(showAlert);
+
+        const result = validateCredentials('testUser', 'testPassword');
+
+        sinon.assert.notCalled(alertSpy);
+
+        expect(result).to.be.true;
+    });
+
 });

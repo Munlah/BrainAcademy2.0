@@ -56,7 +56,7 @@ app.put('/edit-quiz/:quizId', editQuiz);
 app.delete('/delete-quiz/:quizId', deleteQuiz);
 app.get('/get-all-quizzes', viewAllQuizzes)
 app.get('/view-all-quizzes/:course', viewAllQuizzesByCourse);
-app.get('/view-quizzes/:topic',viewQuizzesBytopic);
+app.get('/view-quizzes/:topic', viewQuizzesBytopic);
 
 
 app.post('/register', registerUser);

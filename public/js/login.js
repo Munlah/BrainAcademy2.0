@@ -26,9 +26,9 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
 
               // Redirect based on user role
               if (data.user.role === 'student') {
-                  window.location.href = 'http://127.0.0.1:5500/public/courses.html';
+                  window.location.href = 'http://localhost:5050/courses.html';
               } else if (data.user.role === 'enterprise') {
-                  window.location.href = 'http://127.0.0.1:5500/public/viewAllQuizzes.html';
+                  window.location.href = 'http://localhost:5050/viewAllQuizzes.html';
               }
           } else {
               // Show error message
