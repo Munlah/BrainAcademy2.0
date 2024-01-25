@@ -1,7 +1,7 @@
 function getUserProfile() {
     const username = localStorage.getItem("username");
   
-    fetch(`http://localhost:5050/getUser/${username}`, {
+    fetch(`/getUser/${username}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
