@@ -38,21 +38,7 @@ describe('Redirect to quiz', function () {
     await driver.quit();
   });
 
-  afterEach(async function () {
-    await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
-      if (coverageData) {
-        // Save coverage data to a file
-        await fs.writeFile('coverage-frontend/coverageValidateUserAnswer' + counter++ + '.json',
-          JSON.stringify(coverageData), (err) => {
-            if (err) {
-              console.error('Error writing coverage data:', err);
-            } else {
-              console.log('Coverage data written to coverage.json');
-            }
-          });
-      }
-    });
-  });
+  
 
   it('redirect to quiz when start quiz button is pressed', async function () {
     //Wait for the start-quiz-button to be visible
@@ -73,5 +59,19 @@ describe('Redirect to quiz', function () {
 
     expect(currentUrl).to.include('/validateQuiz.html?quizId=bNeESFLUHc3Abh9qLZ5u');
   })
-
+  afterEach(async function () {
+    await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
+      if (coverageData) {
+        // Save coverage data to a file
+        await fs.writeFile('coverage-frontend/coverageValidateUserAnswer' + counter++ + '.json',
+          JSON.stringify(coverageData), (err) => {
+            if (err) {
+              console.error('Error writing coverage data:', err);
+            } else {
+              console.log('Coverage data written to coverage.json');
+            }
+          });
+      }
+    });
+  });
 })
