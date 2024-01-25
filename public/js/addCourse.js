@@ -6,6 +6,7 @@ function addCourse() {
 function closeModal() {
     const modal = document.getElementById('addCourseModal');
     modal.style.display = 'none';
+    resetForm();
 }
 
 function resetForm() {
@@ -62,9 +63,8 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
                 alert('Please fill in all fields.');
             } else if (result.message === 'Topic already exists' || result.message === 'Description already exists') {
                 alert(result.message);
-            } else if (result.message === 'Invalid input length') {
-                alert('Invalid input length. Please check the length of your input.');
-            } else {
+            } 
+            else {
                 alert('Error adding course. Please try again.');
             }
             resetForm();
