@@ -1,6 +1,6 @@
 const { app } = require("../index");
-const { Builder, By, Key, until } = require("selenium-webdriver");
-const { describe, it } = require("mocha");
+const { Builder, By } = require("selenium-webdriver");
+const { describe, it, before, after, afterEach } = require("mocha");
 const { expect } = require("chai");
 const fs = require("fs").promises;
 
@@ -15,15 +15,14 @@ before(async function () {
 
 after(async function () {
   await server.close();
-  process.exit(0);
 });
 
-describe("Register Page UI Testing ", function () {
+describe("Register Page UI Testing", function () {
   this.timeout(30000);
-  var driver; // Declare a WebDriver variable
+  var driver;
   var counter = 0;
+
   before(async () => {
-    // Initialize a Chrome WebDriver instance
     driver = await new Builder().forBrowser("chrome").build();
     await driver.get(
       "http://localhost:" +
@@ -35,9 +34,162 @@ describe("Register Page UI Testing ", function () {
   after(async () => {
     await driver.quit();
   });
+
   it("Should show the title", async () => {
     const title = await driver.getTitle();
     expect(title).to.equal("Register");
+  });
+
+  it("Should show validation errors for empty fields", async () => {
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const alertText = await driver.switchTo().alert().getText();
+    expect(alertText).to.include("All fields are required");
+    await driver.switchTo().alert().accept(); // Close the alert
+  });
+
+  it("Should show an error if the password is too short", async () => {
+    await driver.findElement(By.id("username")).sendKeys("registeruser");
+    await driver.findElement(By.id("email")).sendKeys("registeruser@gmail.com");
+    await driver.findElement(By.id("password")).sendKeys("Short1!");
+    await driver.findElement(By.id("fullName")).sendKeys("Register User");
+    await driver.findElement(By.id("contactNumber")).sendKeys("12345678");
+
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const passwordErrors = await driver
+      .findElement(By.id("passwordErrors"))
+      .getText();
+    expect(passwordErrors).to.include(
+      "Password must be at least 8 characters long"
+    );
+  });
+
+  it("Should show an error if the password does not contain an uppercase letter", async () => {
+    await driver.findElement(By.id("username")).sendKeys("registeruser");
+    await driver.findElement(By.id("email")).sendKeys("registeruser@gmail.com");
+    await driver.findElement(By.id("password")).sendKeys("password1!");
+    await driver.findElement(By.id("fullName")).sendKeys("Register User");
+    await driver.findElement(By.id("contactNumber")).sendKeys("12345678");
+
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const passwordErrors = await driver
+      .findElement(By.id("passwordErrors"))
+      .getText();
+    expect(passwordErrors).to.include(
+      "Password must contain at least one uppercase letter"
+    );
+  });
+
+  it("Should show an error if the password does not contain an lowercase letter", async () => {
+    await driver.findElement(By.id("username")).sendKeys("registeruser");
+    await driver.findElement(By.id("email")).sendKeys("registeruser@gmail.com");
+    await driver.findElement(By.id("password")).sendKeys("PASSWORD1!");
+    await driver.findElement(By.id("fullName")).sendKeys("Register User");
+    await driver.findElement(By.id("contactNumber")).sendKeys("12345678");
+
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const passwordErrors = await driver
+      .findElement(By.id("passwordErrors"))
+      .getText();
+    expect(passwordErrors).to.include(
+      "Password must contain at least one lowercase letter"
+    );
+  });
+
+  it("Should show an error if the password does not contain a number", async () => {
+    await driver.findElement(By.id("username")).sendKeys("registeruser");
+    await driver.findElement(By.id("email")).sendKeys("registeruser@gmail.com");
+    await driver.findElement(By.id("password")).sendKeys("Password!");
+    await driver.findElement(By.id("fullName")).sendKeys("Register User");
+    await driver.findElement(By.id("contactNumber")).sendKeys("12345678");
+
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const passwordErrors = await driver
+      .findElement(By.id("passwordErrors"))
+      .getText();
+    expect(passwordErrors).to.include(
+      "Password must contain at least one number"
+    );
+  });
+
+  it("Should show an error if the password does not contain a special character", async () => {
+    await driver.findElement(By.id("username")).sendKeys("registeruser");
+    await driver.findElement(By.id("email")).sendKeys("registeruser@gmail.com");
+    await driver.findElement(By.id("password")).sendKeys("Password1");
+    await driver.findElement(By.id("fullName")).sendKeys("Register User");
+    await driver.findElement(By.id("contactNumber")).sendKeys("12345678");
+
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const passwordErrors = await driver
+      .findElement(By.id("passwordErrors"))
+      .getText();
+    expect(passwordErrors).to.include(
+      "Password must contain at least one special character"
+    );
+  });
+
+  it("Should show an error if the password contains more than two identical characters in a row", async () => {
+    await driver.findElement(By.id("username")).sendKeys("registeruser");
+    await driver.findElement(By.id("email")).sendKeys("registeruser@gmail.com");
+    await driver.findElement(By.id("password")).sendKeys("Password111!");
+    await driver.findElement(By.id("fullName")).sendKeys("Register User");
+    await driver.findElement(By.id("contactNumber")).sendKeys("12345678");
+
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const passwordErrors = await driver
+      .findElement(By.id("passwordErrors"))
+      .getText();
+    expect(passwordErrors).to.include(
+      "Password must not contain more than two identical characters in a row"
+    );
+  });
+
+  it("Should show an error if the password contains the username", async () => {
+    await driver.findElement(By.id("username")).sendKeys("registeruser");
+    await driver.findElement(By.id("email")).sendKeys("registeruser@gmail.com");
+    await driver.findElement(By.id("password")).sendKeys("registerUser1!");
+    await driver.findElement(By.id("fullName")).sendKeys("Register User");
+    await driver.findElement(By.id("contactNumber")).sendKeys("12345678");
+
+    const submitButton = await driver.findElement(
+      By.css("button[type='submit']")
+    );
+    await submitButton.click();
+
+    const passwordErrors = await driver
+      .findElement(By.id("passwordErrors"))
+      .getText();
+    expect(passwordErrors).to.include(
+      "Password must not contain the username",
+      "Password must not contain part of the email address"
+    );
   });
 
   afterEach(async function () {
@@ -45,7 +197,6 @@ describe("Register Page UI Testing ", function () {
       .executeScript("return window.__coverage__;")
       .then(async (coverageData) => {
         if (coverageData) {
-          // Save coverage data to a file
           await fs.writeFile(
             "coverage-frontend/coverageRegister" + counter++ + ".json",
             JSON.stringify(coverageData),
@@ -59,5 +210,10 @@ describe("Register Page UI Testing ", function () {
           );
         }
       });
+    // Clear the input fields to ensure they do not affect subsequent tests
+    const inputs = await driver.findElements(By.css("input"));
+    for (const input of inputs) {
+      await input.clear();
+    }
   });
 });

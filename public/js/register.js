@@ -22,7 +22,7 @@ document
       return;
     }
 
-    fetch("http://localhost:5050/register", {
+    fetch("/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
