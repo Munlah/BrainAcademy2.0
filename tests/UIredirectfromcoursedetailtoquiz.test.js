@@ -24,7 +24,7 @@ after(async function () {
 });
 
 
-describe.only('Redirect to quiz', function () {
+describe('Redirect to quiz', function () {
   this.timeout(30000);
   let driver;
   var counter = 0;
