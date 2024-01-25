@@ -5,7 +5,6 @@ const { expect } = require('chai');
 const fs = require('fs').promises;
 const sinon = require('sinon');
 
-
 var server;
 before(async function () {
     server = await new Promise((resolve) => {
@@ -20,7 +19,7 @@ after(async function () {
     process.exit(0);
 });
 
-describe('Testing View Course in Chrome', function () {
+describe.only('Testing View Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     var counter = 0;
@@ -47,29 +46,7 @@ describe('Testing View Course in Chrome', function () {
         // Assert that at least one course is displayed
         expect(topicBoxes.length).to.be.greaterThan(0);
     });
-    // it('Should navigate to the course details page when clicking a course', async () => {
-    //     const courseElements = await driver.findElements(By.className('topic-box'));
-
-    //     // Check if there is at least one course element
-    //     expect(courseElements.length).to.be.greaterThan(0);
-
-    //     // Get the current URL before clicking on the course
-    //     const initialUrl = await driver.getCurrentUrl();
-
-    //     // Click the first course element
-    //     await courseElements[0].click();
-
-    //     // Wait for the page to load (adjust the sleep duration based on your application behavior)
-    //     await driver.sleep(2000);
-
-    //     // Get the current URL after clicking on the course
-    //     const currentUrl = await driver.getCurrentUrl();
-
-    //     // Check if the current URL is the expected course details page URL
-    //     expect(currentUrl).to.not.equal(initialUrl);  // The URL should have changed
-    //     expect(currentUrl).to.include('courseDetails.html');
-    // });
-    it('Should navigate to the course details page when clicking a course - Test Case 1', async () => {
+    it('Should navigate to the course details page when clicking a course', async () => {
         const courseElements = await driver.findElements(By.className('topic-box'));
 
         // Check if there is at least one course element
@@ -89,7 +66,7 @@ describe('Testing View Course in Chrome', function () {
 
         // Check if the current URL is the expected course details page URL
         expect(currentUrl).to.not.equal(initialUrl);  // The URL should have changed
-        expect(currentUrl).to.include('courseDetails.html');
+        expect(currentUrl).to.include('courseDetails.html?courseId=2eOC6Pd7Tcx6OFqGKcPA&topic=Division');
     });
 
     afterEach(async function () {
