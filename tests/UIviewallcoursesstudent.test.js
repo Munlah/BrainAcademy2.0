@@ -19,7 +19,7 @@ after(async function () {
     process.exit(0);
 });
 
-describe.only('Testing View Course in Chrome', function () {
+describe('Testing View Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     var counter = 0;
@@ -68,7 +68,45 @@ describe.only('Testing View Course in Chrome', function () {
         expect(currentUrl).to.not.equal(initialUrl);  // The URL should have changed
         expect(currentUrl).to.include('courseDetails.html?courseId=2eOC6Pd7Tcx6OFqGKcPA&topic=Division');
     });
+    it('Should navigate to the course details page when clicking a course and load course details', async () => {
+        const courseElements = await driver.findElements(By.className('topic-box'));
 
+        // Check if there is at least one course element
+        expect(courseElements.length).to.be.greaterThan(0);
+
+        // Click the first course element
+        await courseElements[0].click();
+
+        // Wait for the page to load
+        await driver.wait(until.urlContains('courseDetails.html'), 5000);
+
+        // Ensure the course details are loaded
+        const courseDetails = await driver.findElement(By.id('courseDetails'));
+        expect(await courseDetails.isDisplayed()).to.be.true;
+
+        // Check if the title is present
+        const titleElement = await driver.findElement(By.css('h2'));
+        const titleText = await titleElement.getText();
+        expect(titleText).to.not.be.empty;
+
+        // Check if the category is present
+        const categoryElement = await driver.findElement(By.css('p strong:contains("Category")'));
+        const categoryText = await categoryElement.getText();
+        expect(categoryText).to.not.be.empty;
+
+        // Check if the video container is present
+        const videoContainer = await driver.findElement(By.css('.video-container'));
+        expect(await videoContainer.isDisplayed()).to.be.true;
+
+        // Check if the description is present
+        const descriptionElement = await driver.findElement(By.css('p strong:contains("Description")'));
+        const descriptionText = await descriptionElement.getText();
+        expect(descriptionText).to.not.be.empty;
+
+        // Check if the quiz button is present
+        const quizButton = await driver.findElement(By.id('start-quiz-button'));
+        expect(await quizButton.isDisplayed()).to.be.true;
+    });
     afterEach(async function () {
         await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
             if (coverageData) {
@@ -85,23 +123,3 @@ describe.only('Testing View Course in Chrome', function () {
         });
     });
 });
-
-
-// it('Should navigate to the course details page when clicking a course', async () => {
-//     // Assuming the course elements have the class name 'topic-box'
-//     const courseElements = await driver.findElements(By.className('topic-box'));
-
-//     // Check if there is at least one course element
-//     expect(courseElements.length).to.be.greaterThan(0);
-
-//     // Click the first course element
-//     await courseElements[0].click();
-
-//     // Wait for the page to load (adjust the sleep duration based on your application behavior)
-//     await driver.sleep(2000);
-
-//     // Check if the current URL is the expected course details page URL
-//     const currentUrl = await driver.getCurrentUrl();
-//     expect(currentUrl).to.include('courseDetails.html');
-
-// });
