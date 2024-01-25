@@ -45,7 +45,6 @@ describe.only('Login Page UI Testing', function () {
 
         await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
             if (coverageData) {
-                //console.log(coverageData);
                 await fs.writeFile('coverage-frontend/coverageLogin' + counter++ + '.json',
                     JSON.stringify(coverageData), (err) => {
                         if (err) {
@@ -63,26 +62,17 @@ describe.only('Login Page UI Testing', function () {
     });
 
     async function login(username, password) {
-        try {
-            await driver.wait(until.elementLocated(By.id('username')), 5000);
-            await driver.findElement(By.id('username')).sendKeys(username);
-            await driver.wait(until.elementLocated(By.id('password')), 5000);
-            await driver.findElement(By.id('password')).sendKeys(password);
-    
-            // Prevent the default form submission behavior
-            await driver.executeScript('document.getElementById("loginForm").onsubmit = function() { return false; }');
-    
-            // Locate and click the login button with an explicit wait
-            let loginButton = await driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'LOGIN')]")), 5000);
-            await loginButton.click();
-    
-            // Add a log to indicate that login button click is successful
-            console.log('Login button clicked successfully');
-        } catch (error) {
-            console.error('Error during login:', error);
-        }
+        await driver.wait(until.elementLocated(By.id('username')), 5000);
+        await driver.findElement(By.id('username')).sendKeys(username);
+        await driver.wait(until.elementLocated(By.id('password')), 5000);
+        await driver.findElement(By.id('password')).sendKeys(password);
+
+        await driver.executeScript('document.getElementById("loginForm").onsubmit = function() { return false; }');
+
+        let loginButton = await driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'LOGIN')]")), 5000);
+        await loginButton.click();
     }
-    
+
     function getCredentials() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -102,32 +92,25 @@ describe.only('Login Page UI Testing', function () {
     }
 
     it('should log in successfully with valid credentials without using the form listener', async function () {
-        // Navigate to the login page
         await driver.get('http://localhost:' + server.address().port + '/instrumented/');
-    
-        // Login using the provided credentials
+
         await login('jennieeain2', 'Ilovefood123@');
-    
-        // Wait until the URL contains '/courses.html'
+
         await driver.wait(until.urlContains('/courses.html'), 10000);
-    
-        // Get the current URL
+
         const currentUrl = await driver.getCurrentUrl();
-    
-        // Assert that the URL contains '/courses.html'
+
         expect(currentUrl).to.include('/courses.html');
     });
-    
+
 
     it('stores username and userId in local storage on successful login', async function () {
         await driver.get('http://localhost:' + server.address().port + '/instrumented/');
         await login('jennieeain2', 'Ilovefood123@');
 
-        // Execute script in the context of the browser to get localStorage values
         const username = await driver.executeScript('return localStorage.getItem("username");');
         const userId = await driver.executeScript('return localStorage.getItem("userId");');
 
-        // Assert that the username and userId are as expected
         expect(username).to.equal('jennieeain2');
         expect(userId).to.equal('B5AijGy9O8g9PAGIvkKs');
     });

@@ -4,11 +4,6 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (!username || !password) {
-        alert('Username and password are required');
-        return;
-    }
-
     fetch('/login', {
         method: 'POST',
         headers: {
@@ -30,6 +25,9 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
                 } else if (data.user.role === 'enterprise') {
                     window.location.href = 'viewAllQuizzes.html';
                 }
+            } else if (!username || !password) {
+                alert('Username and password are required');
+                return;
             } else {
                 // Show error message
                 if (data.message === 'Invalid username') {
