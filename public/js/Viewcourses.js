@@ -1,4 +1,3 @@
-
 async function getAllCourses() {
     try {
         const response = await fetch('http://localhost:5050/getAllCourses');
@@ -11,13 +10,6 @@ async function getAllCourses() {
                 const topicBox = document.createElement('div');
                 topicBox.className = 'topic-box';
                 topicBox.textContent = course.topic;
-
-                // // Add click event to navigate to details page
-                // topicBox.addEventListener('click', () => {
-                //     window.location.href = `http://127.0.0.1:5500/public/courseDetails.html?courseId=${course.id}`;
-                // });
-                // Assuming course is an object with properties like id and topic
-                // Add click event to navigate to details page
                 topicBox.addEventListener('click', () => {
                     const courseId = course.id;
                     const topic = course.topic;
@@ -28,14 +20,10 @@ async function getAllCourses() {
                     const encodedTopic = encodeURIComponent(topic);
 
                     // Update the URL to include both course ID and topic
-                    window.location.href = `http://127.0.0.1:5500/public/courseDetails.html?courseId=${encodedCourseId}&topic=${encodedTopic}`;
+                    window.location.href = `http://localhost:5050/courseDetails.html?courseId=${encodedCourseId}&topic=${encodedTopic}`;
                 });
-
-
                 coursesGrid.appendChild(topicBox);
             });
-        } else {
-            console.error('Error fetching courses:', data.message);
         }
     } catch (error) {
         console.error('Error fetching courses:', error.message);
