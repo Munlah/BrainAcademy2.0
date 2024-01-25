@@ -1,6 +1,6 @@
 document
   .getElementById("registerForm")
-  .addEventListener("submit", function (event) {
+  .addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const username = document.getElementById("username").value;
@@ -9,11 +9,13 @@ document
     const fullName = document.getElementById("fullName").value;
     const contactNumber = document.getElementById("contactNumber").value;
 
+    // Check if all fields are filled
     if (!username || !email || !password || !fullName || !contactNumber) {
       alert("All fields are required");
       return;
     }
 
+    // Validate password and handle errors
     try {
       validatePassword(password, username, email);
       document.getElementById("passwordErrors").style.display = "none";
@@ -22,39 +24,45 @@ document
       return;
     }
 
-    fetch("/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-        fullName,
-        contactNumber,
-        role: "student",
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((data) => Promise.reject(data));
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.message === "User registered successfully") {
-          alert("Registration successful! Please login.");
-          window.location.href = "index.html"; // Redirect to login page
-        } else {
-          throw new Error(data.message);
-        }
-      })
-      .catch((error) => {
-        alert(error.message);
+    // Prepare the data to send in the request
+    const userData = {
+      username,
+      email,
+      password,
+      fullName,
+      contactNumber,
+      role: "student", // 'student' is a default role
+    };
+
+    // Make the POST request to the registration endpoint
+    try {
+      const response = await fetch("http://localhost:5050/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
       });
+
+      const data = await response.json(); // Parse JSON response
+
+      // Handle successful registration
+      if (response.ok && data.message === "User registered successfully") {
+        alert("Registration successful! Please login.");
+        window.location.href = "index.html"; // Redirect to login page
+      } else {
+        // Handle server-side validation errors or other issues
+        throw new Error(
+          data.message || "An error occurred during registration."
+        );
+      }
+    } catch (error) {
+      // Display any error that occurred during the fetch request
+      alert(error.message);
+    }
   });
 
+// Display password errors function remains unchanged
 function displayPasswordErrors(errorString) {
   const passwordErrorsContainer = document.getElementById("passwordErrors");
   const passwordRequirementsList = passwordErrorsContainer.querySelector(
