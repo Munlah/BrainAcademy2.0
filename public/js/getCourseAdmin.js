@@ -1,18 +1,18 @@
-async function getAllCourses() {
+async function getAllCourses1() {
     try {
         const response = await fetch('http://localhost:5050/getAllCourses');
         const data = await response.json();
 
         if (response.ok) {
-            const coursesGrid = document.getElementById('coursesGrid');
+            const coursesGrid1 = document.getElementById('coursesGrid1');
 
-            coursesGrid.innerHTML = '';
+            coursesGrid1.innerHTML = '';
 
             data.courses.forEach(course => {
                 const topicBox = document.createElement('div');
                 topicBox.className = 'topic-box';
                 topicBox.textContent = course.topic;
-                coursesGrid.appendChild(topicBox);
+                coursesGrid1.appendChild(topicBox);
             });
         } else {
             console.error('Error fetching courses:', data.message);
@@ -21,5 +21,5 @@ async function getAllCourses() {
         console.error('Error fetching courses:', error.message);
     }
 }
-window.onload = getAllCourses;
+window.onload = getAllCourses1;
 

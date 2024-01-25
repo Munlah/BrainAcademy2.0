@@ -21,6 +21,12 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
     const video = document.getElementById('video').value;
     const category = document.getElementById('category').value;
 
+    // Validation for empty fields
+    if (!topic || !description || !video || !category) {
+        alert('Please fill in all fields.');
+        return;  // Don't proceed with the API call if validation fails
+    }
+
     // Call your API to add the course
     const response = await fetch('http://localhost:5050/addCourse', {
         method: 'POST',
@@ -38,22 +44,26 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
         // Clear form fields
         document.getElementById('addCourseForm').reset();
 
-        getAllCourses();
+        getAllCourses1();
         // Display success message
         alert('Course added successfully!');
     } else {
         // Handle error
         console.error('Error adding course:', result.message);
 
+        if (!topic || !description || !video || !category) {
+            alert('Please fill in all fields.');
+            return;  // Don't proceed with the API call if validation fails
+        }
         if (response.status === 400) {
             if (result.message === 'Invalid video URL format') {
                 alert('Invalid URL. Please enter a valid URL for the video.');
             } else if (result.message === 'Incomplete course data') {
                 alert('Please fill in all fields.');
-            } else if (result.message === 'Invalid input length') {
-                alert('Invalid input length. Please check the length of your input.');
             } else if (result.message === 'Topic already exists' || result.message === 'Description already exists') {
                 alert(result.message);
+            } else if (result.message === 'Invalid input length') {
+                alert('Invalid input length. Please check the length of your input.');
             } else {
                 alert('Error adding course. Please try again.');
             }
@@ -67,21 +77,21 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
 
 
 
-async function getAllCourses() {
+async function getAllCourses1() {
     try {
         const response = await fetch('http://localhost:5050/getAllCourses');
         const data = await response.json();
 
         if (response.ok) {
-            const coursesGrid = document.getElementById('coursesGrid');
+            const coursesGrid1 = document.getElementById('coursesGrid1');
 
-            coursesGrid.innerHTML = '';
+            coursesGrid1.innerHTML = '';
 
             data.courses.forEach(course => {
                 const topicBox = document.createElement('div');
                 topicBox.className = 'topic-box';
                 topicBox.textContent = course.topic;
-                coursesGrid.appendChild(topicBox);
+                coursesGrid1.appendChild(topicBox);
             });
         } else {
             console.error('Error fetching courses:', data.message);
