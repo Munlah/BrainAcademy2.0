@@ -17,7 +17,7 @@ after(async function () {
   await server.close();
 });
 
-describe.only("Register Page UI Testing", function () {
+describe("Register Page UI Testing", function () {
   this.timeout(30000);
   var driver;
   var counter = 0;
