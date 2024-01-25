@@ -20,7 +20,7 @@ after(async function () {
     process.exit(0);
 });
 
-describe.only('Testing View Course in Chrome', function () {
+describe('Testing View Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     var counter = 0;
