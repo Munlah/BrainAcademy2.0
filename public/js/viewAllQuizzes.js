@@ -1,7 +1,7 @@
 function fetchAndDisplayQuizzes() {
   let quizToDelete = null;
 
-  fetch("http://localhost:5050/get-all-quizzes")
+  fetch("/get-all-quizzes")
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -37,7 +37,7 @@ function fetchAndDisplayQuizzes() {
           modal.style.display = "block";
 
           confirmDeleteButton.addEventListener("click", () => {
-            fetch(`http://localhost:5050/delete-quiz/${quizToDelete}`, {
+            fetch(`/delete-quiz/${quizToDelete}`, {
               method: "DELETE",
             })
               .then((response) => {
@@ -71,7 +71,7 @@ function fetchAndDisplayQuizzes() {
 fetchAndDisplayQuizzes();
 
 function fetchAndDisplayCourses() {
-  fetch("http://localhost:5050/getAllCourses")
+  fetch("/getAllCourses")
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -110,7 +110,7 @@ function fetchAndDisplayCourses() {
 fetchAndDisplayCourses();
 
 function fetchAndDisplayQuizzesByCourse(course) {
-  fetch(`http://localhost:5050/view-all-quizzes/${course}`)
+  fetch(`/view-all-quizzes/${course}`)
     .then((response) => {
       if (!response.ok) {
         if (response.status === 404) {
@@ -153,7 +153,7 @@ function fetchAndDisplayQuizzesByCourse(course) {
             modal.style.display = "block";
 
             confirmDeleteButton.addEventListener("click", () => {
-              fetch(`http://localhost:5050/delete-quiz/${quizToDelete}`, {
+              fetch(`/delete-quiz/${quizToDelete}`, {
                 method: "DELETE",
               })
                 .then((response) => {
