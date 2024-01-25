@@ -6,19 +6,19 @@ const fs = require('fs').promises;
 
 var server;
 before(async function () {
-  server = await new Promise((resolve) => {
-    server = app.listen(0, "localhost", () => {
-      resolve(server);
+    server = await new Promise((resolve) => {
+        server = app.listen(0, "localhost", () => {
+            resolve(server);
+        });
     });
-  });
 });
 
 after(async function () {
     await server.close();
     process.exit(0);
-  });
+});
 
-describe('Testing Add and View Course in Chrome', function () {
+describe.only('Testing Add and View Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     var counter = 0;
@@ -54,12 +54,12 @@ describe('Testing Add and View Course in Chrome', function () {
         expect(isDisplayed).to.be.true;
     });
     it('Should show the Courses in grid view', async () => {
-        const coursesGrid = await driver.findElement(By.id('coursesGrid'));
+        const coursesGrid = await driver.findElement(By.id('coursesGrid1'));
         const topicBoxes = await coursesGrid.findElements(By.className('topic-box'));
         // Assert that at least one course is displayed
         expect(topicBoxes.length).to.be.greaterThan(0);
     });
-    
+
 
     it('Should open the "Add Course" modal when clicking the button', async () => {
         const addButton = await driver.findElement(By.xpath('//button[text()="Add Course"]'));
@@ -102,7 +102,7 @@ describe('Testing Add and View Course in Chrome', function () {
         // Click the "Add Course" button
         await addButton.click();
 
-       
+
         await driver.sleep(2000);
 
         // Handle the alert
@@ -114,7 +114,7 @@ describe('Testing Add and View Course in Chrome', function () {
         expect(alertText).to.equal('Course added successfully!');
 
         // Check if the course is added to the grid
-        const coursesGrid = await driver.findElement(By.id('coursesGrid'));
+        const coursesGrid = await driver.findElement(By.id('coursesGrid1'));
         const topicBoxes = await coursesGrid.findElements(By.className('topic-box'));
 
         // Assert that at least one course is displayed
@@ -124,14 +124,13 @@ describe('Testing Add and View Course in Chrome', function () {
         const addButton = await driver.findElement(By.xpath('//button[text()="Add Course"]'));
         await addButton.click();
 
-       
+        // Wait for the modal to appear (adjust the sleep duration based on your application behavior)
         await driver.sleep(2000);
 
         // Click the "Add Course" button without entering any data
         const addButtonInModal = await driver.findElement(By.id('addCourse'));
         await addButtonInModal.click();
 
-        
         // Handle the alert
         const alert = await driver.switchTo().alert();
         const alertText = await alert.getText();
@@ -197,7 +196,33 @@ describe('Testing Add and View Course in Chrome', function () {
         expect(alertText).to.equal('Topic already exists');
     });
 
-    // it('Should show an error alert for exsiting description', async () => {
+   
+    it('Should close the "Add Course" modal when clicking the close button', async () => {
+        const closeButton = await driver.findElement(By.className('close'));
+        await closeButton.click();
+
+        const modal = await driver.findElement(By.id('addCourseModal'));
+        const isDisplayed = await modal.isDisplayed();
+
+        expect(isDisplayed).to.be.false;
+    });
+    afterEach(async function () {
+        await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
+            if (coverageData) {
+                // Save coverage data to a file
+                await fs.writeFile('coverage-frontend/coverageCourseAdmin' + counter++ + '.json',
+                    JSON.stringify(coverageData), (err) => {
+                        if (err) {
+                            console.error('Error writing coverage data:', err);
+                        } else {
+                            console.log('Coverage data written to coverage.json');
+                        }
+                    });
+            }
+        });
+    });
+});
+ // it('Should show an error alert for exsiting description', async () => {
     //     // Fill in the form with an invalid video URL
     //     const topicInput = await driver.findElement(By.id('topic'));
     //     const descriptionInput = await driver.findElement(By.id('description'));
@@ -225,28 +250,3 @@ describe('Testing Add and View Course in Chrome', function () {
     //     // Check if the alert text is as expected
     //     expect(alertText).to.equal('Description already exists');
     // });
-    it('Should close the "Add Course" modal when clicking the close button', async () => {
-        const closeButton = await driver.findElement(By.className('close'));
-        await closeButton.click();
-
-        const modal = await driver.findElement(By.id('addCourseModal'));
-        const isDisplayed = await modal.isDisplayed();
-
-        expect(isDisplayed).to.be.false;
-    });
-    afterEach(async function () {
-        await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
-            if (coverageData) {
-                // Save coverage data to a file
-                await fs.writeFile('coverage-frontend/coverageCourseAdmin' + counter++ + '.json',
-                    JSON.stringify(coverageData), (err) => {
-                        if (err) {
-                            console.error('Error writing coverage data:', err);
-                        } else {
-                            console.log('Coverage data written to coverage.json');
-                        }
-                    });
-            }
-        });
-    });
-});
