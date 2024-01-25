@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const quizId = urlParams.get("quizId");
 
-  fetch(`http://localhost:5050/get-all-quizzes`)
+  fetch("/get-all-quizzes")
     .then((response) => response.json())
     .then((quizzes) => {
       const quizToEdit = quizzes.find((quiz) => quiz.id === quizId);
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ],
       };
 
-      fetch(`http://localhost:5050/edit-quiz/${quizId}`, {
+      fetch(`/edit-quiz/${quizId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -81,8 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
           if (data.message === "Quiz updated successfully") {
             alert(data.message);
-            window.location.href =
-              "http://127.0.0.1:5500/public/viewAllQuizzes.html";
+            window.location.href = "viewAllQuizzes.html";
           } else {
             alert(data.message);
           }
