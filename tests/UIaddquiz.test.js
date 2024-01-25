@@ -14,31 +14,37 @@ let driver;
 let quizId; // Declare global variable for quizId
 var counter = 0;
 
-// let driver = new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
 
-// let driver;
+var server;
+before(async function () {
+  server = await new Promise((resolve) => {
+    server = app.listen(0, "localhost", () => {
+      resolve(server);
+    });
+  });
+});
 
-// before(async () => {
-//   driver = await new Builder().forBrowser('chrome').build();
-//   await driver.get('http://127.0.0.1:5500/public/addQuiz.html');
-// });
+after(async function () {
+  await server.close();
+  process.exit(0);
+});
+
+
 
 describe('Add Quiz UI', function () {
 
   this.timeout(30000);
 
-  // let driver;
-
   before(async () => {
     driver = await new Builder().forBrowser('chrome').build();
-    await driver.get('http://127.0.0.1:5500/public/instrumented/addQuiz.html');
+    await driver.get('http://localhost:' + server.address().port + '/instrumented/addQuiz.html');
   });
 
   afterEach(async function () {
     await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
       if (coverageData) {
         // Save coverage data to a file
-        await fs.writeFile('coverage-frontend/coverage' + counter++ + '.json',
+        await fs.writeFile('coverage-frontend/coverageAddQiz' + counter++ + '.json',
           JSON.stringify(coverageData), (err) => {
             if (err) {
               console.error('Error writing coverage data:', err);
@@ -50,11 +56,7 @@ describe('Add Quiz UI', function () {
     });
   });
 
-  after(async function () {
-    await driver.quit();
-    // await server.close();
-    // process.exit(0);
-  });
+
 
   it('should have the correct title', async function () {
 
@@ -304,7 +306,7 @@ describe('Add Quiz UI', function () {
 
 
 //after(async function () {
-  // await driver.quit();
-  // await server.close();
-  //process.exit(0);
+// await driver.quit();
+// await server.close();
+//process.exit(0);
 //});
