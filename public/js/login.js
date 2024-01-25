@@ -9,7 +9,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
         return;
     }
 
-    fetch('http://localhost:5050/login', {
+    fetch('/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
