@@ -272,7 +272,9 @@ describe('Add Quiz UI', function () {
   //   fetchStub.restore();
   // });
 
-
+  after(async () => {
+    await driver.quit();
+  });
 });
 
 
