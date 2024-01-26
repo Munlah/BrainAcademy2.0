@@ -23,7 +23,7 @@ after(async function () {
   await server.close();
 });
 
-describe.only("UI for validating quiz answers", function () {
+describe("UI for validating quiz answers", function () {
   this.timeout(30000);
   var driver;
   var counter = 0;
