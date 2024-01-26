@@ -22,7 +22,7 @@ before(async function () {
     });
 });
 
-describe.only('Login Page UI Testing', function () {
+describe('Login Page UI Testing', function () {
     this.timeout(50000);
     let driver;
     var counter = 0;
