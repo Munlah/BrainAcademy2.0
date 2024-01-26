@@ -13,14 +13,12 @@ before(async function () {
     });
 });
 
-let addedCourseInfo; // Variable to store information about the added course
-
 after(async function () {
     await server.close();
     process.exit(0);
 });
 
-describe('Testing Add and View Course in Chrome', function () {
+describe.only('Testing Add and View Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     var counter = 0;
@@ -56,13 +54,11 @@ describe('Testing Add and View Course in Chrome', function () {
         expect(isDisplayed).to.be.true;
     });
     it('Should show the Courses in grid view', async () => {
+        await driver.sleep(2000);
         const coursesGrid = await driver.findElement(By.id('coursesGrid1'));
         const topicBoxes = await coursesGrid.findElements(By.className('topic-box'));
-        // Assert that at least one course is displayed
         expect(topicBoxes.length).to.be.greaterThan(0);
     });
-
-
     it('Should open the "Add Course" modal when clicking the button', async () => {
         const addButton = await driver.findElement(By.xpath('//button[text()="Add Course"]'));
         await addButton.click();
