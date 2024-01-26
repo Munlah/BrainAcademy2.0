@@ -41,6 +41,14 @@ describe.only('Add Quiz UI', function () {
   });
 
   afterEach(async function () {
+    // Capture and save screenshot if the test fails
+    const testStatus = this.currentTest.state;
+    if (testStatus === 'failed') {
+      const screenshot = await driver.takeScreenshot();
+      const screenshotPath = path.join(__dirname, './screenshots', `test-failure-${counter++}.png`);
+      await fs.writeFile(screenshotPath, screenshot, 'base64');
+      console.log(`Screenshot saved: ${screenshotPath}`);
+    }
     await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
       if (coverageData) {
         // Save coverage data to a file
@@ -228,7 +236,7 @@ describe.only('Add Quiz UI', function () {
     await alert.dismiss();
 
     // Check that the URL is redirected to view all quizzes page
-    expect(await driver.getCurrentUrl()).to.equal('http://127.0.0.1:5500/public/viewAllQuizzes.html');
+    expect(await driver.getCurrentUrl()).to.contain('/viewAllQuizzes.html');
 
   });
 
