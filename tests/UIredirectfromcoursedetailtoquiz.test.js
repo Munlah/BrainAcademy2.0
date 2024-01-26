@@ -3,6 +3,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const { describe, it, after, before } = require('mocha');
 const { expect } = require('chai');
 const fs = require('fs').promises;
+const path = require('path');  // Import the path module
 
 //redirect to the quiz qn ui page from the course
 courseId = '2eOC6Pd7Tcx6OFqGKcPA';
@@ -38,7 +39,7 @@ describe('Redirect to quiz', function () {
     await driver.quit();
   });
 
-  
+
 
   it('redirect to quiz when start quiz button is pressed', async function () {
     //Wait for the start-quiz-button to be visible
@@ -60,6 +61,15 @@ describe('Redirect to quiz', function () {
     expect(currentUrl).to.include('/validateQuiz.html?quizId=bNeESFLUHc3Abh9qLZ5u');
   })
   afterEach(async function () {
+    // Capture and save screenshot if the test fails
+    const testStatus = this.currentTest.state;
+    if (testStatus === 'failed') {
+      const screenshot = await driver.takeScreenshot();
+      const screenshotPath = path.join(__dirname, './screenshots', `test-failure-${counter++}.png`);
+      await fs.writeFile(screenshotPath, screenshot, 'base64');
+      console.log(`Screenshot saved: ${screenshotPath}`);
+    }
+
     await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
       if (coverageData) {
         // Save coverage data to a file

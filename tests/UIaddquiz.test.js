@@ -5,6 +5,8 @@ const { expect } = require('chai');
 const fetch = require('node-fetch');
 const sinon = require('sinon');
 const fs = require('fs').promises;
+const path = require('path');  // Import the path module
+
 
 const chrome = require('selenium-webdriver/chrome');
 const chromeOptions = new chrome.Options();
