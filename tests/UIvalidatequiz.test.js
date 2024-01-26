@@ -95,7 +95,47 @@ describe.only("UI for validating quiz answers", function () {
     }
   });
 
+  it('should display an alert if the user tries to submit without selecting options', async () => {
+    // Execute JavaScript to override the fetch function and return questions
+    await driver.executeScript(() => {
+      window.fetch = async () => ({
+        json: async () => ({
+          questions: [
+            {
+              questionTitle: 'Sample Question',
+              options: ['Option 1', 'Option 2', 'Option 3'],
+              correctOption: 0,
+            },
+          ],
+        }),
+      });
+    });
 
+    // Reload the page to trigger the fetch request
+    await driver.navigate().refresh();
+
+    // Wait for the questions to be displayed
+    await driver.wait(until.elementLocated(By.className('question-container')), 5000);
+
+    // Locate the submit button and click it
+    const submitButton = await driver.findElement(By.id('submitQuiz'));
+    await submitButton.click();
+
+    // Wait for the alert to be displayed
+    await driver.switchTo().alert();
+    const alertText = await driver.switchTo().alert().getText();
+
+    // Assert that the alert message is as expected
+    expect(alertText).to.equal('Please attempt all questions before submitting.');
+
+    // Dismiss the alert
+    await driver.switchTo().alert().dismiss();
+
+    // Restore the original fetch function (resetting the browser's fetch function)
+    await driver.executeScript(() => {
+      delete window.fetch;
+    });
+  });
 
   afterEach(async function () {
     // Capture and save screenshot if the test fails
