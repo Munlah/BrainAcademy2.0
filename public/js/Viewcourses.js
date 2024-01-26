@@ -13,14 +13,12 @@ async function getAllCourses() {
                 topicBox.addEventListener('click', () => {
                     const courseId = course.id;
                     const topic = course.topic;
-                    console.log(topic);
+                    // Set values in local storage
+                    localStorage.setItem('courseId', courseId);
+                    localStorage.setItem('topic', topic);
 
-                    // Encode the parameters to ensure they are properly formatted in the URL
-                    const encodedCourseId = encodeURIComponent(courseId);
-                    const encodedTopic = encodeURIComponent(topic);
-
-                    // Update the URL to include both course ID and topic
-                    window.location.href = `http://localhost:5050/courseDetails.html?courseId=${encodedCourseId}&topic=${encodedTopic}`;
+                    // Navigate to the course details page
+                    window.location.href = 'http://localhost:5050/courseDetails.html';
                 });
                 coursesGrid.appendChild(topicBox);
             });

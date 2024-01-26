@@ -3,10 +3,10 @@ let topic;
 async function getCourseById() {
     try {
         const urlParams = new URLSearchParams(window.location.search);
-        const courseId = urlParams.get('courseId');
-        topic = urlParams.get('topic'); // Assign value to the global variable
+        const courseId = localStorage.getItem('courseId');
+        topic = localStorage.getItem('topic'); // Assign value to the global variable
 
-        console.log('Course ID:', courseId); // Add this line for debugging
+        console.log('Course ID:', courseId);
         console.log('Topic:', topic);
 
         const response = await fetch(`http://localhost:5050/getcourse/${courseId}`);

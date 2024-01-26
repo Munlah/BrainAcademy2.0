@@ -2,61 +2,58 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-      
-    />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./js/logout.js"></script>
-    <title>Course Details</title>
-  </head>
 
-  <body>
-    <nav class="nav-container">
-      <div style="display: flex; align-items: center">
-        <img
-          src="./image/Icon.png"
-          alt="BA Icon"
-          style="height: 50px; margin: 10%; margin-left: 20%"
-        />
-        <span style="font-size: 30px">BA</span>
-      </div>
-      <ul class="custom-spacing">
-        <li><a href="courses.html">Courses</a></li>
-      </ul>
-      <ul>
-        <li><a href="getUser.html">Profile</a></li>
-        <span>|</span>
-        <li><a href="#" id="logoutLink">Logout</a></li>
-      </ul>
-    </nav>
+<head>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="./js/logout.js"></script>
+  <title>Course Details</title>
+</head>
 
-    <!-- <div class="back-button">
+<body>
+  <nav class="nav-container">
+    <div style="display: flex; align-items: center">
+      <img src="./image/Icon.png" alt="BA Icon" style="height: 50px; margin: 10%; margin-left: 20%" />
+      <span style="font-size: 30px">BA</span>
+    </div>
+    <ul class="custom-spacing">
+      <li><a href="courses.html">Courses</a></li>
+    </ul>
+    <ul>
+      <li><a href="getUser.html">Profile</a></li>
+      <span>|</span>
+      <li><a href="#" id="logoutLink">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- <div class="back-button">
       <button onclick="goBack()">Back to All Courses</button>
     </div> -->
-    <div class="back-button">
-        <button onclick="goBack()">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-    </div>
-    
-    <div class="course-details" id="courseDetails">
-      <!-- Course details will be dynamically added here -->
-    </div>
-    <div id="start-quiz-button">
-      <!-- The quiz button will be appended here -->
+  <div class="back-button">
+    <button onclick="goBack()">
+      <i class="fas fa-arrow-left"></i>
+    </button>
   </div>
 
-    <script>
-      function goBack() {
-        window.location.href = "courses.html";
-      }
-    </script>
-    <script src="./js/courseDetails.js"></script>
-  
-  </body>
+  <div class="course-details" id="courseDetails">
+    <!-- Course details will be dynamically added here -->
+  </div>
+  <div id="start-quiz-button">
+    <!-- The quiz button will be appended here -->
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "courses.html";
+      // Remove values from local storage
+      localStorage.removeItem('courseId');
+      localStorage.removeItem('topic');
+    }
+  </script>
+  <script src="./js/courseDetails.js"></script>
+
+</body>
+
 </html>
