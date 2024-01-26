@@ -31,7 +31,7 @@ after(async function () {
 
 
 
-describe.only('Add Quiz UI', function () {
+describe('Add Quiz UI', function () {
 
   this.timeout(30000);
 
