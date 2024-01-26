@@ -73,7 +73,7 @@ async function getquiz(topic) {
                         startQuizButton.addEventListener('click', function () {
                             const quizId = quizData.id; // Assuming 'id' is the quiz ID
                             console.log('Starting quiz with ID:', quizId); // Add this line for debugging
-                            window.location.href = `http://127.0.0.1:5500/public/validateQuiz.html?quizId=${quizId}`;
+                            window.location.href = `http://localhost:5050/validateQuiz.html?quizId=${quizId}`;
                         });
 
                         quiz.appendChild(startQuizButton);
