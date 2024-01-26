@@ -5,6 +5,7 @@ const { expect } = require('chai');
 const fs = require('fs').promises;
 const path = require('path');  // Import the path module
 
+
 courseId = 'eboZL9dwy2o9hu2TD4vi';
 quizId = 'TWPgWQfjIFMcKYmIq10C';
 //quiz for algebra 
@@ -32,7 +33,7 @@ describe.only("UI for validating quiz answers", function () {
     await driver.get(
       "http://localhost:" +
       server.address().port +
-      "/instrumented/validateQuiz.html?quizId=TWPgWQfjIFMcKYmIq10C"
+      `/instrumented/validateQuiz.html?quizId=TWPgWQfjIFMcKYmIq10C`
     );
   });
 
@@ -42,12 +43,58 @@ describe.only("UI for validating quiz answers", function () {
 
   it("Should show the title", async () => {
     const title = await driver.getTitle();
-    expect(title).to.equal("Quiz qns");
+    expect(title).to.equal("Main Quiz");
   });
 
-  it('should display all the options for the quiz', async () => {
 
-  })
+  it('should display all the options for the quiz', async () => {
+    // Check if the display-qns div is present
+    const displayQnsContainer = await driver.findElement(By.id('display-qns'));
+    expect(displayQnsContainer).to.exist;
+
+    // Check if the results div is present
+    const resultsContainer = await driver.findElement(By.id('results'));
+    expect(resultsContainer).to.exist;
+
+    // Check if the submit button is present
+    const submitButton = await driver.findElement(By.id('submitQuiz'));
+    expect(submitButton).to.exist;
+
+    // Check if the redo button is present
+    const redoButton = await driver.findElement(By.id('redoQuiz'));
+    expect(redoButton).to.exist;
+
+    // Fetch expected options and question titles from Firebase (replace with actual Firebase fetching logic)
+    const expectedOptions = [
+      ["ab", "a", "b"],
+      ["a", "3a", "2a"],
+    ];
+
+    const expectedQuestionTitles = [
+      "Result of a x b",
+      "result of 2a + a",
+    ];
+
+    // Wait for the questions to be displayed on the page
+    await driver.wait(until.elementLocated(By.className('question-container')), 5000);
+
+    // Loop through each question and assert options and title
+    for (let i = 0; i < expectedOptions.length; i++) {
+      const questionContainer = await driver.findElement(By.xpath(`//div[@class='question-container'][${i + 1}]`));
+
+      // Assert question title
+      const actualQuestionTitle = await questionContainer.findElement(By.className('question')).getText();
+      expect(actualQuestionTitle).to.equal(`Question ${i + 1}: ${expectedQuestionTitles[i]}`);
+
+      // Assert options
+      const optionLabels = await questionContainer.findElements(By.xpath('.//div[@class="options-container"]/label'));
+      for (let j = 0; j < optionLabels.length; j++) {
+        const actualOptionText = await optionLabels[j].getText();
+        expect(actualOptionText).to.equal(`Option ${j + 1}: ${expectedOptions[i][j]}`);
+      }
+    }
+  });
+
 
 
   afterEach(async function () {
