@@ -1,13 +1,14 @@
 const { app } = require('../index');
 const { Builder, By, until } = require('selenium-webdriver');
-const { describe, it, after, before } = require('mocha');
+const { describe, it, after, before, afterEach } = require('mocha');
 const { expect } = require('chai');
 const fs = require('fs').promises;
-const path = require('path');  // Import the path module
+const path = require('path'); 
+
 
 
 courseId = 'eboZL9dwy2o9hu2TD4vi';
-quizId = 'TWPgWQfjIFMcKYmIq10C';
+quizId = 'FLQK8dRiEvUDcAKDu1cA';
 //quiz for algebra 
 
 var server;
@@ -23,7 +24,7 @@ after(async function () {
   await server.close();
 });
 
-describe("UI for validating quiz answers", function () {
+describe.only("UI for validating quiz answers", function () {
   this.timeout(30000);
   var driver;
   var counter = 0;
@@ -33,7 +34,7 @@ describe("UI for validating quiz answers", function () {
     await driver.get(
       "http://localhost:" +
       server.address().port +
-      `/instrumented/validateQuiz.html?quizId=TWPgWQfjIFMcKYmIq10C`
+      `/instrumented/validateQuiz.html?quizId=FLQK8dRiEvUDcAKDu1cA`
     );
   });
 
@@ -121,21 +122,172 @@ describe("UI for validating quiz answers", function () {
     const submitButton = await driver.findElement(By.id('submitQuiz'));
     await submitButton.click();
 
-    // Wait for the alert to be displayed
-    await driver.switchTo().alert();
-    const alertText = await driver.switchTo().alert().getText();
+    //Wait for the alert to be present
+    await driver.wait(until.alertIsPresent(), 5000);
 
-    // Assert that the alert message is as expected
+    //Switch to the alert
+    const alert = await driver.switchTo().alert();
+
+    //Get the text from the alert
+    const alertText = await alert.getText();
+
+    //Assert that the alert message contains the expected text
     expect(alertText).to.equal('Please attempt all questions before submitting.');
 
-    // Dismiss the alert
-    await driver.switchTo().alert().dismiss();
-
-    // Restore the original fetch function (resetting the browser's fetch function)
-    await driver.executeScript(() => {
-      delete window.fetch;
-    });
+    //Dismiss the alert
+    await alert.dismiss();
   });
+
+  it('should display a confirmation alert if the user selects all options and clicks submit', async () => {
+
+    // Wait for the questions to be displayed
+    await driver.wait(until.elementLocated(By.className('question-container')), 5000);
+
+    // Select all radio buttons
+    const radioButtons = await driver.findElements(By.css('input[type="radio"]'));
+    for (const radioButton of radioButtons) {
+      await radioButton.click();
+    }
+
+    // Locate the submit button and click it
+    const submitButton = await driver.findElement(By.id('submitQuiz'));
+    await submitButton.click();
+
+    //Wait for the alert to be present
+    await driver.wait(until.alertIsPresent(), 5000);
+
+    //Switch to the alert
+    const alert = await driver.switchTo().alert();
+
+    //Get the text from the alert
+    const alertText = await alert.getText();
+
+    //Assert that the alert message contains the expected text
+    expect(alertText).to.equal('Are you sure you want to submit?');
+
+    //Dismiss the alert
+    await alert.dismiss();
+  });
+
+  it('should display confirmation alert and automatically click "Yes"', async () => {
+    // Reload the page to trigger the fetch request
+    await driver.navigate().refresh();
+
+    // Wait for the questions to be displayed
+    await driver.wait(until.elementLocated(By.className('question-container')), 5000);
+
+    // Simulate user interactions to select answers
+    await driver.executeScript(() => {
+      document.querySelector('input[name="question0"][value="0"]').click(); // Select correct option for the 1st question
+      document.querySelector('input[name="question1"][value="2"]').click(); // Select incorrect option for the 2nd question
+    });
+
+    // Locate the submit button and click it
+    const submitButton = await driver.findElement(By.id('submitQuiz'));
+    await submitButton.click();
+
+    // Wait for the confirmation alert
+    const alert = await driver.switchTo().alert();
+
+    // Automatically click "Yes" (OK) on the confirmation alert
+    await alert.accept();
+
+  });
+
+  it('Should show the result as 1/2 if the answer for a qn is wrong', async function () {
+    // Reload the page to trigger the fetch request
+    await driver.navigate().refresh();
+
+    // Wait for the questions to be displayed
+    await driver.wait(until.elementLocated(By.className('question-container')), 5000);
+
+    // Simulate user interactions to select answers
+    await driver.executeScript(() => {
+      document.querySelector('input[name="question0"][value="0"]').click(); // Select correct option for the 1st question
+      document.querySelector('input[name="question1"][value="2"]').click(); // Select incorrect option for the 2nd question
+    });
+
+    // Locate the submit button and click it
+    const submitButton = await driver.findElement(By.id('submitQuiz'));
+    await submitButton.click();
+
+    // Wait for the confirmation alert
+    const alert = await driver.switchTo().alert();
+
+    // Automatically click "Yes" (OK) on the confirmation alert
+    await alert.accept();
+
+    // Wait for the results div to be displayed
+    await driver.wait(until.elementLocated(By.id('results')), 5000);
+
+    // Assert that the result is displayed as "1/2"
+    const resultsText = await driver.findElement(By.id('results')).getText();
+    expect(resultsText).to.equal('Your score is: 1/2');
+
+    // Assert that the submit button is changed to "Redo Quiz"
+    const redoButton = await driver.findElement(By.id('redoQuiz'));
+    expect(await redoButton.isDisplayed()).to.be.true;
+  })
+
+  /*
+
+  it.only('should refresh the page when "Redo Quiz" button is clicked', async () => {
+    // Simulate user interactions to select answers
+    await driver.executeScript(() => {
+      document.querySelector('input[name="question0"][value="0"]').click();
+      document.querySelector('input[name="question1"][value="2"]').click();
+    });
+
+    // Locate the submit button before clicking it
+    const submitButton = await driver.findElement(By.id('submitQuiz'));
+
+    // Click the submit button
+    await submitButton.click();
+
+    // Wait for the confirmation alert
+    const alert = await driver.switchTo().alert();
+    await alert.accept();
+
+    // Wait for the results div to be displayed
+    await driver.wait(until.elementLocated(By.id('results')), 5000);
+
+    // Assert that the result is displayed as "1/2"
+    let resultsText = await driver.findElement(By.id('results')).getText();
+    expect(resultsText).to.equal('Your score is: 1/2');
+
+    // Locate the "Redo Quiz" button
+    const redoButton = await driver.findElement(By.id('redoQuiz'));
+
+    // Click the "Redo Quiz" button
+    await redoButton.click();
+
+    await driver.wait(until.urlContains('/validateQuiz.html?quizId=FLQK8dRiEvUDcAKDu1cA'), 20000);
+
+    const currentUrl = await driver.getCurrentUrl();
+
+    expect(currentUrl).to.include('/validateQuiz.html?quizId=FLQK8dRiEvUDcAKDu1cA');
+
+
+    // Wait for the page to be fully loaded after refreshing
+    await driver.wait(until.elementLocated(By.id('submitQuiz')), 5000);
+
+    // Re-locate the submit button on the refreshed page
+    const submitButtonRefreshed = await driver.findElement(By.id('submitQuiz'));
+
+    // Assert that the "Get Results" button is shown
+    const isSubmitButtonDisplayed = await submitButtonRefreshed.isDisplayed();
+    expect(isSubmitButtonDisplayed).to.be.true;
+
+
+    // Assert that there is no result displayed on the refreshed page
+    const resultsContainerRefreshed = await driver.findElement(By.id('results'));
+    const resultsRefreshedText = await resultsContainerRefreshed.getText();
+    expect(resultsRefreshedText).to.equal('');
+  });
+
+  */
+
+
 
   afterEach(async function () {
     // Capture and save screenshot if the test fails
