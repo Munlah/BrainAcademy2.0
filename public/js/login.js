@@ -19,13 +19,6 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
                     localStorage.setItem('username', data.user.username);
                     localStorage.setItem('userId', data.user.id);
 
-                    // Redirect based on user role
-                    if (data.user.role === 'student') {
-                        window.location.href = '/courses.html';
-                    } else if (data.user.role === 'enterprise') {
-                        window.location.href = '/viewAllQuizzes.html';
-                    }
-
                     resolve(data);
                 } else if (!username || !password) {
                     alert('Username and password are required');
@@ -45,5 +38,15 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
                     reject(new Error(data.message));
                 }
             });
+    }).then((data)=> {
+        setTimeout(() => {
+           // Redirect based on user role
+        if (data.user.role === 'student') {
+            window.location.href = '/courses.html';
+        } else if (data.user.role === 'enterprise') {
+            window.location.href = '/viewAllQuizzes.html';
+        }
+        }, 2000);
+        
     });
 });
