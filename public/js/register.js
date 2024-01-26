@@ -18,7 +18,7 @@ document
     // Validate password and handle errors
     try {
       validatePassword(password, username, email);
-      document.getElementById("passwordErrors").style.display = "none";
+      setPasswordErrorsVisible(false); // Hide password errors
     } catch (error) {
       displayPasswordErrors(error.message);
       return;
@@ -49,7 +49,10 @@ document
       // Handle successful registration
       if (response.ok && data.message === "User registered successfully") {
         alert("Registration successful! Please login.");
-        window.location.href = "index.html"; // Redirect to login page
+        // Use a timeout to delay redirection to allow tests to check the UI state
+        setTimeout(() => {
+          window.location.href = "index.html"; // Redirect to login page
+        }, 1000); // Adjust the delay as needed
       } else {
         // Handle server-side validation errors or other issues
         throw new Error(
@@ -61,6 +64,13 @@ document
       alert(error.message);
     }
   });
+
+function setPasswordErrorsVisible(visible) {
+  const passwordErrors = document.getElementById("passwordErrors");
+  if (passwordErrors) {
+    passwordErrors.style.display = visible ? "block" : "none";
+  }
+}
 
 // Display password errors function remains unchanged
 function displayPasswordErrors(errorString) {
