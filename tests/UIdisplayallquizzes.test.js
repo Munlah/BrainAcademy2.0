@@ -179,8 +179,7 @@ describe('Testing View All Quizzes Admin Page', function () {
         expect(quizzes.length).to.be.greaterThan(0);
     });
 
-    /*
-    it('should delete a quiz when the delete button is clicked and the deletion is confirmed', async function () {
+    it.skip('should delete a quiz when the delete button is clicked and the deletion is confirmed', async function () {
         await driver.executeScript('fetchAndDisplayQuizzesByCourse("Division")');
     
         const deleteButtons = await driver.findElements(By.css('.delete-button'));
@@ -195,6 +194,5 @@ describe('Testing View All Quizzes Admin Page', function () {
         const quizzesAfterDeletion = await driver.findElements(By.css('.quiz'));
         expect(quizzesAfterDeletion.length).to.equal(deleteButtons.length - 1);
     });
-*/
 
 });
