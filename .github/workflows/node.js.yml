@@ -22,5 +22,5 @@ jobs:
       - name: Install dependencies for based on package.json
         run: npm install
     
-      - name: Run tests in "tests" folder
+      - name: Run tests in "UItests" folder
         run: npm test
