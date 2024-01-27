@@ -24,7 +24,7 @@ after(async function () {
   await server.close();
 });
 
-describe.only("UI for validating quiz answers", function () {
+describe("UI for validating quiz answers", function () {
   this.timeout(30000);
   var driver;
   var counter = 0;
@@ -34,7 +34,7 @@ describe.only("UI for validating quiz answers", function () {
     await driver.get(
       "http://localhost:" +
       server.address().port +
-      `/instrumented/validateQuiz.html?quizId=qpFwX10uWggzijOknVrJ`
+      `/instrumented/validateQuiz.html?quizId=${quizId}`
     );
   });
 
@@ -48,23 +48,44 @@ describe.only("UI for validating quiz answers", function () {
     expect(title).to.equal("Main Quiz");
   });
 
+  it('should expect the submit button to be shown and the redo button to be hidden', async () => {
+    // Check if the results div is present
+    const resultsContainer = await driver.findElement(By.id('results'));
+    expect(resultsContainer).to.exist;
+
+    // Check if the submit button is present and has the text "Get Results"
+    const submitButton = await driver.findElement(By.id('submitQuiz'));
+    expect(submitButton).to.exist;
+    const submitButtonText = await submitButton.getText();
+    expect(submitButtonText.trim()).to.equal('Get Results');
+
+    // Check if the redo button is present and is hidden
+    const redoButton = await driver.findElement(By.id('redoQuiz'));
+    expect(redoButton).to.exist;
+    const isRedoButtonHidden = await redoButton.isDisplayed();
+    expect(isRedoButtonHidden).to.be.false;
+
+    // Check that the results div is initially empty
+    const resultsText = await resultsContainer.getText();
+    expect(resultsText.trim()).to.equal('');
+  })
+
+  it('should check if quizId is present in the URL', async () => {
+    // Get the current URL
+    const currentUrl = await driver.getCurrentUrl();
+
+    // Check if the URL contains the expected quizId parameter
+    const expectedQuizId = quizId; // Replace with the expected quizId
+    const isQuizIdInUrl = currentUrl.includes(`quizId=${expectedQuizId}`);
+
+    // Assert that the quizId is present in the URL
+    expect(isQuizIdInUrl).to.be.true;
+  });
 
   it('should display all the options for the quiz', async () => {
     // Check if the display-qns div is present
     const displayQnsContainer = await driver.findElement(By.id('display-qns'));
     expect(displayQnsContainer).to.exist;
-
-    // Check if the results div is present
-    const resultsContainer = await driver.findElement(By.id('results'));
-    expect(resultsContainer).to.exist;
-
-    // Check if the submit button is present
-    const submitButton = await driver.findElement(By.id('submitQuiz'));
-    expect(submitButton).to.exist;
-
-    // Check if the redo button is present
-    const redoButton = await driver.findElement(By.id('redoQuiz'));
-    expect(redoButton).to.exist;
 
     // Fetch expected options and question titles from Firebase (replace with actual Firebase fetching logic)
     const expectedOptions = [
@@ -209,15 +230,9 @@ describe.only("UI for validating quiz answers", function () {
     const displayQnsContainer = await driver.findElement(By.id('display-qns'));
     expect(displayQnsContainer).to.exist;
 
-    // Check if the results div is present
-    // const resultsContainer = await driver.findElement(By.id('results'));
-    // expect(resultsContainer).to.exist;
-
     // Check if the submit button is present
     expect(submitButton).to.exist;
 
-    // Check if the redo button is present
-    // expect(redoButton).to.exist;
 
     // Fetch expected options and question titles from Firebase (replace with actual Firebase fetching logic)
     const expectedOptions = [
@@ -373,8 +388,6 @@ describe.only("UI for validating quiz answers", function () {
     // Assert that the URL matches the expected URL after redirection
     expect(currentUrl).to.include("/courses.html");
   });
-
-
 
 
   afterEach(async function () {
