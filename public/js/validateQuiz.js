@@ -65,14 +65,10 @@ document.addEventListener('DOMContentLoaded', function () {
           }
 
           output.push('</div>'); // Close options-container div
-        } else {
-          output.push('<div>No options available for this question.</div>');
         }
 
         output.push('</div>'); // Close the question-container div
       }
-    } else {
-      output.push('<div>No questions available for this quiz.</div>');
     }
 
     displayQnsContainer.innerHTML = output.join('');

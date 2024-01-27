@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.42% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/14</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>12/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
-                <span class="quiet">Functions</span>
+                <span class="quiet">Branches</span>
                 <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.42% </span>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>2/2</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/14</span>
+                <span class='fraction'>12/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -89,45 +89,45 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-yes">84x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">async function getAllCourses() {
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">async function getAllCourses1() {
     try {
         const response = await fetch('http://localhost:5050/getAllCourses');
-        const data = <span class="cstat-no" title="statement not covered" >await response.json();</span>
+        const data = await response.json();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (response.ok) {</span>
-            const coursesGrid = <span class="cstat-no" title="statement not covered" >document.getElementById('coursesGrid');</span>
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (response.ok) {
+            const coursesGrid1 = document.getElementById('coursesGrid1');
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            coursesGrid.innerHTML = '';</span>
+            coursesGrid1.innerHTML = '';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            data.courses.forEach(<span class="fstat-no" title="function not covered" >co</span>urse =&gt; {</span>
-                const topicBox = <span class="cstat-no" title="statement not covered" >document.createElement('div');</span>
-<span class="cstat-no" title="statement not covered" >                topicBox.className = 'topic-box';</span>
-<span class="cstat-no" title="statement not covered" >                topicBox.textContent = course.topic;</span>
-<span class="cstat-no" title="statement not covered" >                coursesGrid.appendChild(topicBox);</span>
+            data.courses.forEach(course =&gt; {
+                const topicBox = document.createElement('div');
+                topicBox.className = 'topic-box';
+                topicBox.textContent = course.topic;
+                coursesGrid1.appendChild(topicBox);
             });
         } else {
 <span class="cstat-no" title="statement not covered" >            console.error('Error fetching courses:', data.message);</span>
@@ -136,7 +136,7 @@
 <span class="cstat-no" title="statement not covered" >        console.error('Error fetching courses:', error.message);</span>
     }
 }
-window.onload = getAllCourses;
+window.onload = getAllCourses1;
 &nbsp;
 &nbsp;</pre></td></tr></table></pre>
 
@@ -145,7 +145,7 @@ window.onload = getAllCourses;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-25T10:17:51.501Z
+                at 2024-01-26T17:44:08.342Z
             </div>
         <script src="prettify.js"></script>
         <script>

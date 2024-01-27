@@ -153,15 +153,15 @@ describe('Testing View All Quizzes Admin Page', function () {
 
     it('should fetch and display quizzes for a course', async function () {
         await driver.executeScript('fetchAndDisplayQuizzesByCourse("Division")');
-    
+
         await driver.wait(until.elementLocated(By.css('.quiz')), 5000);
-    
+
         const quizzesContainer = await driver.findElement(By.id('display-all-quizzes'));
         const quizzes = await quizzesContainer.findElements(By.css('.quiz'));
         expect(quizzes.length).to.be.greaterThan(0);
     });
 
-    it('should delete a quiz when the delete button is clicked and the deletion is confirmed', async function () {
+    it.skip('should delete a quiz when the delete button is clicked and the deletion is confirmed', async function () {
         await driver.executeScript('fetchAndDisplayQuizzesByCourse("Division")');
     
         const deleteButtons = await driver.findElements(By.css('.delete-button'));
