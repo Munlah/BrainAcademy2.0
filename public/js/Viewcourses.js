@@ -44,13 +44,11 @@
 // // }
 
 // window.onload = getAllCourses;
+
+
 async function getAllCourses() {
     try {
         const response = await fetch('/getAllCourses');
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch courses');
-        }
 
         const data = await response.json();
         displayCourses(data.courses);
@@ -82,9 +80,5 @@ function navigateToCourseDetails(courseId, topic) {
     localStorage.setItem('topic', topic);
     window.location.href = '/courseDetails.html';
 }
-
-// function displayError(message) {
-//     console.error(message);
-// }
 
 window.onload = getAllCourses;
