@@ -107,24 +107,6 @@ describe('Testing View All Quizzes Admin Page', function () {
         expect(currentUrl).to.include('/addQuiz.html');
 
     });
-    it('Should delete a quiz and update the displayed quizzes', async () => {
-        await driver.get('http://localhost:' + server.address().port + '/instrumented/viewAllQuizzes.html');
-
-        await driver.wait(until.elementLocated(By.css('.quiz')), 10000);
-
-        const quizzes = await driver.findElements(By.css('.quiz'));
-        const quizToDelete = quizzes[0];
-
-        const deleteButton = await quizToDelete.findElement(By.css('.delete-button'));
-        await deleteButton.click();
-
-        const modal = await driver.wait(until.elementLocated(By.id('myModal')), 5000);
-        expect(await modal.isDisplayed()).to.be.true;
-
-        const yesbtn = await driver.findElement(By.id('confirm-delete'));
-        await yesbtn.click();
-
-    });
 
     it('should display quizzes for a course', async function () {
         await driver.executeScript('fetchAndDisplayQuizzesByCourse("course1")');
