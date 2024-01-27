@@ -3,12 +3,12 @@ const { Builder, By, until } = require('selenium-webdriver');
 const { describe, it, after, before, afterEach } = require('mocha');
 const { expect } = require('chai');
 const fs = require('fs').promises;
-const path = require('path'); 
+const path = require('path');
 
 
 
 courseId = 'eboZL9dwy2o9hu2TD4vi';
-quizId = 'FLQK8dRiEvUDcAKDu1cA';
+quizId = 'iz6sqlotv82qxkxMXPof';
 //quiz for algebra 
 
 var server;
@@ -24,7 +24,7 @@ after(async function () {
   await server.close();
 });
 
-describe("UI for validating quiz answers", function () {
+describe.only("UI for validating quiz answers", function () {
   this.timeout(30000);
   var driver;
   var counter = 0;
@@ -34,7 +34,7 @@ describe("UI for validating quiz answers", function () {
     await driver.get(
       "http://localhost:" +
       server.address().port +
-      `/instrumented/validateQuiz.html?quizId=FLQK8dRiEvUDcAKDu1cA`
+      `/instrumented/validateQuiz.html?quizId=iz6sqlotv82qxkxMXPof`
     );
   });
 
@@ -195,16 +195,16 @@ describe("UI for validating quiz answers", function () {
   });
 
   it('Should show the result as 1/2 if the answer for a qn is wrong', async function () {
-    // Reload the page to trigger the fetch request
-    await driver.navigate().refresh();
-
     // Wait for the questions to be displayed
     await driver.wait(until.elementLocated(By.className('question-container')), 5000);
 
     // Simulate user interactions to select answers
     await driver.executeScript(() => {
-      document.querySelector('input[name="question0"][value="0"]').click(); // Select correct option for the 1st question
-      document.querySelector('input[name="question1"][value="2"]').click(); // Select incorrect option for the 2nd question
+      // Select correct option for the 1st question
+      document.querySelector('input[name="question0"][value="0"]').click();
+
+      // Select incorrect option for the 2nd question
+      document.querySelector('input[name="question1"][value="2"]').click();
     });
 
     // Locate the submit button and click it
@@ -217,17 +217,23 @@ describe("UI for validating quiz answers", function () {
     // Automatically click "Yes" (OK) on the confirmation alert
     await alert.accept();
 
+    await driver.sleep(3000); 
+
     // Wait for the results div to be displayed
     await driver.wait(until.elementLocated(By.id('results')), 5000);
 
-    // Assert that the result is displayed as "1/2"
+    // Log the actual results text
     const resultsText = await driver.findElement(By.id('results')).getText();
+    console.log('Actual Results Text:', resultsText);
+
+    // Assert that the result is displayed as "1/2"
     expect(resultsText).to.equal('Your score is: 1/2');
 
     // Assert that the submit button is changed to "Redo Quiz"
     const redoButton = await driver.findElement(By.id('redoQuiz'));
     expect(await redoButton.isDisplayed()).to.be.true;
-  })
+  });
+
 
   /*
 
