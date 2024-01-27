@@ -19,7 +19,7 @@ after(async function () {
     process.exit(0);
 });
 
-describe.only('Testing Add and View Course in Microsoft Edge', function () {
+describe('Testing Add and View Course in Microsoft Edge', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
     var counter = 0;
