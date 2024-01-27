@@ -9,7 +9,7 @@ async function getCourseById() {
         console.log('Course ID:', courseId);
         console.log('Topic:', topic);
 
-        const response = await fetch(`http://localhost:5050/getcourse/${courseId}`);
+        const response = await fetch(`/getcourse/${courseId}`);
         console.log('API Response:', response); // Add this line for debugging
 
         const data = await response.json();
@@ -51,7 +51,7 @@ window.onload = getCourseById;
 
 async function getquiz(topic) {
     try {
-        const response = await fetch(`http://localhost:5050/view-quizzes/${topic}`);
+        const response = await fetch(`/view-quizzes/${topic}`);
 
         if (response.ok) {
             const data = await response.json();

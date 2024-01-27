@@ -48,6 +48,49 @@ describe('Testing View Course in Chrome', function () {
         // Assert that at least one course is displayed
         expect(topicBoxes.length).to.be.greaterThan(0);
     });
+
+    it('should store courseId and topic in local storage and navigate to courseDetails.html', async () => {
+        await driver.executeScript(`navigateToCourseDetails('2eOC6Pd7Tcx6OFqGKcPA', 'Division')`);
+
+        await driver.sleep(2000);
+
+        const currentUrl = await driver.getCurrentUrl();
+        console.log(currentUrl);
+        await driver.sleep(2000);
+        const courseId = await driver.executeScript('return localStorage.getItem("courseId");');
+        const topic = await driver.executeScript('return localStorage.getItem("topic");');
+        console.log(courseId);
+        console.log(topic);
+        await driver.sleep(2000);
+        expect(courseId).to.equal('2eOC6Pd7Tcx6OFqGKcPA');
+        expect(topic).to.equal('Division');
+        expect(currentUrl).to.include('/courseDetails.html');
+    });
+
+    it('should store courseId and topic in local storage and navigate to courseDetails.html', async () => {
+        await driver.executeScript(`
+            navigateToCourseDetails({
+                courseId: '2eOC6Pd7Tcx6OFqGKcPA',
+                topic: 'Division'
+            });
+        `);
+
+
+        // Wait for navigation
+        await driver.sleep(2000);
+
+        const courseId = await driver.executeScript('return localStorage.getItem("courseId");');
+        const topic = await driver.executeScript('return localStorage.getItem("topic");');
+
+        console.log(courseId);
+        console.log(topic);
+
+        expect(courseId).to.equal('2eOC6Pd7Tcx6OFqGKcPA');
+        expect(topic).to.equal('Division');
+        expect(currentUrl).to.include('/courseDetails.html');
+    });
+
+
     // it('Should navigate to the course details page when clicking a course', async () => {
     //     const courseElements = await driver.findElements(By.className('topic-box'));
 

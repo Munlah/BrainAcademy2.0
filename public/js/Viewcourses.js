@@ -1,31 +1,46 @@
 async function getAllCourses() {
     try {
-        const response = await fetch('http://localhost:5050/getAllCourses');
-        const data = await response.json();
+        const response = await fetch('/getAllCourses');
 
-        if (response.ok) {
-            const coursesGrid = document.getElementById('coursesGrid');
-
-            data.courses.forEach(course => {
-                const topicBox = document.createElement('div');
-                topicBox.className = 'topic-box';
-                topicBox.textContent = course.topic;
-                topicBox.addEventListener('click', () => {
-                    const courseId = course.id;
-                    const topic = course.topic;
-                    // Set values in local storage
-                    localStorage.setItem('courseId', courseId);
-                    localStorage.setItem('topic', topic);
-
-                    // Navigate to the course details page
-                    window.location.href = 'http://localhost:5050/courseDetails.html';
-                });
-                coursesGrid.appendChild(topicBox);
-            });
+        if (!response.ok) {
+            throw new Error('Failed to fetch courses');
         }
+
+        const data = await response.json();
+        displayCourses(data.courses);
     } catch (error) {
         console.error('Error fetching courses:', error.message);
+        displayError('Failed to fetch courses. Please try again later.');
     }
+}
+
+function displayCourses(courses) {
+    const coursesGrid = document.getElementById('coursesGrid');
+
+    courses.forEach(course => {
+        const topicBox = createTopicBox(course);
+        coursesGrid.appendChild(topicBox);
+    });
+}
+
+function createTopicBox(course) {
+    const topicBox = document.createElement('div');
+    topicBox.className = 'topic-box';
+    topicBox.textContent = course.topic;
+    topicBox.addEventListener('click', () => {
+        navigateToCourseDetails(course.id, course.topic);
+    });
+    return topicBox;
+}
+
+function navigateToCourseDetails(courseId, topic) {
+    localStorage.setItem('courseId', courseId);
+    localStorage.setItem('topic', topic);
+    window.location.href = '/courseDetails.html';
+}
+
+function displayError(message) {
+    console.error(message);
 }
 
 window.onload = getAllCourses;
