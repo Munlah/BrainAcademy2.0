@@ -48,74 +48,47 @@ describe('Testing View Course in Chrome', function () {
         // Assert that at least one course is displayed
         expect(topicBoxes.length).to.be.greaterThan(0);
     });
-
-    it('should store courseId and topic in local storage and navigate to courseDetails.html', async () => {
+     it('Should store courseId and topic in local storage and navigate to courseDetails.html', async () => {
+        // Navigate to course details page
         await driver.executeScript(`navigateToCourseDetails('2eOC6Pd7Tcx6OFqGKcPA', 'Division')`);
-
         await driver.sleep(2000);
 
+        // Get the current URL and stored values from local storage
+        //const currentUrl = await driver.getCurrentUrl();
         const currentUrl = await driver.getCurrentUrl();
-        console.log(currentUrl);
-        await driver.sleep(2000);
-        const courseId = await driver.executeScript('return localStorage.getItem("courseId");');
-        const topic = await driver.executeScript('return localStorage.getItem("topic");');
-        console.log(courseId);
-        console.log(topic);
-        await driver.sleep(2000);
-        expect(courseId).to.equal('2eOC6Pd7Tcx6OFqGKcPA');
-        expect(topic).to.equal('Division');
-        expect(currentUrl).to.include('/courseDetails.html');
-    });
-
-    it('should store courseId and topic in local storage and navigate to courseDetails.html', async () => {
-        await driver.executeScript(`
-            navigateToCourseDetails({
-                courseId: '2eOC6Pd7Tcx6OFqGKcPA',
-                topic: 'Division'
-            });
-        `);
-
-
-        // Wait for navigation
-        await driver.sleep(2000);
-
         const courseId = await driver.executeScript('return localStorage.getItem("courseId");');
         const topic = await driver.executeScript('return localStorage.getItem("topic");');
 
-        console.log(courseId);
-        console.log(topic);
+        // Log the information for debugging
+        console.log('Current URL:', currentUrl);
+        console.log('Stored courseId:', courseId);
+        console.log('Stored topic:', topic);
 
+        // Assert the stored values
         expect(courseId).to.equal('2eOC6Pd7Tcx6OFqGKcPA');
         expect(topic).to.equal('Division');
-        expect(currentUrl).to.include('/courseDetails.html');
+
+        // Assert the current URL
+        await driver.wait(until.urlContains('/coursesDetails.html'), 10000);
+        //console.log('Expected URL:', expectedUrl);
+        expect(currentUrl).to.include('/coursesDetails.html');
+
+        // Wait for the course details to load
+        const courseDetailsElement = await driver.wait(until.elementLocated(By.id('courseDetails')), 10000);
+        const textContent = await courseDetailsElement.getText();
+
+        // Log the text content for debugging
+        console.log('Course Details Text Content:', textContent);
+
+        // Assert that the course details are displayed
+        expect(textContent).to.include('Division'); 
+        expect(textContent).to.include('Category'); 
+        expect(textContent).to.include('Description'); 
+
+        // Clean up - remove values from local storage
+        await driver.executeScript('localStorage.removeItem("courseId");');
+        await driver.executeScript('localStorage.removeItem("topic");');
     });
-
-
-    // it('Should navigate to the course details page when clicking a course', async () => {
-    //     const courseElements = await driver.findElements(By.className('topic-box'));
-
-    //     // Check if there is at least one course element
-    //     expect(courseElements.length).to.be.greaterThan(0);
-
-    //     // Get the current URL before clicking on the course
-    //     const initialUrl = await driver.getCurrentUrl();
-
-    //     // Click the first course element
-    //     await courseElements[0].click();
-
-    //     // Wait for the page to load (adjust the sleep duration based on your application behavior)
-    //     await driver.sleep(2000);
-
-    //     // Get the current URL after clicking on the course
-    //     const currentUrl = await driver.getCurrentUrl();
-
-    //     // Check if the current URL is the expected course details page URL
-    //     expect(currentUrl).to.not.equal(initialUrl);  // The URL should have changed
-    //     expect(currentUrl).to.include('courseDetails.html');
-    // });
-
-
-
     afterEach(async function () {
         await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
             if (coverageData) {
@@ -132,3 +105,72 @@ describe('Testing View Course in Chrome', function () {
         });
     });
 });
+
+    // it('Should store courseId and topic in local storage and navigate to courseDetails.html', async () => {
+    //     // Navigate to course details page
+    //     await driver.executeScript(`navigateToCourseDetails('2eOC6Pd7Tcx6OFqGKcPA', 'Division')`);
+    //     await driver.sleep(2000);
+
+    //     // Get the current URL and stored values from local storage
+    //     //const currentUrl = await driver.getCurrentUrl();
+    //     const currentUrl = await driver.getCurrentUrl();
+    //     const courseId = await driver.executeScript('return localStorage.getItem("courseId");');
+    //     const topic = await driver.executeScript('return localStorage.getItem("topic");');
+
+    //     // Log the information for debugging
+    //     console.log('Current URL:', currentUrl);
+    //     console.log('Stored courseId:', courseId);
+    //     console.log('Stored topic:', topic);
+
+    //     // Assert the stored values
+    //     expect(courseId).to.equal('2eOC6Pd7Tcx6OFqGKcPA');
+    //     expect(topic).to.equal('Division');
+
+    //     // Assert the current URL
+    //     await driver.wait(until.urlContains('/coursesDetails.html'), 10000);
+    //     //console.log('Expected URL:', expectedUrl);
+    //     expect(currentUrl).to.include('/coursesDetails.html');
+
+    //     // Wait for the course details to load
+    //     const courseDetailsElement = await driver.wait(until.elementLocated(By.id('courseDetails')), 10000);
+    //     const textContent = await courseDetailsElement.getText();
+
+    //     // Log the text content for debugging
+    //     console.log('Course Details Text Content:', textContent);
+
+    //     // Assert that the course details are displayed
+    //     expect(textContent).to.include('Division'); 
+    //     expect(textContent).to.include('Category'); 
+    //     expect(textContent).to.include('Description'); 
+
+    //     // Clean up - remove values from local storage
+    //     await driver.executeScript('localStorage.removeItem("courseId");');
+    //     await driver.executeScript('localStorage.removeItem("topic");');
+    // });
+    // it('Should click on the first course, store courseId and topic in local storage', async () => {
+    //     // Wait for the courses to load
+    //     await driver.wait(until.elementLocated(By.className('topic-box')), 5000);
+
+    //     // Find the first course element
+    //     const firstCourse = await driver.findElement(By.className('topic-box'));
+
+    //     // Click on the first course
+    //     await firstCourse.click();
+
+    //     // Wait for the local storage values to be set
+    //     await driver.wait(async () => {
+    //         const courseId = await driver.executeScript('return localStorage.getItem("courseId");');
+    //         const topic = await driver.executeScript('return localStorage.getItem("topic");');
+    //         return courseId === '2eOC6Pd7Tcx6OFqGKcPA' && topic === 'Division';
+    //     }, 5000);
+
+    //     // Assert that local storage values are set
+    //     const courseId = await driver.executeScript('return localStorage.getItem("courseId");');
+    //     const topic = await driver.executeScript('return localStorage.getItem("topic");');
+
+    //     expect(courseId).to.equal('2eOC6Pd7Tcx6OFqGKcPA');
+    //     expect(topic).to.equal('Division');
+    // });
+    
+    
+    
