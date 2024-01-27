@@ -11,8 +11,10 @@
       "public/js/*.js"
     ],
     "exclude": [],
+    "report-dir": "./coverage",
     "reporter": [
-      "html",
+      "lcov",
+      "text",
       "text-summary"
     ],
     "all": true,
@@ -26,7 +28,10 @@
     "start": "node index.js",
     "test": "nyc mocha UItests/*.test.js",
     "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css",
-    "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary"
+    "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary",
+    "cy:run": "cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
+    "cypress-frontend-report": "npx nyc report --reporter html --reporter text -t cypress-coverage --report-dir cypress-coverage/summary",
+    "coverage:report": "npx nyc report --reporter=html"
   },
   "author": "",
   "license": "ISC",
@@ -43,15 +48,23 @@
     "jsdom": "^24.0.0",
     "mocha": "^10.2.0",
     "mock-cloud-firestore": "^0.12.0",
-    "nyc": "^15.1.0",
     "proxyquire": "^2.1.3",
     "selenium-webdriver": "^4.17.0"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.12.19",
     "@firebase/testing": "^0.20.11",
     "chai": "^4.4.0",
     "chai-as-promised": "^7.1.1",
+    "cypress": "^13.6.3",
+    "cypress-istanbul": "^1.3.0",
+    "cypress-wait-until": "^3.0.1",
     "istanbul": "^0.4.5",
-    "sinon": "^17.0.1"
+    "istanbul-lib-coverage": "^3.2.2",
+    "mochawesome": "^7.1.3",
+    "mochawesome-report-generator": "^6.2.0",
+    "nyc": "^15.1.0",
+    "sinon": "^17.0.1",
+    "start-server-and-test": "^2.0.3"
   }
 }
