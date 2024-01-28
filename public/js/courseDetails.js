@@ -1,19 +1,21 @@
-let topic;
-
 async function getCourseById() {
     try {
         const urlParams = new URLSearchParams(window.location.search);
-        const courseId = localStorage.getItem('courseId');
-        topic = localStorage.getItem('topic'); // Assign value to the global variable
+
+        // Extract courseId and topic from URL parameters
+        const courseId = urlParams.get('courseId');
+        const topic = urlParams.get('topic');
 
         console.log('Course ID:', courseId);
         console.log('Topic:', topic);
 
+        // Use the correct API endpoint to fetch course details
         const response = await fetch(`/getcourse/${courseId}`);
         console.log('API Response:', response); // Add this line for debugging
 
         const data = await response.json();
         console.log('API Data:', data); // Add this line for debugging
+
         if (response.ok) {
             const courseDetails = document.getElementById('courseDetails');
             const course = data.course;
@@ -32,10 +34,11 @@ async function getCourseById() {
             await getquiz(topic); // Pass the topic as a parameter
 
             // Append the quiz button to the 'quiz' div
+            // const quiz = document.getElementById('quiz');
+            // courseDetails.appendChild(quiz);
             const quiz = document.getElementById('quiz');
-            courseDetails.appendChild(quiz);
-        } else {
-            console.error('Error fetching course details:', data.message);
+            quiz.appendChild(startQuizButton);
+
         }
     } catch (error) {
         console.error('Error fetching course details:', error.message);
