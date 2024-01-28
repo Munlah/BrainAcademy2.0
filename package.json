@@ -5,9 +5,6 @@
   "main": "index.js",
   "nyc": {
     "include": [
-      "utils/UserUtil.js",
-      "utils/QuizzesUtil.js",
-      "utils/CourseUtil.js",
       "public/js/*.js"
     ],
     "exclude": [],
