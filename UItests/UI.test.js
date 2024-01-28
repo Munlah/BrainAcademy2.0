@@ -1581,32 +1581,9 @@ describe("UI for validating quiz answers", function () {
 // validate quiz end 
 
 // view all course student start
-
-const { app } = require('../index');
-const { Builder, By, Key, until } = require('selenium-webdriver');
-const { describe, it } = require('mocha');
-const { expect } = require('chai');
-const fs = require('fs').promises;
-const sinon = require('sinon');
-
-var server;
-before(async function () {
-    server = await new Promise((resolve) => {
-        server = app.listen(0, "localhost", () => {
-            resolve(server);
-        });
-    });
-});
-
-after(async function () {
-    await server.close();
-    process.exit(0);
-});
-
 describe('Testing View Course in Chrome', function () {
     this.timeout(30000);
     var driver; // Declare a WebDriver variable
-    var counter = 0;
 
     before(async () => {
         // Initialize a Chrome WebDriver instance
