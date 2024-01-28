@@ -13,7 +13,7 @@
     "exclude": [],
     "report-dir": "./coverage",
     "reporter": [
-      "lcov",
+      "html",
       "text",
       "text-summary"
     ],
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "nyc mocha UItests/*.test.js",
+    "test": "nyc mocha UItests/UI.test.js",
     "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css",
     "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary",
     "cy:run": "cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
