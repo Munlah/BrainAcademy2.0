@@ -10,9 +10,9 @@
       "utils/CourseUtil.js"
     ],
     "exclude": [],
-    "report-dir": "./coverage",
     "reporter": [
       "html",
+      "lcov",
       "text",
       "text-summary"
     ],
@@ -24,7 +24,7 @@
     "test": "nyc mocha tests/*.test.js",
     "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css",
     "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary",
-    "cy:run": "cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
+    "cy:run": "nyc cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
     "cypress-frontend-report": "npx nyc report --reporter html --reporter text -t cypress-coverage --report-dir cypress-coverage/summary",
     "coverage:report": "npx nyc report --reporter=html"
   },
