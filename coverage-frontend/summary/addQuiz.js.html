@@ -23,16 +23,20 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">3.7% </span>
+
+                <span class="strong">85.18% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/27</span>
+                <span class='fraction'>23/27</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+
+                <span class="strong">93.75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>15/16</span>
+
             </div>
         
             
@@ -44,9 +48,11 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">3.7% </span>
+
+                <span class="strong">85.18% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/27</span>
+                <span class='fraction'>23/27</span>
+
             </div>
         
             
@@ -61,7 +67,9 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+
+    <div class='status-line high'></div>
+
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -135,35 +143,37 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -226,7 +236,9 @@
   const questionTwoCorrectOption = <span class="cstat-no" title="statement not covered" >parseInt(document.getElementById('questionTwoCorrectOption').value, 10);</span>
 &nbsp;
   //validate that none of the fields are empty
-<span class="cstat-no" title="statement not covered" >  if (</span>
+
+  if (
+
     !quizTitle ||
     !quizCourse ||
     !questionOneTitle || !questionOneOptionOne || !questionOneOptionTwo || !questionOneOptionThree ||
@@ -234,8 +246,8 @@
     !questionTwoTitle || !questionTwoOptionOne || !questionTwoOptionTwo || !questionTwoOptionThree ||
     isNaN(questionTwoCorrectOption)
   ) {
-<span class="cstat-no" title="statement not covered" >    alert('Please fill in all fields');</span>
-<span class="cstat-no" title="statement not covered" >    return;</span>
+    alert('Please fill in all fields');
+    return;
   }
 &nbsp;
   let quizBody = <span class="cstat-no" title="statement not covered" >{</span>
@@ -286,7 +298,9 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-28T19:14:40.678Z
+
+                at 2024-01-28T16:25:03.916Z
+
             </div>
         <script src="prettify.js"></script>
         <script>

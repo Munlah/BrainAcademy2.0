@@ -33,7 +33,7 @@ function populateFormFields(quiz) {
 
   // Assuming there are exactly two questions for simplicity, extend as needed
   quiz.questions.forEach((question, index) => {
-    const qNum = index + 1; 
+    const qNum = index + 1;
     document.getElementById(`question${qNum}Title`).value =
       question.questionTitle;
     question.options.forEach((option, optionIndex) => {
@@ -49,10 +49,7 @@ function gatherUpdatedQuizData() {
   return {
     newQuizTitle: document.getElementById("quizTitle").value,
     newQuizCourse: document.getElementById("quizCourse").value,
-    newQuestions: [
-      gatherQuestionData(1),
-      gatherQuestionData(2),
-    ],
+    newQuestions: [gatherQuestionData(1), gatherQuestionData(2)],
   };
 }
 
@@ -82,7 +79,7 @@ function updateQuiz(quizId, updatedQuiz) {
     .then((data) => {
       if (data.message === "Quiz updated successfully") {
         alert(data.message);
-        navigateToQuizList(); 
+        navigateToQuizList();
       } else {
         alert(data.message); // Show error message from server
       }

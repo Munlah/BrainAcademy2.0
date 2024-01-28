@@ -1084,6 +1084,8 @@ describe('Testing View All Quizzes Admin Page', function () {
 
         await driver.sleep(1000);
 
+        const quizzesBeforeDeletion = await driver.findElements(By.css('.quiz'));
+
         const deleteButtons = await driver.findElements(By.css('.delete-button'));
         const deleteButtonToClick = deleteButtons[0];
         await deleteButtonToClick.click();
@@ -1094,7 +1096,10 @@ describe('Testing View All Quizzes Admin Page', function () {
         await driver.sleep(1000);
 
         const quizzesAfterDeletion = await driver.findElements(By.css('.quiz'));
-        expect(quizzesAfterDeletion.length).to.equal(deleteButtons.length - 1);
+
+        await driver.sleep(1000);
+
+        expect(quizzesAfterDeletion.length).to.equal(quizzesBeforeDeletion.length - 1);
     });
 
     it('Add Quiz button should redirect to addQuiz.html', async () => {

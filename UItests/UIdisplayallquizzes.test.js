@@ -199,79 +199,43 @@ describe("Testing View All Quizzes Admin Page", function () {
     expect(quizzesAfterDeletion.length).to.equal(deleteButtons.length - 1);
   });
 
-  // it.only("Should navigate to edit quiz page when an edit button is clicked", async function () {
-  //   // First, set up the context by displaying quizzes for a specific course
-  //   await driver.sleep(1000);
+  it("Should navigate to edit quiz page when an edit button is clicked", async function () {
+    // First, set up the context by displaying quizzes for a specific course
+    await driver.sleep(1000);
 
-  //   await driver.executeScript('fetchAndDisplayQuizzesByCourse("Algebra")');
+    await driver.executeScript('fetchAndDisplayQuizzesByCourse("Algebra")');
 
-  //   await driver.sleep(3000);
+    await driver.sleep(5000);
 
-  //   // Find an edit button for a quiz
-  //   const editButton = await driver.findElement(By.css(".edit-button"));
+    // Find an edit button for a quiz
+    const editButton = await driver.findElement(By.css(".edit-button"));
 
-  //   // Get the current URL before clicking the edit button
-  //   const initialUrl = await driver.getCurrentUrl();
+    // Get the current URL before clicking the edit button
+    const initialUrl = await driver.getCurrentUrl();
 
-  //   // Click on the edit button
-  //   await editButton.click();
+    // Click on the edit button
+    await editButton.click();
 
-  //   // Add a sleep timer to wait for the navigation to complete
-  //   await driver.sleep(3000);
+    // Add a sleep timer to wait for the navigation to complete
+    await driver.sleep(3000);
 
-  //   // Get the new URL after clicking
-  //   const newUrl = await driver.getCurrentUrl();
+    // Get the new URL after clicking
+    const newUrl = await driver.getCurrentUrl();
 
-  //   // Assert that the URL has changed, indicating successful navigation
-  //   expect(newUrl).to.not.equal(initialUrl);
+    // Assert that the URL has changed, indicating successful navigation
+    expect(newUrl).to.not.equal(initialUrl);
 
-  //   // Extract quiz ID from the new URL
-  //   const urlParams = new URLSearchParams(newUrl.split("?")[1]);
-  //   const quizId = urlParams.get("quizId");
+    // Extract quiz ID from the new URL
+    const urlParams = new URLSearchParams(newUrl.split("?")[1]);
+    const quizId = urlParams.get("quizId");
 
-  //   // Assert that the quiz ID exists in the URL
-  //   expect(quizId).to.exist;
+    // Assert that the quiz ID exists in the URL
+    expect(quizId).to.exist;
 
-  //   // // Optionally, navigate back to the original quizzes page to continue tests or clean up
-  //   // await driver.navigate().back();
-  //   // await driver.sleep(3000);
-  // });
-
-  // it.only("Should update the quiz successfully", async function () {
-  //   // Extract the quiz ID from the current URL
-  //   const currentUrl = await driver.getCurrentUrl();
-  //   const urlParams = new URLSearchParams(currentUrl.split("?")[1]);
-  //   const quizId = urlParams.get("quizId");
-
-  //   // Ensure the quiz ID is captured before proceeding
-  //   if (!quizId) {
-  //     throw new Error("Quiz ID not found in URL");
-  //   }
-
-  //   // Populate the form with updated quiz data
-  //   await driver.findElement(By.id("quizTitle")).clear();
-  //   await driver.findElement(By.id("quizTitle")).sendKeys("Updated Quiz Title");
-  //   await driver.sleep(2000);
-
-  //   // Submit the form
-  //   await driver
-  //     .findElement(By.css("form#editQuizForm button[type='submit']"))
-  //     .click();
-
-  //   // Wait for the update action to complete and for the page to provide feedback
-  //   await driver.sleep(3000);
-
-  //   const alertText = await driver.switchTo().alert().getText();
-  //   expect(alertText).to.equal("Quiz updated successfully");
-  //   await driver.switchTo().alert().accept(); // Close the alert
-
-  //   // await driver.sleep(1000);
-  //   // await driver.wait(until.urlContains("/viewAllQuizzes.html"), 10000);
-  //   // const newUrl = await driver.getCurrentUrl();
-  //   // expect(newUrl).to.include("/viewAllQuizzes.html");
-  //   // await driver.sleep(8000);
-  // });
-
+    // Navigate back to the original quizzes page to continue tests 
+    await driver.navigate().back();
+    await driver.sleep(3000);
+  });
 
   it("Add Quiz button should redirect to addQuiz.html", async () => {
     await driver.sleep(1000);
