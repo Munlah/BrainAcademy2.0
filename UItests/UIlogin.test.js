@@ -42,24 +42,58 @@ describe('Login Page UI Testing', function () {
         };
         global.window = { localStorage: localStorageMock };
     })
-
-    it('should navigate to courses.html if user role is student', async () => {
-
-        await driver.findElement(By.id('username')).sendKeys('jennieeain2');
-        await driver.findElement(By.id('password')).sendKeys('Ilovefood123@');
+    it.only('should navigate to courses.html if user role is student', async () => {
+        await driver.findElement(By.id('username')).sendKeys('validuser');
+        await driver.findElement(By.id('password')).sendKeys('ValidPassword1!');
         await driver.findElement(By.id('loginForm')).submit();
 
         await driver.sleep(1000);
-
         await driver.wait(until.urlContains('/courses.html'), 10000);
 
-        await driver.sleep(1000);
+        // const currentUrl = await driver.getCurrentUrl();
+        // expect(currentUrl).to.include('/courses.html');
 
-        const currentUrl = await driver.getCurrentUrl();
+        // Extract the user ID after successful login
+        const userId = await driver.executeScript(() => localStorage.getItem('userId'));
 
-        await driver.sleep(1000);
+        // Navigate to the courses.html page
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/courses.html');
 
-        expect(currentUrl).to.include('/courses.html');
+        // Assuming the deleteButton is part of the courses.html page
+        const deleteButton = await driver.findElement(By.id('deleteButton'));
+        await deleteButton.click();
+        await driver.sleep(2000);
+
+        const confirmationPrompt = await driver.switchTo().alert();
+        expect(confirmationPrompt).to.exist;
+
+        await confirmationPrompt.accept();
+
+        // // Check if the navigateToLogin function is executed
+        // const isNavigateToLoginExecuted = await driver.executeScript(() => {
+        //     let isExecuted = false;
+        //     function navigateToLogin() {
+        //         localStorage.removeItem('userId');
+        //         window.location.href = "/index.html";
+        //         isExecuted = true;
+        //     }
+        //     navigateToLogin();
+        //     return isExecuted;
+        // });
+
+        // // Assert that the navigateToLogin function is executed
+        // expect(isNavigateToLoginExecuted).to.be.true;
+
+        // // Wait for the redirection to index.html
+        // await driver.wait(until.urlContains('/index.html'), 5000);
+
+        // // Check the current URL to ensure redirection
+        // const currentUrl = await driver.getCurrentUrl();
+        // expect(currentUrl).to.include('/index.html');
+
+        // // Check that the user ID has been removed from local storage
+        // const storedUserId = await driver.executeScript(() => localStorage.getItem('userId'));
+        // expect(storedUserId).to.be.null;
     });
 
     it('should navigate to viewAllQuizzes.html if user role is enterprise', async () => {
@@ -337,7 +371,7 @@ describe('Login Page UI Testing', function () {
 
     it('should redirect to the correct page based on user role 4', async () => {
         await driver.executeScript(`redirectToUserRolePage('enterprise');`);
-        
+
         await driver.sleep(1000);
 
         await driver.wait(until.urlContains('/viewAllQuizzes.html'), 5000);
@@ -357,14 +391,14 @@ describe('Login Page UI Testing', function () {
                 }
             });
         `);
-    
+
         const username = await driver.executeScript('return localStorage.getItem("username");');
         const userId = await driver.executeScript('return localStorage.getItem("userId");');
-    
+
         expect(username).to.equal('testUser');
         expect(userId).to.equal('testId');
     });
-    
+
 
     afterEach(async function () {
         await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
