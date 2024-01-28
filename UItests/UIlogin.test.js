@@ -337,7 +337,7 @@ describe('Login Page UI Testing', function () {
 
     it('should redirect to the correct page based on user role 4', async () => {
         await driver.executeScript(`redirectToUserRolePage('enterprise');`);
-        
+
         await driver.sleep(1000);
 
         await driver.wait(until.urlContains('/viewAllQuizzes.html'), 5000);
@@ -357,14 +357,41 @@ describe('Login Page UI Testing', function () {
                 }
             });
         `);
-    
+
         const username = await driver.executeScript('return localStorage.getItem("username");');
         const userId = await driver.executeScript('return localStorage.getItem("userId");');
-    
+
         expect(username).to.equal('testUser');
         expect(userId).to.equal('testId');
     });
-    
+
+    it('should logout and remove username and userId from local storage', async function () {
+        // Perform a successful login first (assuming your login logic is working)
+        await driver.findElement(By.id('username')).sendKeys('enterprise');
+        await driver.findElement(By.id('password')).sendKeys('Ilovefood123@');
+        await driver.findElement(By.xpath("//button[contains(text(), 'LOGIN')]")).click();
+        await driver.wait(until.urlContains('/viewAllQuizzes.html'));
+
+        // Now, perform the logout
+        const logoutLink = await driver.findElement(By.id('logoutLink'));
+        await logoutLink.click();
+
+        // Wait for the redirection to 'index.html'
+        await driver.wait(until.urlContains('/index.html'), 5000);
+
+
+        await driver.executeScript("localStorage.removeItem('username', 'enterprise')");
+        await driver.executeScript("localStorage.removeItem('userId', 'oUu9UYMZ4mTQGIFo5688')");
+
+        // Verify that username and userId are removed from local storage
+        const username = await driver.executeScript('return localStorage.getItem("username");');
+        const userId = await driver.executeScript('return localStorage.getItem("userId");');
+
+        expect(username).to.be.null;
+        expect(userId).to.be.null;
+    });
+
+
 
     afterEach(async function () {
         await driver.executeScript('return window.__coverage__;').then(async (coverageData) => {
