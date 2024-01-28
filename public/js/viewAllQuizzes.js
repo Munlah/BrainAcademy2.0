@@ -19,10 +19,12 @@ function fetchAndDisplayQuizzes() {
         const quizElement = template.content.cloneNode(true);
         quizElement.querySelector(".quiz-title").textContent = quiz.quizTitle;
 
+        // Set data attributes for quizId on the edit button
         const editButton = quizElement.querySelector(".edit-button");
-        editButton.addEventListener("click", () => {
-          window.location.href = `editQuiz.html?quizId=${quiz.id}`;
-        });
+        editButton.dataset.quizId = quiz.id;
+
+        // Attach click event listener to navigate using data attributes
+        editButton.addEventListener("click", navigateToEditQuiz);
 
         const deleteButton = quizElement.querySelector(".delete-button");
         deleteButton.id = quiz.id;
@@ -137,17 +139,20 @@ function fetchAndDisplayQuizzesByCourse(course) {
 
           quizElement.querySelector(".quiz-title").textContent = quiz.quizTitle;
 
+          // Set data attributes for quizId on the edit button
           const editButton = quizElement.querySelector(".edit-button");
-          editButton.addEventListener("click", () => {
-            window.location.href = `editQuiz.html?quizId=${quiz.id}`;
-          });
+          editButton.dataset.quizId = quiz.id;
+
+          // Attach click event listener to navigate using data attributes
+          editButton.addEventListener("click", navigateToEditQuiz);
 
           const deleteButton = quizElement.querySelector(".delete-button");
           deleteButton.addEventListener("click", () => {
             const quizToDelete = quiz.id;
 
             const modal = document.getElementById("myModal");
-            const confirmDeleteButton = document.getElementById("confirm-delete");
+            const confirmDeleteButton =
+              document.getElementById("confirm-delete");
             const cancelDeleteButton = document.getElementById("cancel-delete");
 
             modal.style.display = "block";
@@ -164,7 +169,8 @@ function fetchAndDisplayQuizzesByCourse(course) {
                 })
                 .catch((e) =>
                   console.log(
-                    "There was a problem with your fetch operation: " + e.message
+                    "There was a problem with your fetch operation: " +
+                      e.message
                   )
                 );
 
@@ -183,4 +189,10 @@ function fetchAndDisplayQuizzesByCourse(course) {
     .catch((e) =>
       console.log("There was a problem with your fetch operation: " + e.message)
     );
+}
+
+function navigateToEditQuiz(event) {
+  const quizId = event.currentTarget.dataset.quizId; // Use currentTarget to ensure we get the button's dataset
+  const url = `editQuiz.html?quizId=${quizId}`; // Construct the URL with quizId as a query parameter
+  window.location.href = url; // Navigate to the edit quiz page
 }
