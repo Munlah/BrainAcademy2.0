@@ -17,15 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
           });
 
           const data = await response.json();
-
-          // if (response.ok) {
-            // alert(data.message); 
             window.location.href = "index.html"; // Redirect to login page
             localStorage.removeItem('userId');
             localStorage.removeItem('username');
-          // } else {
-          //   alert(data.message); 
-          // }
         } catch (error) {
           console.error('Error deleting user:', error);
           alert('An error occurred. Please try again.'); 

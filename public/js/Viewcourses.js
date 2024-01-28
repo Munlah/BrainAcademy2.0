@@ -1,14 +1,10 @@
 // async function getAllCourses() {
 //     try {
-//         const response = await fetch('/getAllCourses');
-
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch courses');
-//         }
-
+//         const response = await fetch('http://localhost:5050/getAllCourses');
 //         const data = await response.json();
 //         displayCourses(data.courses);
-//     } catch (error) {
+//     } 
+//     catch (error) {
 //         console.error('Error fetching courses:', error.message);
 //         displayError('Failed to fetch courses. Please try again later.');
 //     }
@@ -19,6 +15,7 @@
 
 //     courses.forEach(course => {
 //         const topicBox = createTopicBox(course);
+//         //topicBox.addEventListener('click', () => navigateToCourseDetails(course.id, course.topic));
 //         coursesGrid.appendChild(topicBox);
 //     });
 // }
@@ -27,9 +24,10 @@
 //     const topicBox = document.createElement('div');
 //     topicBox.className = 'topic-box';
 //     topicBox.textContent = course.topic;
-//     topicBox.addEventListener('click', () => {
-//         navigateToCourseDetails(course.id, course.topic);
-//     });
+//     topicBox.dataset.courseId = course.id;  // Add courseId to data attribute
+//     topicBox.dataset.topic = course.topic;  // Add topic to data attribute
+
+//     topicBox.addEventListener('click', () => navigateToCourseDetails(course.id, course.topic));
 //     return topicBox;
 // }
 
@@ -39,46 +37,46 @@
 //     window.location.href = '/courseDetails.html';
 // }
 
-// // function displayError(message) {
-// //     console.error(message);
-// // }
-
 // window.onload = getAllCourses;
 
 
 async function getAllCourses() {
     try {
-        const response = await fetch('/getAllCourses');
-
+        const response = await fetch('http://localhost:5050/getAllCourses');
         const data = await response.json();
-        displayCourses(data.courses);
+
+        if (response.ok) {
+            const coursesGrid = document.getElementById('coursesGrid');
+
+            data.courses.forEach(course => {
+                const topicBox = document.createElement('div');
+                topicBox.className = 'topic-box';
+                topicBox.textContent = course.topic;
+
+                // Set data attributes for courseId and topic
+                topicBox.dataset.courseId = course.id;
+                topicBox.dataset.topic = course.topic;
+
+                // Attach click event listener
+                topicBox.addEventListener('click', navigateToCourseDetails);
+
+                coursesGrid.appendChild(topicBox);
+            });
+        }
     } catch (error) {
         console.error('Error fetching courses:', error.message);
-        displayError('Failed to fetch courses. Please try again later.');
     }
 }
 
-function displayCourses(courses) {
-    const coursesGrid = document.getElementById('coursesGrid');
+function navigateToCourseDetails(event) {
+    const courseId = event.target.dataset.courseId;
+    const topic = event.target.dataset.topic;
 
-    courses.forEach(course => {
-        const topicBox = createTopicBox(course);
-        topicBox.addEventListener('click', () => navigateToCourseDetails(course.id, course.topic));
-        coursesGrid.appendChild(topicBox);
-    });
-}
+    // Construct the URL with query parameters
+    const url = `/courseDetails.html?courseId=${courseId}&topic=${encodeURIComponent(topic)}`;
 
-function createTopicBox(course) {
-    const topicBox = document.createElement('div');
-    topicBox.className = 'topic-box';
-    topicBox.textContent = course.topic;
-    return topicBox;
-}
-
-function navigateToCourseDetails(courseId, topic) {
-    localStorage.setItem('courseId', courseId);
-    localStorage.setItem('topic', topic);
-    window.location.href = '/courseDetails.html';
+    // Navigate to the course details page
+    window.location.href = url;
 }
 
 window.onload = getAllCourses;
