@@ -26,7 +26,8 @@
     "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary",
     "cy:run": "nyc cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
     "cypress-frontend-report": "npx nyc report --reporter html --reporter text -t cypress-coverage --report-dir cypress-coverage/summary",
-    "coverage:report": "npx nyc report --reporter=html"
+    "coverage:report": "npx nyc report --reporter=html",
+    "postinstall": "npm rebuild bcrypt --build-from-source"
   },
   "author": "",
   "license": "ISC",
