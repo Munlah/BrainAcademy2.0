@@ -52,10 +52,11 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
         // Handle error
         console.error('Error adding course:', result.message);
 
-        if (!topic || !description || !video || !category) {
-            alert('Please fill in all fields.');
-            return;  // Don't proceed with the API call if validation fails
-        }
+        // if (!topic || !description || !video || !category) {
+        //     alert('Please fill in all fields.');
+        //     return;  // Don't proceed with the API call if validation fails
+        // }
+        
         if (response.status === 400) {
             if (result.message === 'Invalid video URL format') {
                 alert('Invalid URL. Please enter a valid URL for the video.');

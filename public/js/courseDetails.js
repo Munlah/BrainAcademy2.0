@@ -11,10 +11,10 @@ async function getCourseById() {
 
         // Use the correct API endpoint to fetch course details
         const response = await fetch(`/getcourse/${courseId}`);
-        console.log('API Response:', response); // Add this line for debugging
+        console.log('API Response:', response); 
 
         const data = await response.json();
-        console.log('API Data:', data); // Add this line for debugging
+        console.log('API Data:', data); 
 
         if (response.ok) {
             const courseDetails = document.getElementById('courseDetails');
@@ -26,7 +26,7 @@ async function getCourseById() {
                 <div class="video-container">
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/${getYouTubeVideoId(course.video)}" frameborder="0" allowfullscreen></iframe>
                 </div>
-                <p><strong>Description:</strong> ${course.description}`;
+                <p id="description" ><strong>Description:</strong> ${course.description}`;
 
             courseDetails.innerHTML = courseInfo;
 
