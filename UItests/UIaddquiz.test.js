@@ -42,6 +42,11 @@ describe('Add Quiz UI', function () {
     await driver.get('http://localhost:' + server.address().port + '/instrumented/addQuiz.html');
   });
 
+  this.beforeEach(async () => {
+    await driver.get('http://localhost:' + server.address().port + '/instrumented/addQuiz.html');
+
+  })
+
   afterEach(async function () {
     // Capture and save screenshot if the test fails
     const testStatus = this.currentTest.state;
@@ -76,6 +81,8 @@ describe('Add Quiz UI', function () {
 
 
   it('should show alert if all fields are not filled', async function () {
+    await driver.navigate().refresh();
+
     //Find quiz title field
     const quizTitleElement = await driver.findElement(By.id('quizTitle'));
     await quizTitleElement.click();
@@ -102,14 +109,16 @@ describe('Add Quiz UI', function () {
   });
 
   it('should show alert if quizTitle already exists', async function () {
+    await driver.navigate().refresh();
+
     // Find quiz title field
     const quizTitleElement = await driver.findElement(By.id('quizTitle'));
     await quizTitleElement.click();
-    await quizTitleElement.sendKeys('Maths');
+    await quizTitleElement.sendKeys('Test validation');
 
     const quizCourseElement = await driver.findElement(By.id('quizCourse'));
     await quizCourseElement.click();
-    await quizCourseElement.sendKeys('Test Course');
+    await quizCourseElement.sendKeys('Algebra');
 
     const questionOneTitleElement = await driver.findElement(By.id('questionOneTitle'));
     await questionOneTitleElement.click();
@@ -174,114 +183,57 @@ describe('Add Quiz UI', function () {
   });
 
 
-  it('should redirect to view all quizzes page after successfully adding', async function () {
-    // qn 1
-    const quizTitleElement = await driver.findElement(By.id('quizTitle'));
-    await quizTitleElement.click();
-    await quizTitleElement.sendKeys('successfull mock quiz added');
+  it('should add a quiz and redirect to view all quizzes page', async function () {
+    await driver.navigate().refresh();
 
-    const quizCourseElement = await driver.findElement(By.id('quizCourse'));
-    await quizCourseElement.click();
-    await quizCourseElement.sendKeys('Test Course mockhhh');
+    // Fill in the quiz form
+    await driver.findElement(By.id('quizTitle')).sendKeys('add quiz test case new');
+    await driver.findElement(By.id('quizCourse')).sendKeys('add quiz course');
 
-    const questionOneTitleElement = await driver.findElement(By.id('questionOneTitle'));
-    await questionOneTitleElement.click();
-    await questionOneTitleElement.sendKeys('Test question title');
+    // Fill in question 1
+    await driver.findElement(By.id('questionOneTitle')).sendKeys('Question 1 Title');
+    await driver.findElement(By.id('questionOneOptionOne')).sendKeys('Option 1');
+    await driver.findElement(By.id('questionOneOptionTwo')).sendKeys('Option 2');
+    await driver.findElement(By.id('questionOneOptionThree')).sendKeys('Option 3');
+    await driver.findElement(By.id('questionOneCorrectOption')).sendKeys('1');
 
-    const questionOneOptionOneElement = await driver.findElement(By.id('questionOneOptionOne'));
-    await questionOneOptionOneElement.click();
-    await questionOneOptionOneElement.sendKeys('option 1');
+    // Fill in question 2
+    await driver.findElement(By.id('questionTwoTitle')).sendKeys('Question 2 Title');
+    await driver.findElement(By.id('questionTwoOptionOne')).sendKeys('Option 1');
+    await driver.findElement(By.id('questionTwoOptionTwo')).sendKeys('Option 2');
+    await driver.findElement(By.id('questionTwoOptionThree')).sendKeys('Option 3');
+    await driver.findElement(By.id('questionTwoCorrectOption')).sendKeys('2');
 
-    const questionOneOptionTwoElement = await driver.findElement(By.id('questionOneOptionTwo'));
-    await questionOneOptionTwoElement.click();
-    await questionOneOptionTwoElement.sendKeys('option 2');
+    // Submit the form
+    await driver.findElement(By.xpath('//button[text()="Submit"]')).click();
 
-    const questionOneOptionThreeElement = await driver.findElement(By.id('questionOneOptionThree'));
-    await questionOneOptionThreeElement.click();
-    await questionOneOptionThreeElement.sendKeys('option 3');
-
-    const questionOneCorrectOptionElement = await driver.findElement(By.id('questionOneCorrectOption'));
-    await questionOneCorrectOptionElement.click();
-    await questionOneCorrectOptionElement.sendKeys(1);
-
-
-    // qn 2
-    const questionTwoTitleElement = await driver.findElement(By.id('questionTwoTitle'));
-    await questionTwoTitleElement.click();
-    await questionTwoTitleElement.sendKeys('Test question title');
-
-    const questionTwoOptionOneElement = await driver.findElement(By.id('questionTwoOptionOne'));
-    await questionTwoOptionOneElement.click();
-    await questionTwoOptionOneElement.sendKeys('option 1');
-
-    const questionTwoOptionTwoElement = await driver.findElement(By.id('questionTwoOptionTwo'));
-    await questionTwoOptionTwoElement.click();
-    await questionTwoOptionTwoElement.sendKeys('option 2');
-
-    const questionTwoOptionThreeElement = await driver.findElement(By.id('questionTwoOptionThree'));
-    await questionTwoOptionThreeElement.click();
-    await questionTwoOptionThreeElement.sendKeys('option 3');
-
-    const questionTwoCorrectOptionElement = await driver.findElement(By.id('questionTwoCorrectOption'));
-    await questionTwoCorrectOptionElement.click();
-    await questionTwoCorrectOptionElement.sendKeys(1);
-
-    // Find submit button
-    const submitButton = await driver.findElement(By.xpath('//button[text()="Submit"]'));
-    await submitButton.click();
-
+    // Wait for the alert to be present
     await driver.wait(until.alertIsPresent(), 5000);
+
+    // Switch to the alert
     const alert = await driver.switchTo().alert();
+
+    // Get the text from the alert
     const alertText = await alert.getText();
+
+    // Assert that the alert message contains the expected text
     expect(alertText).to.equal('Quiz created successfully.');
 
+    // Dismiss the alert
     await alert.dismiss();
 
-    // Check that the URL is redirected to view all quizzes page
-    expect(await driver.getCurrentUrl()).to.contain('/viewAllQuizzes.html');
+    // Wait for a moment to ensure the alert is closed
+    await driver.sleep(3000);
 
+    // Execute JavaScript to check if the window.location.href has changed
+    const redirectedUrl = await driver.executeScript('return window.location.href;');
+    expect(redirectedUrl).to.include("/viewAllQuizzes.html");
   });
 
 
-
-  // it('should show error alert if there is internal server error', async function () {
-  //   // Stub the fetch function to simulate an internal server error
-  //   const fetchStub = sinon.stub(global, 'fetch');
-  //   fetchStub.rejects(new Error('Internal Server Error'));
-
-  //   // Trigger form submission
-  //   const submitButton = await driver.findElement(By.xpath('//button[text()="Submit"]'));
-  //   await submitButton.click();
-
-  //   // Wait for the alert to be present
-  //   await driver.wait(until.alertIsPresent(), 5000);
-
-  //   // Switch to the alert
-  //   const alert = await driver.switchTo().alert();
-
-  //   // Get the text from the alert
-  //   const alertText = await alert.getText();
-
-  //   // Assert that the alert message contains the expected text
-  //   expect(alertText).to.equal('Error creating quiz. Please try again.');
-
-  //   // Dismiss the alert
-  //   await alert.dismiss();
-
-  //   // Restore the original fetch function
-  //   fetchStub.restore();
-  // });
 
   after(async () => {
     await driver.quit();
   });
 });
 
-
-
-
-//after(async function () {
-// await driver.quit();
-// await server.close();
-//process.exit(0);
-//});

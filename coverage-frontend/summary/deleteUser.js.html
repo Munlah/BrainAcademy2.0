@@ -23,16 +23,28 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">26.66% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>4/15</span>
+=======
+                <span class="strong">19.04% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>4/21</span>
+>>>>>>> 862f127ba818e26622f195e92c658256d6556196
             </div>
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">25% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>1/4</span>
+=======
+                <span class="strong">12.5% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>1/8</span>
+>>>>>>> 862f127ba818e26622f195e92c658256d6556196
             </div>
         
             
@@ -44,9 +56,15 @@
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">26.66% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>4/15</span>
+=======
+                <span class="strong">19.04% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>4/21</span>
+>>>>>>> 862f127ba818e26622f195e92c658256d6556196
             </div>
         
             
@@ -109,6 +127,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<<<<<<< HEAD
+=======
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+>>>>>>> 862f127ba818e26622f195e92c658256d6556196
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,6 +146,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<<<<<<< HEAD
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -136,6 +164,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">document.addEventListener('DOMContentLoaded', function () {
+=======
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">document.addEventListener('DOMContentLoaded', function () {
+>>>>>>> 862f127ba818e26622f195e92c658256d6556196
   const deleteButton = document.getElementById('deleteButton');
 &nbsp;
   <span class="missing-if-branch" title="else path not taken" >E</span>if (deleteButton) {
@@ -145,6 +186,7 @@
 <span class="cstat-no" title="statement not covered" >      if (confirmed) {</span>
         // Retrieve the userId from local storage
         const userId = <span class="cstat-no" title="statement not covered" >localStorage.getItem('userId');</span>
+<<<<<<< HEAD
 <span class="cstat-no" title="statement not covered" >        try {</span>
           const response = <span class="cstat-no" title="statement not covered" >await fetch(`http://localhost:5050/deleteUser/${userId}`, {</span>
             method: 'DELETE',
@@ -172,13 +214,46 @@
   }
 });
 &nbsp;</pre></td></tr></table></pre>
+=======
+        try {
+<span class="cstat-no" title="statement not covered" >          const response = await fetch(`http://localhost:5050/deleteUser/${userId}`, {</span>
+<span class="cstat-no" title="statement not covered" >            method: 'DELETE',</span>
+<span class="cstat-no" title="statement not covered" >            header</span>s: {
+              'Content-Type': 'application/json',
+            },
+<span class="cstat-no" title="statement not covered" >          });</span>
+<span class="cstat-no" title="statement not covered" ></span>
+          const data = await response.json();
+&nbsp;
+          // if (response.ok) {
+            // alert(data.message); 
+            window.location.href = "index.html"; // Redirect to login page
+            localStorage.removeItem('userId');
+            localStorag<span class="cstat-no" title="statement not covered" >e.removeItem('username</span>');
+          // } else {
+<span class="cstat-no" title="statement not covered" >          //   alert(data.message); </span>
+          //<span class="cstat-no" title="statement not covered" > }</span>
+        } ca<span class="cstat-no" title="statement not covered" >tch (error) {</span>
+          co<span class="cstat-no" title="statement not covered" >nsole.error('Error deleting user:',</span> error);
+          al<span class="cstat-no" title="statement not covered" >ert('An error occurred. Please try ag</span>ain.'); 
+        }
+      }<span class="cstat-no" title="statement not covered" ></span>
+    });
+  }
+});<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" ></span></pre></td></tr></table></pre>
+>>>>>>> 862f127ba818e26622f195e92c658256d6556196
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+<<<<<<< HEAD
                 at 2024-01-27T09:36:45.346Z
+=======
+                at 2024-01-28T04:42:32.667Z
+>>>>>>> 862f127ba818e26622f195e92c658256d6556196
             </div>
         <script src="prettify.js"></script>
         <script>
