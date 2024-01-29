@@ -4,6 +4,6 @@ services:
         build:
             context: .
             dockerfile: DockerfileSanjana
-            image: sanjana624/docker-image-name:latest
+        image: sanjana624/docker-image-name:latest
         container_name: ba-docker-name
    
