@@ -14,8 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
               'Content-Type': 'application/json',
             },
           });
-
-          const data = await response.json();
+          
           Navigate();
         } catch (error) {
           console.error('Error deleting user:', error);
@@ -26,10 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function Navigate() {
-    const redirectUrl = '/index.html';
-    setTimeout(() => {
-      window.location.href = redirectUrl;
-    }, 2000);
+    localStorage.removeItem('userId');
+    window.location.href = '/index.html';
   }
 
   function confirmAsync(message) {
