@@ -4,7 +4,7 @@ services:
         build:
             context: .
             dockerfile: DockerfileSanjana
-        image: sanjana624/docker-image-name:latest:v3
+        image: sanjana624/sanjana-docker-img:latest
         container_name: ba-docker-sanjana
    ba-munleng:
         build:
@@ -12,7 +12,7 @@ services:
             dockerfile: DockerfileMunleng
         image: chengmunleng/brain-academy-img:latest
         container_name: ba-docker-munleng
-   ba-newservice:
+   ba-thathmuu:
         build:
             context: .
             dockerfile: DockerfileThatHmuu
