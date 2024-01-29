@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="./js/logout.js"></script>
+  
   <title>Course Details</title>
 </head>
 
@@ -24,7 +24,7 @@
     <ul>
       <li><a href="#"  id="deleteButton" onclick="deleteUser()">Delete Account</a></li>
       <span>|</span>
-      <li><a href="#" id="logoutLink">Logout</a></li>
+      <li><a href="index.html" id="logoutLink" onclick="logout()">Logout</a></li>
     </ul>
   </nav>
 
@@ -50,6 +50,13 @@
       // Remove values from local storage
       localStorage.removeItem('courseId');
       localStorage.removeItem('topic');
+    }
+  </script>
+   <script>
+    function logout() {
+      // Remove values from local storage
+      localStorage.removeItem('userId');
+      localStorage.removeItem('username');
     }
   </script>
   <script src="./js/courseDetails.js"></script>

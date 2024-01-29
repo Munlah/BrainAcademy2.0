@@ -42,7 +42,7 @@ describe('Login Page UI Testing', function () {
         };
         global.window = { localStorage: localStorageMock };
     })
-    it.only('should navigate to courses.html if user role is student', async () => {
+    it('should navigate to courses.html if user role is student', async () => {
         await driver.findElement(By.id('username')).sendKeys('validuser');
         await driver.findElement(By.id('password')).sendKeys('ValidPassword1!');
         await driver.findElement(By.id('loginForm')).submit();
@@ -68,32 +68,12 @@ describe('Login Page UI Testing', function () {
         expect(confirmationPrompt).to.exist;
 
         await confirmationPrompt.accept();
-
-        // // Check if the navigateToLogin function is executed
-        // const isNavigateToLoginExecuted = await driver.executeScript(() => {
-        //     let isExecuted = false;
-        //     function navigateToLogin() {
-        //         localStorage.removeItem('userId');
-        //         window.location.href = "/index.html";
-        //         isExecuted = true;
-        //     }
-        //     navigateToLogin();
-        //     return isExecuted;
-        // });
-
-        // // Assert that the navigateToLogin function is executed
-        // expect(isNavigateToLoginExecuted).to.be.true;
-
-        // // Wait for the redirection to index.html
-        // await driver.wait(until.urlContains('/index.html'), 5000);
-
-        // // Check the current URL to ensure redirection
+        // // Wait for the user to be deleted
+        // await driver.sleep(2000); // Simulating the 2-second timeout
+        // await driver.wait(until.urlContains('/index.html'));
+        // // Validate that the navigation to index.html occurred
         // const currentUrl = await driver.getCurrentUrl();
         // expect(currentUrl).to.include('/index.html');
-
-        // // Check that the user ID has been removed from local storage
-        // const storedUserId = await driver.executeScript(() => localStorage.getItem('userId'));
-        // expect(storedUserId).to.be.null;
     });
 
     it('should navigate to viewAllQuizzes.html if user role is enterprise', async () => {
