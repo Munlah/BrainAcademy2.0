@@ -28,7 +28,7 @@ var counter = 0;
 
 //register start
 
-describe.only("Register Page UI Testing", function () {
+describe("Register Page UI Testing", function () {
     this.timeout(30000);
     var driver;
 
@@ -322,7 +322,7 @@ describe.only("Register Page UI Testing", function () {
 //register end 
 
 //login start
-describe.only('Login Page UI Testing', function () {
+describe('Login Page UI Testing', function () {
     this.timeout(50000);
     let driver;
 
