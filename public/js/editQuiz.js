@@ -1,19 +1,31 @@
+// This function is called when the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const quizId = urlParams.get("quizId");
 
-  fetchQuizData(quizId);
+  // Fetch the quiz data and populate the form before adding event listeners
+  fetchQuizData(quizId)
+    .then(() => {
+      // Only after fetching the quiz data attach the event listener to the form.
+      const form = document.getElementById("editQuizForm");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const updatedQuiz = gatherUpdatedQuizData();
+        updateQuiz(quizId, updatedQuiz);
+      });
+    })
+    .catch((error) => {
+      console.error("Error setting up the form:", error);
+      alert("Failed to load quiz data. Please try again.");
 
-  const form = document.getElementById("editQuizForm");
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-    const updatedQuiz = gatherUpdatedQuizData();
-    updateQuiz(quizId, updatedQuiz);
-  });
+      // Redirect to viewAllQuizzes.html after user acknowledges the alert
+      setTimeout(navigateToQuizList, 2000);
+    });
 });
 
+// Fetches the quiz data and returns a promise.
 function fetchQuizData(quizId) {
-  fetch("/get-all-quizzes")
+  return fetch("/get-all-quizzes")
     .then((response) => response.json())
     .then((quizzes) => {
       const quizToEdit = quizzes.find((quiz) => quiz.id === quizId);
@@ -21,12 +33,22 @@ function fetchQuizData(quizId) {
         populateFormFields(quizToEdit);
       } else {
         console.error("Quiz not found");
-        alert("Quiz not found. Please check the quiz ID.");
+        throw new Error("Quiz not found");
       }
     })
-    .catch((error) => console.error("Error fetching quiz data:", error));
+    .catch((error) => {
+      console.error("Error fetching quiz data:", error);
+      if (error.message === "Quiz not found") {
+        alert("Quiz not found. Please check the quiz ID.");
+      } else {
+        alert("Error fetching quiz data. Please try again.");
+      }
+      // Redirect to viewAllQuizzes.html after user acknowledges the alert
+      setTimeout(navigateToQuizList, 2000);
+    });
 }
 
+// Populates the form fields with the quiz data
 function populateFormFields(quiz) {
   document.getElementById("quizTitle").value = quiz.quizTitle;
   document.getElementById("quizCourse").value = quiz.quizCourse;
@@ -45,6 +67,7 @@ function populateFormFields(quiz) {
   });
 }
 
+// Gathers the updated quiz data from the form
 function gatherUpdatedQuizData() {
   return {
     newQuizTitle: document.getElementById("quizTitle").value,
@@ -53,6 +76,7 @@ function gatherUpdatedQuizData() {
   };
 }
 
+// Gathers the data for a single question from the form
 function gatherQuestionData(questionNumber) {
   return {
     questionTitle: document.getElementById(`question${questionNumber}Title`)
@@ -69,24 +93,36 @@ function gatherQuestionData(questionNumber) {
   };
 }
 
+// Update the quiz and navigate to the quiz list on success
 function updateQuiz(quizId, updatedQuiz) {
-  fetch(`/edit-quiz/${quizId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedQuiz),
+  new Promise((resolve, reject) => {
+    fetch(`/edit-quiz/${quizId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedQuiz),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Quiz updated successfully") {
+          alert(data.message);
+          resolve(data);
+        } else {
+          alert(data.message); // Show error message from server
+          reject(new Error("Quiz update failed"));
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating quiz:", error);
+        alert("Error updating quiz. Please try again.");
+        reject(new Error("Quiz update error"));
+      });
   })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.message === "Quiz updated successfully") {
-        alert(data.message);
-        navigateToQuizList();
-      } else {
-        alert(data.message); // Show error message from server
-      }
+    .then(() => {
+      setTimeout(navigateToQuizList, 2000);
     })
     .catch((error) => {
-      console.error("Error updating quiz:", error);
-      alert("Error updating quiz. Please try again.");
+      // Handle any errors that occurred during update
+      console.error(error);
     });
 }
 
