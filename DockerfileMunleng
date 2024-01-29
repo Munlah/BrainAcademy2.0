@@ -8,7 +8,6 @@ COPY package*.json ./
 RUN npm install
 # Bundle app source
 COPY . .
-# Rebuild bcrypt
 RUN npm rebuild bcrypt --build-from-source
 # Expose the port your app runs on
 EXPOSE 5050
