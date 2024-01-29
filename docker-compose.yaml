@@ -1,0 +1,9 @@
+version: '3'
+services:
+   ba-sanjana:
+        build:
+        context: .
+            dockerfile: DockerfileSanjana
+            image: sanjana624/docker-image-name:latest
+        container_name: ba-docker-name
+   
