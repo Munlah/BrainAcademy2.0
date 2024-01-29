@@ -12,3 +12,25 @@ services:
             dockerfile: DockerfileMunleng
         image: chengmunleng/brain-academy-img:latest
         container_name: ba-docker-munleng
+
+
+version: '4'
+services:
+   ba-sanjana:
+        build:
+            context: .
+            dockerfile: DockerfileSanjana
+        image: sanjana624/docker-image-name:latest
+        container_name: ba-docker-sanjana
+   ba-munleng:
+        build:
+            context: .
+            dockerfile: DockerfileMunleng
+        image: chengmunleng/brain-academy-img:latest
+        container_name: ba-docker-munleng
+   ba-newservice:
+        build:
+            context: .
+            dockerfile: DockerfileThatHmuu
+        image: thathmuu/ba-docker-img:latest
+        container_name: ba-docker-thathmuu
