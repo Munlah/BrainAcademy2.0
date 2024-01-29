@@ -1,115 +1,3 @@
-// const { describe, it } = require('mocha');
-// const { expect } = require('chai');
-// const sinon = require('sinon');
-// const proxyquire = require('proxyquire');
-
-// const mockFirestore = {
-//   collection: sinon.stub(),
-//   doc: sinon.stub(),
-//   get: sinon.stub(),
-// };
-
-// const adminMock = {
-//   firestore: () => mockFirestore,
-// };
-
-// const { getCourseById } = proxyquire('../utils/CourseUtil', {
-//   '../firebaseAdmin.js': { admin: adminMock },
-// });
-
-// describe.only('getCourseById Function', () => {
-//   it('should return a course when a valid ID is provided', async () => {
-//     // Arrange
-//     const courseId = '2eOC6Pd7Tcx6OFqGKcPA';
-//     const quizIds = ['quizId1', 'quizId2'];
-//     const courseSnapshot = {
-//       exists: true,
-//       id: courseId,
-//       data: sinon.stub().returns({ topic: 'Test Course' }),
-//     };
-//     const quizzesSnapshot = {
-//       empty: false,
-//       docs: quizIds.map(id => ({ id })),
-//     };
-//     mockFirestore.doc.withArgs(`courses/${courseId}`).returns({ get: sinon.stub().resolves(courseSnapshot) });
-//     mockFirestore.collection.withArgs('quizzes').returns({ where: sinon.stub().returns({ get: sinon.stub().resolves(quizzesSnapshot) }) });
-
-//     const req = { params: { id: courseId } };
-//     const res = {
-//       status: sinon.stub().returnsThis(),
-//       json: sinon.stub(),
-//     };
-
-//     await getCourseById(req, res);
-
-//     // Assert
-//     sinon.assert.calledOnce(res.status); // Ensure status is called at least once
-//     sinon.assert.calledWith(res.status.firstCall, 200); // Check the first call to status
-//     sinon.assert.calledOnce(res.json);
-//     const response = res.json.args[0][0];
-//     expect(response.course).to.exist;
-//     expect(response.course.id).to.equal(courseId);
-//     expect(response.course.topic).to.equal('Test Course');
-//     expect(response.course.quizIds).to.deep.equal(quizIds);
-
-//   });
-
-//   it('should return a 404 status when the course ID is not found', async () => {
-//     // Arrange
-//     const courseId = 'nonexistentCourseId';
-//     mockFirestore.doc.withArgs(`courses/${courseId}`).returns({ get: sinon.stub().resolves({ exists: false }) });
-
-//     const req = { params: { id: courseId } };
-//     const res = {
-//       status: sinon.stub().returnsThis(),
-//       json: sinon.stub(),
-//     };
-
-//     // Act
-//     await getCourseById(req, res);
-
-//     // Assert
-//     sinon.assert.calledWith(res.status, 404);
-//     sinon.assert.calledOnce(res.json);
-//   });
-
-//   it('should return a 400 status when no course ID is provided', async () => {
-//     // Arrange
-//     const req = { params: {} };
-//     const res = {
-//       status: sinon.stub().returnsThis(),
-//       json: sinon.stub(),
-//     };
-
-//     // Act
-//     await getCourseById(req, res);
-
-//     // Assert
-//     sinon.assert.calledWith(res.status, 400);
-//     sinon.assert.calledOnce(res.json);
-//   });
-
-//   it('should handle internal server errors and return a 500 status', async () => {
-//     // Arrange
-//     const courseId = 'validCourseId';
-//     mockFirestore.doc.withArgs(`courses/${courseId}`).throws(new Error('Internal Server Error'));
-
-//     const req = { params: { id: courseId } };
-//     const res = {
-//       status: sinon.stub().returnsThis(),
-//       json: sinon.stub(),
-//     };
-
-//     // Act
-//     await getCourseById(req, res);
-
-//     // Assert
-//     sinon.assert.calledWith(res.status, 500);
-//     sinon.assert.calledOnce(res.json);
-//   });
-// });
-
-
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
@@ -155,7 +43,7 @@ const { getCourseById: getCourseByIdInternalError } = proxyquire('../utils/Cours
 describe('Testing get Course by Id Function', () => {
     it('should return a course when a valid ID is provided', async () => {
         // Arrange
-        const req = { params: { id: '2eOC6Pd7Tcx6OFqGKcPA' } };
+        const req = { params: { id: 'AIr2hTaloW4KHN6Dg1z2' } };
         const res = {
             status: sinon.stub().returnsThis(),
             json: sinon.stub(),
@@ -207,7 +95,7 @@ describe('Testing get Course by Id Function', () => {
 
     it('should handle internal server errors and return a 500 status', async () => {
         // Arrange
-        const req = { params: { id: '2eOC6Pd7Tcx6OFqGKcPA' } };
+        const req = { params: { id: 'AIr2hTaloW4KHN6Dg1z2' } };
         const res = {
             status: sinon.stub().returnsThis(),
             json: sinon.stub(),
