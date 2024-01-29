@@ -22,7 +22,7 @@
       <li><a href="viewAllQuizzes.html">Quizzes</a></li>
     </ul>
     <ul>
-      <li><a href="#" id="logoutLink">Logout</a></li>
+      <li><a href="index.html" id="logoutLink" onclick="logout()">Logout</a></li>
     </ul>
   </nav>
 
@@ -101,6 +101,13 @@
       // Redirect to another page
       window.location.href = 'http://localhost:5050/viewAllQuizzes.html';
     });
+  </script>
+  <script>
+    function logout() {
+      // Remove values from local storage
+      localStorage.removeItem('userId');
+      localStorage.removeItem('username');
+    }
   </script>
   <script src="./js/addQuiz.js"></script>
 </body>

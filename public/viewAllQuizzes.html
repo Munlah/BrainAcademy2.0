@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>View All Quizzes Admin</title>
-  <script src="./js/logout.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/styles.css" />
 </head>
 
@@ -22,7 +21,7 @@
     </ul>
 
     <ul>
-      <li><a href="#" id="logoutLink">Logout</a></li>
+      <li><a href="index.html" id="logoutLink" onclick="logout()">Logout</a></li>
     </ul>
   </nav>
   <div class="all-quiz-main-div">
@@ -72,6 +71,13 @@
         // Redirect to another page
         window.location.href = 'addQuiz.html';
       });
+    </script>
+     <script>
+      function logout() {
+        // Remove values from local storage
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+      }
     </script>
 </body>
 

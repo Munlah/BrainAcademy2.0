@@ -23,30 +23,36 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">26.66% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>4/15</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">25% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>1/4</span>
+
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
+
                 <span class="strong">26.66% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>4/15</span>
+
             </div>
         
             
@@ -61,7 +67,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -93,6 +99,7 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
+
 <a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,6 +112,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,21 +120,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+
+
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">document.addEventListener('DOMContentLoaded', function () {
   const deleteButton = document.getElementById('deleteButton');
+  const userId = localStorage.getItem('userId');
 &nbsp;
   <span class="missing-if-branch" title="else path not taken" >E</span>if (deleteButton) {
+
     deleteButton.addEventListener('click', <span class="fstat-no" title="function not covered" >as</span>ync function () {
       const confirmed = <span class="cstat-no" title="statement not covered" >confirm('Are you sure you want to delete your account?');</span>
 &nbsp;
@@ -135,23 +149,29 @@
         const userId = <span class="cstat-no" title="statement not covered" >localStorage.getItem('userId');</span>
 <span class="cstat-no" title="statement not covered" >        try {</span>
           const response = <span class="cstat-no" title="statement not covered" >await fetch(`http://localhost:5050/deleteUser/${userId}`, {</span>
+
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
             },
           });
 &nbsp;
+
           const data = <span class="cstat-no" title="statement not covered" >await response.json();</span>
 <span class="cstat-no" title="statement not covered" >            window.location.href = "index.html"; </span>// Redirect to login page
 <span class="cstat-no" title="statement not covered" >            localStorage.removeItem('userId');</span>
 <span class="cstat-no" title="statement not covered" >            localStorage.removeItem('username');</span>
         } catch (error) {
+
 <span class="cstat-no" title="statement not covered" >          console.error('Error deleting user:', error);</span>
-<span class="cstat-no" title="statement not covered" >          alert('An error occurred. Please try again.'); </span>
+<span class="cstat-no" title="statement not covered" >         alert('An error occurred. Please try again.');</span>
+  
         }
       }
     });
   }
+
+
 });
 &nbsp;</pre></td></tr></table></pre>
 
@@ -160,7 +180,9 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+
                 at 2024-01-28T16:25:03.916Z
+
             </div>
         <script src="prettify.js"></script>
         <script>

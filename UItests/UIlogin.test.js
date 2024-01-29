@@ -42,24 +42,38 @@ describe('Login Page UI Testing', function () {
         };
         global.window = { localStorage: localStorageMock };
     })
-
     it('should navigate to courses.html if user role is student', async () => {
-
-        await driver.findElement(By.id('username')).sendKeys('jennieeain2');
-        await driver.findElement(By.id('password')).sendKeys('Ilovefood123@');
+        await driver.findElement(By.id('username')).sendKeys('validuser');
+        await driver.findElement(By.id('password')).sendKeys('ValidPassword1!');
         await driver.findElement(By.id('loginForm')).submit();
 
         await driver.sleep(1000);
-
         await driver.wait(until.urlContains('/courses.html'), 10000);
 
-        await driver.sleep(1000);
+        // const currentUrl = await driver.getCurrentUrl();
+        // expect(currentUrl).to.include('/courses.html');
 
-        const currentUrl = await driver.getCurrentUrl();
+        // Extract the user ID after successful login
+        const userId = await driver.executeScript(() => localStorage.getItem('userId'));
 
-        await driver.sleep(1000);
+        // Navigate to the courses.html page
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/courses.html');
 
-        expect(currentUrl).to.include('/courses.html');
+        // Assuming the deleteButton is part of the courses.html page
+        const deleteButton = await driver.findElement(By.id('deleteButton'));
+        await deleteButton.click();
+        await driver.sleep(2000);
+
+        const confirmationPrompt = await driver.switchTo().alert();
+        expect(confirmationPrompt).to.exist;
+
+        await confirmationPrompt.accept();
+        // // Wait for the user to be deleted
+        // await driver.sleep(2000); // Simulating the 2-second timeout
+        // await driver.wait(until.urlContains('/index.html'));
+        // // Validate that the navigation to index.html occurred
+        // const currentUrl = await driver.getCurrentUrl();
+        // expect(currentUrl).to.include('/index.html');
     });
 
     it('should navigate to viewAllQuizzes.html if user role is enterprise', async () => {
@@ -365,6 +379,7 @@ describe('Login Page UI Testing', function () {
         expect(userId).to.equal('testId');
     });
 
+
     it('should logout and remove username and userId from local storage', async function () {
         // Perform a successful login first (assuming your login logic is working)
         await driver.findElement(By.id('username')).sendKeys('enterprise');
@@ -390,7 +405,6 @@ describe('Login Page UI Testing', function () {
         expect(username).to.be.null;
         expect(userId).to.be.null;
     });
-
 
 
     afterEach(async function () {

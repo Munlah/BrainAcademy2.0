@@ -5,9 +5,11 @@
   "main": "index.js",
   "nyc": {
     "include": [
-      "utils/UserUtil.js",
+      "utils/CourseUtils.js",
       "utils/QuizzesUtil.js",
-      "utils/CourseUtil.js"
+      "utils/UserUtil.js"
+
+
     ],
     "exclude": [],
     "reporter": [
