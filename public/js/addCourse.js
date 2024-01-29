@@ -29,7 +29,7 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
     }
 
     // Call your API to add the course
-    const response = await fetch('http://localhost:5050/addCourse', {
+    const response = await fetch('/addCourse', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -51,11 +51,6 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
     } else {
         // Handle error
         console.error('Error adding course:', result.message);
-
-        // if (!topic || !description || !video || !category) {
-        //     alert('Please fill in all fields.');
-        //     return;  // Don't proceed with the API call if validation fails
-        // }
         
         if (response.status === 400) {
             if (result.message === 'Invalid video URL format') {
@@ -80,7 +75,7 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
 
 async function getAllCourses1() {
     try {
-        const response = await fetch('http://localhost:5050/getAllCourses');
+        const response = await fetch('/getAllCourses');
         const data = await response.json();
 
         if (response.ok) {

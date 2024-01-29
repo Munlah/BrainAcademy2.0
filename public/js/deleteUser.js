@@ -1,15 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
   const deleteButton = document.getElementById('deleteButton');
+  const userId = localStorage.getItem('userId');
 
   if (deleteButton) {
     deleteButton.addEventListener('click', async function () {
-      const confirmed = confirm('Are you sure you want to delete your account?');
+      const confirmed = await confirmAsync('Are you sure you want to delete your account?');
 
       if (confirmed) {
-        // Retrieve the userId from local storage
-        const userId = localStorage.getItem('userId');
         try {
-          const response = await fetch(`http://localhost:5050/deleteUser/${userId}`, {
+          const response = await fetch(`/deleteUser/${userId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -17,14 +16,26 @@ document.addEventListener('DOMContentLoaded', function () {
           });
 
           const data = await response.json();
-            window.location.href = "index.html"; // Redirect to login page
-            localStorage.removeItem('userId');
-            localStorage.removeItem('username');
+          Navigate();
         } catch (error) {
           console.error('Error deleting user:', error);
-          alert('An error occurred. Please try again.'); 
+          alert('An error occurred. Please try again.');
         }
       }
+    });
+  }
+
+  function Navigate() {
+    const redirectUrl = '/index.html';
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 2000);
+  }
+
+  function confirmAsync(message) {
+    return new Promise((resolve) => {
+      const confirmed = confirm(message);
+      resolve(confirmed);
     });
   }
 });

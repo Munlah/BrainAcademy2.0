@@ -342,21 +342,48 @@ describe('Login Page UI Testing', function () {
 
     it('should navigate to courses.html if user role is student', async () => {
 
-        await driver.findElement(By.id('username')).sendKeys('jennieeain2');
-        await driver.findElement(By.id('password')).sendKeys('Ilovefood123@');
+        await driver.findElement(By.id('username')).sendKeys('validuser');
+        await driver.findElement(By.id('password')).sendKeys('ValidPassword1!');
         await driver.findElement(By.id('loginForm')).submit();
 
-        await driver.sleep(1000);
+        // await driver.sleep(1000);
 
+        // await driver.wait(until.urlContains('/courses.html'), 10000);
+
+        // await driver.sleep(1000);
+
+        // const currentUrl = await driver.getCurrentUrl();
+
+        // await driver.sleep(1000);
+
+        // expect(currentUrl).to.include('/courses.html');
+        await driver.sleep(1000);
         await driver.wait(until.urlContains('/courses.html'), 10000);
 
-        await driver.sleep(1000);
+        // const currentUrl = await driver.getCurrentUrl();
+        // expect(currentUrl).to.include('/courses.html');
 
-        const currentUrl = await driver.getCurrentUrl();
+        // Extract the user ID after successful login
+        const userId = await driver.executeScript(() => localStorage.getItem('userId'));
 
-        await driver.sleep(1000);
+        // Navigate to the courses.html page
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/courses.html');
 
-        expect(currentUrl).to.include('/courses.html');
+        // Assuming the deleteButton is part of the courses.html page
+        const deleteButton = await driver.findElement(By.id('deleteButton'));
+        await deleteButton.click();
+        await driver.sleep(2000);
+
+        const confirmationPrompt = await driver.switchTo().alert();
+        expect(confirmationPrompt).to.exist;
+
+        await confirmationPrompt.accept();
+        // // Wait for the user to be deleted
+        //await driver.sleep(2000); // Simulating the 2-second timeout
+        // await driver.wait(until.urlContains('/index.html'));
+        // // Validate that the navigation to index.html occurred
+        // const currentUrl = await driver.getCurrentUrl();
+        // expect(currentUrl).to.include('/index.html');
     });
 
     it('should navigate to viewAllQuizzes.html if user role is enterprise', async () => {
@@ -1084,6 +1111,8 @@ describe('Testing View All Quizzes Admin Page', function () {
 
         await driver.sleep(1000);
 
+        const quizzesBeforeDeletion = await driver.findElements(By.css('.quiz'));
+
         const deleteButtons = await driver.findElements(By.css('.delete-button'));
         const deleteButtonToClick = deleteButtons[0];
         await deleteButtonToClick.click();
@@ -1094,8 +1123,49 @@ describe('Testing View All Quizzes Admin Page', function () {
         await driver.sleep(1000);
 
         const quizzesAfterDeletion = await driver.findElements(By.css('.quiz'));
-        expect(quizzesAfterDeletion.length).to.equal(deleteButtons.length - 1);
+
+        await driver.sleep(1000);
+
+        expect(quizzesAfterDeletion.length).to.equal(quizzesBeforeDeletion.length - 1);
     });
+
+    it("Should navigate to edit quiz page when an edit button is clicked", async function () {
+        // First, set up the context by displaying quizzes for a specific course
+        await driver.sleep(1000);
+    
+        await driver.executeScript('fetchAndDisplayQuizzesByCourse("Algebra")');
+    
+        await driver.sleep(5000);
+    
+        // Find an edit button for a quiz
+        const editButton = await driver.findElement(By.css(".edit-button"));
+    
+        // Get the current URL before clicking the edit button
+        const initialUrl = await driver.getCurrentUrl();
+    
+        // Click on the edit button
+        await editButton.click();
+    
+        // Add a sleep timer to wait for the navigation to complete
+        await driver.sleep(3000);
+    
+        // Get the new URL after clicking
+        const newUrl = await driver.getCurrentUrl();
+    
+        // Assert that the URL has changed, indicating successful navigation
+        expect(newUrl).to.not.equal(initialUrl);
+    
+        // Extract quiz ID from the new URL
+        const urlParams = new URLSearchParams(newUrl.split("?")[1]);
+        const quizId = urlParams.get("quizId");
+    
+        // Assert that the quiz ID exists in the URL
+        expect(quizId).to.exist;
+    
+        // Navigate back to the original quizzes page to continue tests 
+        await driver.navigate().back();
+        await driver.sleep(3000);
+      });
 
     it('Add Quiz button should redirect to addQuiz.html', async () => {
         await driver.sleep(1000);
@@ -1116,6 +1186,207 @@ describe('Testing View All Quizzes Admin Page', function () {
     });
 
 });
+
+// edit quiz start
+const quizId = "4V7n4oZmOt7fJHXf9tEV"; // Define the quiz ID as a constant
+describe("Testing Edit Quiz in Chrome", function () {
+    this.timeout(30000);
+    let driver;
+  
+    before(async () => {
+      // Initialize a Chrome WebDriver instance
+      driver = await new Builder().forBrowser("chrome").build();
+      // Use the predefined quizId to navigate to the edit page
+      await driver.get(
+        `http://localhost:${
+          server.address().port
+        }/instrumented/editQuiz.html?quizId=${quizId}`
+      );
+    });
+  
+    after(async () => {
+      // Quit the WebDriver instance after the tests
+      await driver.quit();
+    });
+  
+    it("Should populate the form with existing quiz data", async () => {
+      await driver.sleep(5000);
+  
+      // Wait for the form to be populated
+      await driver.wait(until.elementLocated(By.id("quizTitle")), 10000);
+  
+      // Verify form fields are populated
+      const quizTitle = await driver
+        .findElement(By.id("quizTitle"))
+        .getAttribute("value");
+      expect(quizTitle).to.not.equal("");
+  
+      const quizCourse = await driver
+        .findElement(By.id("quizCourse"))
+        .getAttribute("value");
+      expect(quizCourse).to.not.equal("");
+  
+      const question1Title = await driver
+        .findElement(By.id("question1Title"))
+        .getAttribute("value");
+      expect(question1Title).to.not.equal("");
+  
+      const question1Option1 = await driver
+        .findElement(By.id("question1Option1"))
+        .getAttribute("value");
+      expect(question1Option1).to.not.equal("");
+  
+      const question1Option2 = await driver
+        .findElement(By.id("question1Option2"))
+        .getAttribute("value");
+      expect(question1Option2).to.not.equal("");
+  
+      const question1CorrectOption = await driver
+        .findElement(By.id("question1CorrectOption"))
+        .getAttribute("value");
+      expect(question1CorrectOption).to.not.equal("");
+  
+      const question2Title = await driver
+        .findElement(By.id("question2Title"))
+        .getAttribute("value");
+      expect(question2Title).to.not.equal("");
+  
+      const question2Option1 = await driver
+        .findElement(By.id("question2Option1"))
+        .getAttribute("value");
+      expect(question2Option1).to.not.equal("");
+  
+      const question2Option2 = await driver
+        .findElement(By.id("question2Option2"))
+        .getAttribute("value");
+      expect(question2Option2).to.not.equal("");
+  
+      const question2CorrectOption = await driver
+        .findElement(By.id("question2CorrectOption"))
+        .getAttribute("value");
+      expect(question2CorrectOption).to.not.equal("");
+    });
+  
+    it("Should update the quiz when form is submitted with valid data", async () => {
+      // Get the current URL before updating the quiz
+      const initialUrl = await driver.getCurrentUrl();
+  
+      // Simulate user input to update quiz details
+      const updatedQuizTitle = "Updated Algebra Quiz";
+      await driver.findElement(By.id("quizTitle")).clear();
+      await driver.sleep(1000);
+      await driver.findElement(By.id("quizTitle")).sendKeys(updatedQuizTitle);
+  
+      // Submit the updated form
+      await driver.findElement(By.id("editQuizForm")).submit();
+  
+      // Wait for the success alert and verify its text
+      await driver.wait(until.alertIsPresent(), 10000);
+      const alert = await driver.switchTo().alert();
+      const alertText = await alert.getText();
+      expect(alertText).to.include("Quiz updated successfully");
+      await driver.sleep(2000);
+      alert.accept(); // Dismiss the alert
+  
+      // Wait a bit to allow any JavaScript-based navigation to initiate
+      await driver.sleep(3000); // Wait for navigation to complete
+      // Capture the new URL after the expected navigation
+      const newUrl = await driver.getCurrentUrl();
+  
+      // Assert that the URL has changed, indicating successful navigation
+      expect(newUrl).to.not.equal(initialUrl);
+      expect(newUrl).to.include("viewAllQuizzes.html"); // Confirm the specific navigation target
+  
+      // Navigate back and verify the initial page
+      await driver.navigate().back();
+      await driver.sleep(3000); // Wait for navigation back to complete
+      const backUrl = await driver.getCurrentUrl();
+      expect(backUrl).to.equal(initialUrl); // Back on the initial page
+    });
+  
+    it("Should display an error message if the quiz update failed", async () => {
+      // Assuming a function to simulate a failed quiz update response
+      await driver.executeScript(() => {
+        window.fetch = () =>
+          Promise.resolve({
+            json: () => Promise.resolve({ message: "Quiz update failed" }),
+          });
+      });
+  
+      // Trigger the quiz update process
+      await driver.findElement(By.id("editQuizForm")).submit();
+  
+      // Wait for the failure alert to be present
+      await driver.wait(until.alertIsPresent(), 10000);
+      const alert = await driver.switchTo().alert();
+      const alertText = await alert.getText();
+  
+      // Verify the alert text matches the failure message
+      expect(alertText).to.include("Quiz update failed");
+      await driver.sleep(2000);
+  
+      // Accept the alert
+      await alert.accept();
+    });
+  
+    it("Should display an error message if the error failed to fetch", async () => {
+      await driver.sleep(2000);
+  
+      // Simulate a fetch error
+      await driver.executeScript(() => {
+        window.fetch = () => Promise.reject(new Error("Simulated fetch failure"));
+      });
+  
+      // Trigger the fetch process
+      await driver.findElement(By.id("editQuizForm")).submit();
+  
+      // Wait for the error alert to be present
+      await driver.wait(until.alertIsPresent(), 10000);
+      const alert = await driver.switchTo().alert();
+      const alertText = await alert.getText();
+  
+      // Verify the alert text matches the error message
+      expect(alertText).to.include("Error updating quiz. Please try again.");
+      await driver.sleep(2000);
+  
+      // Accept the alert
+      await alert.accept();
+    });
+  
+    it("Should display an error message if the quiz is not found", async () => {
+      await driver.get(
+        "http://localhost:" +
+          server.address().port +
+          "/instrumented/editQuiz.html?quizId=123"
+      );
+  
+      // Wait for the error alert to be present
+      await driver.wait(until.alertIsPresent(), 10000);
+      const alert = await driver.switchTo().alert();
+      const alertText = await alert.getText();
+  
+      // Verify the alert text matches the "Quiz not found" error message
+      expect(alertText).to.include("Quiz not found. Please check the quiz ID.");
+      await driver.sleep(2000);
+  
+      // Accept the alert
+      await alert.accept();
+    });
+  
+    afterEach(async function () {
+      await driver
+        .executeScript("return window.__coverage__;")
+        .then(async (coverageData) => {
+          if (coverageData) {
+            await fs.writeFile(
+              `coverage-frontend/coverageEditQuiz${counter++}.json`,
+              JSON.stringify(coverageData)
+            );
+          }
+        });
+    });
+  });
+
 
 //viewallquizzes delete quiz edit quiz end
 
@@ -1682,7 +1953,7 @@ describe('Testing Course Details in Chrome', function () {
     before(async () => {
         // Initialize a Chrome WebDriver instance
         driver = await new Builder().forBrowser('chrome').build();
-        await driver.get('http://localhost:' + server.address().port + '/instrumented/courseDetails.html?courseId=2eOC6Pd7Tcx6OFqGKcPA&topic=Division');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/courseDetails.html?courseId=AIr2hTaloW4KHN6Dg1z2&topic=Division');
     });
 
     after(async () => {
