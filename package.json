@@ -5,7 +5,11 @@
   "main": "index.js",
   "nyc": {
     "include": [
-      "public/**/*.js"
+      "utils/CourseUtils.js",
+      "utils/QuizzesUtil.js",
+      "utils/UserUtil.js"
+
+
     ],
     "exclude": [],
     "reporter": [
@@ -19,7 +23,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "nyc mocha UItests/*UIlogin.test.js",
+    "test": "nyc mocha tests/*.test.js",
     "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css",
     "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary",
     "cy:run": "nyc cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
