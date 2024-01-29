@@ -1,10 +1,10 @@
-version: '4'
+version: '3'
 services:
    ba-sanjana:
         build:
             context: .
             dockerfile: DockerfileSanjana
-        image: sanjana624/docker-image-name:latest
+        image: sanjana624/docker-image-name:latest:v3
         container_name: ba-docker-sanjana
    ba-munleng:
         build:
