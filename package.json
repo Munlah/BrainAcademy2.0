@@ -5,7 +5,7 @@
   "main": "index.js",
   "nyc": {
     "include": [
-      "utils/CourseUtils.js",
+      "utils/CourseUtil.js",
       "utils/QuizzesUtil.js",
       "utils/UserUtil.js"
 
