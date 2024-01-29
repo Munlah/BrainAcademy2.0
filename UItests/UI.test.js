@@ -1687,7 +1687,7 @@ describe('Testing Course Details in Chrome', function () {
     before(async () => {
         // Initialize a Chrome WebDriver instance
         driver = await new Builder().forBrowser('chrome').build();
-        await driver.get('http://localhost:' + server.address().port + '/instrumented/courseDetails.html?courseId=2eOC6Pd7Tcx6OFqGKcPA&topic=Division');
+        await driver.get('http://localhost:' + server.address().port + '/instrumented/courseDetails.html?courseId=AIr2hTaloW4KHN6Dg1z2&topic=Division');
     });
 
     after(async () => {
