@@ -68,6 +68,12 @@ describe('Login Page UI Testing', function () {
         expect(confirmationPrompt).to.exist;
 
         await confirmationPrompt.accept();
+
+        // await driver.wait(until.urlContains('/index.html'), 10000);
+
+        // const currentUrl = await driver.getCurrentUrl();
+        // expect(currentUrl).to.include('/index.html');
+
         // // Wait for the user to be deleted
         // await driver.sleep(2000); // Simulating the 2-second timeout
         // await driver.wait(until.urlContains('/index.html'));
