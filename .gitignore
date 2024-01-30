@@ -67,3 +67,4 @@ node_modules/
 
 #terraform
 /ba-terraform/.terraform/
+/ba-terraform-sanjana/.terraform/
