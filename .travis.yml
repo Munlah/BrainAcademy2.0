@@ -16,12 +16,14 @@ install:
 
 before_script:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+  - az account set --subscription "3c69ad98-c43d-4573-bef4-1e5a1ecc39ea"
   - cd ba-terraform
   - terraform init
   - terraform plan
   - terraform apply -auto-approve
   - cd ..
-  - az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing--subscription "3c69ad98-c43d-4573-bef4-1e5a1ecc39ea"
+  - az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing
   - sudo snap install kubectl --classic
 
 script:
