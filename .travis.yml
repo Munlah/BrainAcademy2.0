@@ -16,6 +16,7 @@ install:
 
 before_script:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - az login --service-principal -u 76e616bd-2322-47da-9706-934c22940e0a -p 0bo8Q~Onkv9mP-rJGsLP_E2nx-YJlC91Wsaaqai6 --tenant 25a99bf0-8e72-472a-ae50-adfbdf0df6f1
   - cd ba-terraform
   - terraform init
   - terraform plan
