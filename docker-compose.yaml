@@ -24,6 +24,3 @@ services:
       dockerfile: DockerfileThatHmuu
     image: thathmuu/brain-academy-img:latest
     container_name: ba-docker-thathmuu
- 
- 
-
