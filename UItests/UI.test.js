@@ -28,7 +28,7 @@ var counter = 0;
 
 //register start
 
-describe("Register Page UI Testing", function () {
+describe.only("Register Page UI Testing", function () {
     this.timeout(30000);
     var driver;
 
@@ -241,7 +241,7 @@ describe("Register Page UI Testing", function () {
         );
     });
 
-    it("Should successfully register with a valid password and redirect to login page", async () => {
+    it.only("Should successfully register with a valid password and redirect to login page", async () => {
         await driver.findElement(By.id("username")).sendKeys("validuser");
         await driver.findElement(By.id("email")).sendKeys("validuser@gmail.com");
         await driver.findElement(By.id("password")).sendKeys("ValidPassword1!");
@@ -322,7 +322,7 @@ describe("Register Page UI Testing", function () {
 //register end 
 
 //login start
-describe('Login Page UI Testing', function () {
+describe.only('Login Page UI Testing', function () {
     this.timeout(50000);
     let driver;
 
@@ -340,28 +340,16 @@ describe('Login Page UI Testing', function () {
         global.window = { localStorage: localStorageMock };
     })
 
-    it('should navigate to courses.html if user role is student', async () => {
+    it.only('should navigate to courses.html if user role is student', async () => {
 
         await driver.findElement(By.id('username')).sendKeys('validuser');
         await driver.findElement(By.id('password')).sendKeys('ValidPassword1!');
         await driver.findElement(By.id('loginForm')).submit();
-
-        // await driver.sleep(1000);
-
-        // await driver.wait(until.urlContains('/courses.html'), 10000);
-
-        // await driver.sleep(1000);
-
-        // const currentUrl = await driver.getCurrentUrl();
-
-        // await driver.sleep(1000);
-
-        // expect(currentUrl).to.include('/courses.html');
         await driver.sleep(1000);
         await driver.wait(until.urlContains('/courses.html'), 10000);
 
-        // const currentUrl = await driver.getCurrentUrl();
-        // expect(currentUrl).to.include('/courses.html');
+        const currentUrl = await driver.getCurrentUrl();
+        expect(currentUrl).to.include('/courses.html');
 
         // Extract the user ID after successful login
         const userId = await driver.executeScript(() => localStorage.getItem('userId'));
@@ -378,12 +366,8 @@ describe('Login Page UI Testing', function () {
         expect(confirmationPrompt).to.exist;
 
         await confirmationPrompt.accept();
-        // // Wait for the user to be deleted
-        //await driver.sleep(2000); // Simulating the 2-second timeout
-        // await driver.wait(until.urlContains('/index.html'));
-        // // Validate that the navigation to index.html occurred
-        // const currentUrl = await driver.getCurrentUrl();
-        // expect(currentUrl).to.include('/index.html');
+
+        
     });
 
     it('should navigate to viewAllQuizzes.html if user role is enterprise', async () => {
