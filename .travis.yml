@@ -21,8 +21,7 @@ before_script:
   - terraform plan
   - terraform apply -auto-approve
   - cd ..
-  - az account set --subscription "3c69ad98-c43d-4573-bef4-1e5a1ecc39ea"
-  - az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing
+  - az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing--subscription "3c69ad98-c43d-4573-bef4-1e5a1ecc39ea"
   - sudo snap install kubectl --classic
 
 script:
