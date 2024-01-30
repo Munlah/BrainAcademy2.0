@@ -28,7 +28,7 @@ resource "azurerm_kubernetes_cluster" "brainacademyAKSCluster" {
   }
 
   service_principal {
-    client_id     = "31223feb-f232-48cd-ba1c-7282b1061d33"
-    client_secret = "MQk8Q~44wHSP~G3iwV28BhWQU_gmqD57kjJIhaCL"
+    client_id     = "76e616bd-2322-47da-9706-934c22940e0a"
+    client_secret = "0bo8Q~Onkv9mP-rJGsLP_E2nx-YJlC91Wsaaqai6"
   }
 }
