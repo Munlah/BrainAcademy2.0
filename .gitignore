@@ -68,4 +68,6 @@ node_modules/
 #terraform
 /ba-terraform/.terraform/
 /ba-terraform-sanjana/.terraform/
+/ba-terraform-sujitha/.terraform/
 /ba-terraform-thathmuu/.terraform/
+
