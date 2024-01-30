@@ -10,14 +10,15 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_resource_group" "existing" {
-  name = "brainacademy"
+resource "azurerm_resource_group" "brainacademy" {
+  name     = "brainacademy"
+  location = "East US"
 }
 
 resource "azurerm_kubernetes_cluster" "brainacademyAKSCluster" {
   name                = "brainacademyAKSCluster"
-  location            = element(azurerm_resource_group.brainacademy.*.location, 0)
-  resource_group_name = element(azurerm_resource_group.brainacademy.*.name, 0)
+  location            = azurerm_resource_group.brainacademy.location
+  resource_group_name = azurerm_resource_group.brainacademy.name
   dns_prefix          = "brainacademy-aks"
 
   default_node_pool {
