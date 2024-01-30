@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
+const logger = require('./logger-sujitha');
 
 app.use(cors());
 
@@ -68,7 +69,8 @@ app.post('/addCourse', addCourse);
 app.get('/getAllCourses', getAllCourses);
 app.get('/getcourse/:id', getCourseById);
 
-
+const statusMonitor = require('express-status-monitor');
+app.use(statusMonitor());
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/' + startPage);
@@ -76,6 +78,8 @@ app.get('/', (req, res) => {
 
 const server = app.listen(PORT, function () {
   console.log(`Demo project at: ${PORT}!`);
+  logger.info(`Demo project at: ${PORT}!`);
+  logger.error(`Example or error log`)
 });
 
 module.exports = { app, server };
