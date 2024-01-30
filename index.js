@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
-const logger = require('./logger-sujitha');
+const logger = require('./logger');
 
 app.use(cors());
 
@@ -12,6 +12,9 @@ var startPage = 'index.html';
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('./public'));
+
+const statusMonitor = require('express-status-monitor');
+app.use(statusMonitor());
 
 // Quizzes
 const {
@@ -69,8 +72,6 @@ app.post('/addCourse', addCourse);
 app.get('/getAllCourses', getAllCourses);
 app.get('/getcourse/:id', getCourseById);
 
-const statusMonitor = require('express-status-monitor');
-app.use(statusMonitor());
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/' + startPage);
