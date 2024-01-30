@@ -5,4 +5,4 @@ scrape_configs:
   - job_name: 'brain academy'
     scrape_interval: 5s
     static_configs:
-      - targets: ['4.246.252.24:80']
+      - targets: ['4.246.252.24:9090']
