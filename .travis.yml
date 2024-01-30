@@ -21,8 +21,8 @@ before_script:
 
 script:
   - npm test
-  - docker-compose build
-  - docker-compose push
+  - docker-compose-munleng build
+  - docker-compose-munleng push
   - kubectl apply -f ba-deployment-munleng.yaml
   - kubectl apply -f ba-service-munleng.yaml
   - kubectl rollout history deployment/ba-deployment
