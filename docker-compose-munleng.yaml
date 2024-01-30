@@ -1,8 +1,0 @@
-version: '3'
-services:
-   ba-munleng:
-        build:
-            context: .
-            dockerfile: DockerfileMunleng
-        image: chengmunleng/brain-academy-img:latest
-        container_name: ba-docker-munleng
