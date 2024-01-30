@@ -10,7 +10,12 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_resource_group" "existing" {
+  name = "brainacademy"
+}
+
 resource "azurerm_resource_group" "brainacademy" {
+  count    = data.azurerm_resource_group.existing.id == null ? 1 : 0
   name     = "brainacademy"
   location = "East US"
 }

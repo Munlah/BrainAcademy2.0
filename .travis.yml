@@ -32,4 +32,4 @@ script:
   - cd ba-terraform
   - terraform init
   - terraform plan
-  - echo "yes" | terraform apply
+  - terraform apply -auto-approve
