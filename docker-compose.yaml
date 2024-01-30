@@ -12,9 +12,3 @@ services:
             dockerfile: DockerfileMunleng
         image: chengmunleng/brain-academy-img:latest
         container_name: ba-docker-munleng
-   ba-thathmuu:
-        build:
-            context: .
-            dockerfile: DockerfileThatHmuu
-        image: thathmuu/ba-docker-img:latest
-        container_name: ba-docker-thathmuu
