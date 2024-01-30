@@ -451,16 +451,24 @@ describe('Login Page UI Testing', function () {
         await driver.findElement(By.id('password')).sendKeys('Ilovefood123@');
         await driver.findElement(By.xpath("//button[contains(text(), 'LOGIN')]")).click();
 
+        await driver.sleep(1000);
+
         await driver.executeScript("localStorage.setItem('username', 'enterprise')");
         await driver.executeScript("localStorage.setItem('userId', 'oUu9UYMZ4mTQGIFo5688')");
 
         await driver.wait(until.urlContains('/viewAllQuizzes.html'), 5000);
 
+        await driver.sleep(1000);
+
         const currentUrl = await driver.getCurrentUrl();
         expect(currentUrl).to.include('/viewAllQuizzes.html');
 
+        await driver.sleep(1000);
+
         const username = await driver.executeScript('return localStorage.getItem("username");');
         const userId = await driver.executeScript('return localStorage.getItem("userId");');
+
+        await driver.sleep(1000);
 
         expect(username).to.equal('enterprise');
         expect(userId).to.equal('oUu9UYMZ4mTQGIFo5688');
@@ -1056,7 +1064,7 @@ describe('Testing View All Quizzes Admin Page', function () {
         await driver.sleep(1000);
         const courseButtons = await driver.findElements(By.css('.course-button'));
         await driver.sleep(1000);
-        const coursetoSelect = courseButtons[3];
+        const coursetoSelect = courseButtons[1];
         await coursetoSelect.click();
         await driver.sleep(1000);
         await driver.wait(until.elementLocated(By.css('.quiz')), 5000);
@@ -1070,7 +1078,7 @@ describe('Testing View All Quizzes Admin Page', function () {
         await driver.sleep(1000);
         const courseButtons = await driver.findElements(By.css('.course-button'));
         await driver.sleep(1000);
-        const coursetoSelect = courseButtons[2];
+        const coursetoSelect = courseButtons[4];
         await driver.sleep(1000);
         await coursetoSelect.click();
         await driver.sleep(1000);
@@ -1083,7 +1091,7 @@ describe('Testing View All Quizzes Admin Page', function () {
         await driver.sleep(1000);
         const courseButtons = await driver.findElements(By.css('.course-button'));
         await driver.sleep(1000);
-        const coursetoSelect = courseButtons[2];
+        const coursetoSelect = courseButtons[4];
         await driver.sleep(1000);
         await coursetoSelect.click();
         await driver.sleep(1000);
@@ -1113,11 +1121,21 @@ describe('Testing View All Quizzes Admin Page', function () {
 
         const quizzesBeforeDeletion = await driver.findElements(By.css('.quiz'));
 
+        await driver.sleep(1000);
+
         const deleteButtons = await driver.findElements(By.css('.delete-button'));
         const deleteButtonToClick = deleteButtons[0];
+
+        await driver.sleep(1000);
+
         await deleteButtonToClick.click();
 
+        await driver.sleep(1000);
+
         const confirmDeleteButton = await driver.findElement(By.id('confirm-delete'));
+
+        await driver.sleep(1000);
+
         await confirmDeleteButton.click();
 
         await driver.sleep(1000);
@@ -1127,6 +1145,8 @@ describe('Testing View All Quizzes Admin Page', function () {
         await driver.sleep(1000);
 
         expect(quizzesAfterDeletion.length).to.equal(quizzesBeforeDeletion.length - 1);
+
+        await driver.sleep(1000);
     });
 
     it("Should navigate to edit quiz page when an edit button is clicked", async function () {
