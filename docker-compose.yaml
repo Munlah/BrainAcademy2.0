@@ -1,14 +1,8 @@
-version: '3'
+version: "3"
 services:
-   ba-sanjana:
-        build:
-            context: .
-            dockerfile: DockerfileSanjana
-        image: sanjana624/sanjana-docker-img:latest
-        container_name: ba-docker-sanjana
-   ba-munleng:
-        build:
-            context: .
-            dockerfile: DockerfileMunleng
-        image: chengmunleng/brain-academy-img:latest
-        container_name: ba-docker-munleng
+  ba-munleng:
+    build:
+      context: .
+      dockerfile: DockerfileMunleng
+    image: chengmunleng/brain-academy-img:latest
+    container_name: ba-docker-munleng
