@@ -2,35 +2,35 @@ language: node_js
 node_js:
   - "14"
 
-services:
-  - docker
+#services:
+  #- docker
 
-before_install:
-  - curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  - sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  - sudo apt-get update && sudo apt-get install terraform
-  - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+#before_install:
+  #- curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+  #- sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  #- sudo apt-get update && sudo apt-get install terraform
+  #- curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 install:
   - npm install
 
-before_script:
-  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - az login --use-device-code
-  - cd ba-terraform
-  - terraform init
-  - terraform plan
-  - terraform apply -auto-approve
-  - cd ..
-  - az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing --subscription "3c69ad98-c43d-4573-bef4-1e5a1ecc39ea"
-  - sudo snap install kubectl --classic
+#before_script:
+  #- docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  #- az login --use-device-code
+  #- cd ba-terraform
+  #- terraform init
+  #- terraform plan
+  #- terraform apply -auto-approve
+  #- cd ..
+  #- az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing --subscription "3c69ad98-c43d-4573-bef4-1e5a1ecc39ea"
+  #- sudo snap install kubectl --classic
 
 script:
   - npm test
-  - docker-compose build ba-munleng
-  - docker-compose push ba-munleng
-  - kubectl apply -f ba-deployment-munleng.yaml
-  - kubectl apply -f ba-service-munleng.yaml
-  - kubectl rollout history deployment/ba-deployment
-  - kubectl get pods
-  - kubectl get services
+  #- docker-compose build ba-munleng
+  #- docker-compose push ba-munleng
+  #- kubectl apply -f ba-deployment-munleng.yaml
+  #- kubectl apply -f ba-service-munleng.yaml
+  #- kubectl rollout history deployment/ba-deployment
+  #- kubectl get pods
+  #- kubectl get services
