@@ -6,7 +6,7 @@ services:
       dockerfile: DockerfileMunleng
     image: chengmunleng/brain-academy-img:latest
     container_name: ba-docker-munleng
-    ba-sanjana:
+  ba-sanjana:
     build:
       context: .
       dockerfile: DockerfileSanjana
