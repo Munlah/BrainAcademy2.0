@@ -23,6 +23,7 @@ script:
   - npm test
   - docker-compose build ba-munleng
   - docker-compose push chengmunleng/brain-academy-img:latest
+  - sudo apt-get install -y kubectl  # Install kubectl
   - kubectl apply -f ba-deployment-munleng.yaml
   - kubectl apply -f ba-service-munleng.yaml
   - kubectl rollout history deployment/ba-deployment
