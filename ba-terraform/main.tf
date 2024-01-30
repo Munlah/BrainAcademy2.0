@@ -14,16 +14,10 @@ data "azurerm_resource_group" "existing" {
   name = "brainacademy"
 }
 
-resource "azurerm_resource_group" "brainacademy" {
-  count    = data.azurerm_resource_group.existing.id == null ? 1 : 0
-  name     = "brainacademy"
-  location = "East US"
-}
-
 resource "azurerm_kubernetes_cluster" "brainacademyAKSCluster" {
   name                = "brainacademyAKSCluster"
-  location            = azurerm_resource_group.brainacademy.location
-  resource_group_name = azurerm_resource_group.brainacademy.name
+  location            = element(azurerm_resource_group.brainacademy.*.location, 0)
+  resource_group_name = element(azurerm_resource_group.brainacademy.*.name, 0)
   dns_prefix          = "brainacademy-aks"
 
   default_node_pool {
