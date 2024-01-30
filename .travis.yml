@@ -16,7 +16,6 @@ install:
 
 before_script:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - az account set --subscription $AZURE_SUBSCRIPTION_ID
   - az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing
 
 script:
