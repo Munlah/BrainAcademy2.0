@@ -24,6 +24,9 @@ before_script:
   - cd ..
   - az aks get-credentials --resource-group "brainacademy" --name "brainacademyAKSCluster" --overwrite-existing --subscription "3c69ad98-c43d-4573-bef4-1e5a1ecc39ea"
   - sudo snap install kubectl --classic
+  - wget https://github.com/prometheus/prometheus/releases/download/v2.49.1/prometheus-2.49.1.linux-amd64.tar.gz
+  - tar xvf prometheus-2.49.1.linux-amd64.tar.gz
+  - ./prometheus-2.49.1.linux-amd64/prometheus --config.file=prometheus.yml > prometheus.log 2>&1 &
 
 script:
   - npm test
@@ -34,3 +37,4 @@ script:
   - kubectl rollout history deployment/ba-deployment
   - kubectl get pods
   - kubectl get services
+  - cat prometheus.log
