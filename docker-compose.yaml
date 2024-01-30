@@ -1,5 +1,6 @@
 version: "3"
 services:
+
   ba-munleng:
     build:
       context: .
@@ -12,3 +13,12 @@ services:
       dockerfile: DockerfileSanjana
     image: sanjana624/sanjanaba-docker-img:latest
     container_name: ba-docker-sanjana
+  ba-sujitha:
+    build:
+      context: .
+      dockerfile: DockerfileSujitha
+    image: sujithapalani/brain-academy-img:latest
+    container_name: ba-docker-sujitha
+ 
+ 
+
