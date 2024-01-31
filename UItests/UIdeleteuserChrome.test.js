@@ -19,7 +19,7 @@ after(async function () {
     process.exit(0);
 });
 
-describe.only('Delete User UI Testing', function () {
+describe('Delete User UI Testing', function () {
     this.timeout(50000);
     let driver;
     var counter = 0;
