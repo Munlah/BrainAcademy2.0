@@ -20,7 +20,7 @@ after(async function () {
     process.exit(0);
 });
 
-describe.only('Delete User UI Testing Microsoft', function () {
+describe('Delete User UI Testing Microsoft', function () {
     this.timeout(50000);
     let driver;
     var counter = 0;
