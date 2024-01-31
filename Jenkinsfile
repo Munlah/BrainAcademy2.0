@@ -4,6 +4,8 @@ pipeline {
     environment {
         DOCKER_USERNAME = credentials('docker_hub_credentials')
         DOCKER_PASSWORD = credentials('docker_hub_credentials')
+        AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
+
     }
 
     stages {
@@ -37,7 +39,7 @@ pipeline {
         }
         stage('Kubernetes Operations') {
             steps {
-                bat 'az aks get-credentials --resource-group "dvopsBrainAcademy" --name "dvopsAKSCluster" --overwrite-existing --subscription "3b1a5a53-30bb-411c-9bbe-4e427558f4a0"'
+                bat 'az aks get-credentials --resource-group "dvopsBrainAcademy" --name "dvopsAKSCluster" --overwrite-existing --subscription "%AZURE_SUBSCRIPTION_ID%"'
                 bat 'kubectl apply -f ba-deployment-thathmuu.yaml'
                 bat 'kubectl apply -f ba-service-thathmuu.yaml'
                 bat 'kubectl rollout history deployment/ba-deployment'
