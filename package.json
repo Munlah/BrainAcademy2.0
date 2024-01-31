@@ -5,8 +5,9 @@
   "main": "index.js",
   "nyc": {
     "include": [
-      "public/js/viewAllQuizzes.js",
-      "public/js/login.js"
+      "utils/CourseUtil.js",
+      "utils/QuizzesUtil.js",
+      "utils/UserUtil.js"
     ],
     "exclude": [],
     "reporter": [
