@@ -1601,7 +1601,7 @@ describe('Testing View All Quizzes Admin Page', function () {
 // validate quiz end 
 
 // edit quiz start
-quizId = "4V7n4oZmOt7fJHXf9tEV"; // Define the quiz ID as a constant
+quizId = "ShFCSO5A1d9t9w09ikkI"; // Define the quiz ID as a constant
 describe("Testing Edit Quiz in Chrome", function () {
     this.timeout(30000);
     let driver;
