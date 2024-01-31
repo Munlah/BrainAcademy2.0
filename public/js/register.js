@@ -49,15 +49,10 @@ document
       // Handle successful registration
       if (response.ok && data.message === "User registered successfully") {
         alert("Registration successful! Please login.");
-        // Use a timeout to delay redirection to allow tests to check the UI state
-        setTimeout(() => {
-          window.location.href = "index.html"; // Redirect to login page
-        }, 1000); // Adjust the delay as needed
+        setTimeout(navigateToLogin, 2000);
       } else {
         // Handle server-side validation errors or other issues
-        throw new Error(
-          data.message || "An error occurred during registration."
-        );
+        throw new Error(data.message);
       }
     } catch (error) {
       // Display any error that occurred during the fetch request
@@ -136,4 +131,9 @@ function validatePassword(password, username, email) {
   if (errors.length > 0) {
     throw new Error(errors.join(" "));
   }
+}
+
+// Navigation function used after successful registration
+function navigateToLogin() {
+  window.location.href = "index.html";
 }
