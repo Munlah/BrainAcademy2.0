@@ -59,7 +59,7 @@ describe('viewAllquizzes Page UI Testing', function () {
     });
 
     it('Should not display any quizzes for a course with no quizzes', () => {
-        cy.get('.course-button').eq(2).click();
+        cy.get('.course-button').eq(4).click();
         cy.get('.quiz').should('not.exist');
         cy.get('.no-quizzes-message').should('have.text', 'No quizzes found for this course');
     });
@@ -68,7 +68,7 @@ describe('viewAllquizzes Page UI Testing', function () {
         cy.wait(1000);
 
         cy.window().then((win) => {
-            win.fetchAndDisplayQuizzesByCourse("Calculus");
+            win.fetchAndDisplayQuizzesByCourse("Calculas");
         });
 
         cy.wait(1000);

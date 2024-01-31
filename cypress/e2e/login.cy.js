@@ -54,7 +54,7 @@ describe('Login Page UI Testing', function () {
 
     cy.window().then((window) => {
       expect(window.localStorage.getItem('username')).to.equal('enterprise');
-      expect(window.localStorage.getItem('userId')).to.equal('oUu9UYMZ4mTQGIFo5688');
+      expect(window.localStorage.getItem('userId')).to.equal('XxJr8EJMeQEAenjkiRMM');
     });
   });
 
