@@ -96,7 +96,7 @@ describe('Testing Add Quiz Function', () => {
     expect(res.statusCode).to.equal(201);
   });
 
-  it('should handle when quiz with this title already exists', async () => {
+  it('should handle the error when quiz with this title already exists', async () => {
     const newQuiz = {
       quizTitle: 'Maths',
       quizCourse: 'Division',

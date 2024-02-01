@@ -7,6 +7,7 @@ const { describe, it, after, before } = require('mocha');
 const { JSDOM } = require('jsdom');
 const dom = new JSDOM('<!doctype html><html><body></body></html>', { url: "http://localhost" });
 const sinon = require('sinon');
+const path = require('path');
 
 global.window = dom.window;
 global.document = dom.window.document;
@@ -774,7 +775,7 @@ describe('Login Page UI Testing', function () {
 
 //add quiz start
 describe('Add Quiz UI', function () {
-
+    let driver;
     this.timeout(30000);
 
     before(async () => {
@@ -991,9 +992,10 @@ describe('Add Quiz UI', function () {
 // add quiz end
 
 // validate quiz start
-describe("UI for validating quiz answers", function () {
+describe.only("UI for validating quiz answers", function () {
     this.timeout(30000);
-    var driver;
+    let driver;
+
 
     before(async () => {
         driver = await new Builder().forBrowser("chrome").build();
@@ -1343,7 +1345,7 @@ describe("UI for validating quiz answers", function () {
 
     it("Should redirect to courses.html when the back button is clicked", async function () {
         // Locate and click the back button
-        const backButton = await driver.findElement(By.id('backArrow'));
+        const backButton = await driver.findElement(By.id('bavckArrow'));
         await backButton.click();
 
         // Wait for the redirection to complete (you may need to adjust the wait conditions)
