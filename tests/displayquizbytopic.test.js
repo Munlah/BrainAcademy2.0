@@ -11,7 +11,6 @@ describe('Testing View All Quizzes By Topic Function', () => {
         statusStub = sinon.stub().returnsThis();
         jsonStub = sinon.stub();
 
-        // Correct stubbing to match the actual call in the function
         sinon.stub(admin.firestore(), 'collection').withArgs('quizzes').returns({
             get: getStub,
         });
@@ -25,26 +24,21 @@ describe('Testing View All Quizzes By Topic Function', () => {
         const req = { params: { topic: 'Algebra' } };
         const res = { status: statusStub, json: jsonStub };
 
-        // Simulate that quizzes exist for the specified topic
         getStub.resolves({
             docs: [
                 { data: () => ({ quizCourse: 'Algebra', quizTitle: 'Test Quiz' }) },
-                // Add more quiz objects if needed
             ],
         });
 
         await viewQuizzesBytopic(req, res);
 
-        // Assertions
         expect(statusStub.calledOnceWith(200)).to.be.true;
         expect(jsonStub.calledOnce).to.be.true;
-        // Add more specific assertions based on your expected data
     });
     it('should return 404 if no quizzes are found', async () => {
         const req = { params: { topic: 'tester' } };
         const res = { status: statusStub, json: jsonStub };
 
-        // Simulate that no quizzes exist for the specified course
         getStub.resolves({ docs: [] });
 
         await viewQuizzesBytopic(req, res);

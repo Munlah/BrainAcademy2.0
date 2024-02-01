@@ -173,31 +173,24 @@ async function getUser(req, res) {
 // Function for login
 async function login(req, res) {
   try {
-    // Request username and password on body
     const { username, password } = req.body;
 
-    // Validation that both fields need to be filled in
     if (!username || !password) {
       return res
         .status(400)
         .json({ message: 'Username and password are required' });
     }
 
-    // Checking if user exists in the Firestore
     const users = await readFirestoreUsers();
 
-    // Find and Compare the users (Basically search)
     const user = users.find((user) => user.username === username);
 
-    // If user do not match the database then return the message of invalid user
     if (!user) {
       return res.status(401).json({ message: 'Invalid username' });
     }
 
-    // Compare the password in hash
     const passwordMatch = await bcrypt.compare(password, user.passwordHash);
 
-    // If password do not match the database then return the message of invalid password
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid password' });
     }
