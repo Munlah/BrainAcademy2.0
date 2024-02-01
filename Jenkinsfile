@@ -5,6 +5,7 @@ pipeline {
         DOCKER_USERNAME = credentials('docker_hub_credentials')
         DOCKER_PASSWORD = credentials('docker_hub_credentials')
         AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
+
     }
 
     stages {
@@ -13,13 +14,11 @@ pipeline {
                 bat 'npm install'
             }
         }
-
         stage('Run Tests') {
             steps {
                 bat 'npm test'
             }
         }
-
         stage('Docker Operations') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker_hub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
@@ -29,7 +28,6 @@ pipeline {
                 }
             }
         }
-
         stage('Terraform Operations') {
             steps {
                 dir('ba-terraform-thathmuu') {
@@ -39,7 +37,6 @@ pipeline {
                 }
             }
         }
-
         stage('Kubernetes Operations') {
             steps {
                 bat 'az aks get-credentials --resource-group "dvopsBrainAcademy" --name "dvopsAKSCluster" --overwrite-existing --subscription "%AZURE_SUBSCRIPTION_ID%"'
@@ -48,17 +45,6 @@ pipeline {
                 bat 'kubectl rollout history deployment/ba-deployment'
                 bat 'kubectl get pods'
                 bat 'kubectl get services'
-            }
-        }
-
-        stage('Health Check') {
-            steps {
-                script {
-                    // Assuming your check_status.sh script is in the same directory as Jenkinsfile
-                    // Make the script executable and run it
-                    bat 'chmod +x ./check_status.sh'
-                    bat './check_status.sh'
-                }
             }
         }
     }
