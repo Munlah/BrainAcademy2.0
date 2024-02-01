@@ -28,10 +28,8 @@ describe('Testing Delete Quiz Function', () => {
         const req = { params: { quizId: 'ZKdcI1Jue7HQGaiMTMU5' } };
         const res = { status: statusStub, json: jsonStub };
 
-        // Simulate that the quiz exists
         getStub.resolves({ exists: true });
 
-        // Simulate successful deletion
         deleteStub.resolves();
 
         await deleteQuiz(req, res);
@@ -65,7 +63,6 @@ describe('Testing Delete Quiz Function', () => {
             },
         };
 
-        // Simulate an error during deletion
         getStub.withArgs('ZKdcI1Jue7HQGaiMTMU5').throws(new Error('Error occurred attempting to delete quiz'));
 
         await deleteQuiz(req, res);
