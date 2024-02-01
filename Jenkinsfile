@@ -5,7 +5,6 @@ pipeline {
         DOCKER_USERNAME = credentials('docker_hub_credentials')
         DOCKER_PASSWORD = credentials('docker_hub_credentials')
         AZURE_SUBSCRIPTION_ID = credentials('azure-subscription-id')
-
     }
 
     stages {
@@ -46,6 +45,25 @@ pipeline {
                 bat 'kubectl get pods'
                 bat 'kubectl get services'
             }
+        }
+    }
+
+    post {
+        success {
+            emailext (
+                subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName} Succeeded",
+                body: "The Jenkins pipeline job ${env.JOB_NAME} build number ${env.BUILD_NUMBER} has succeeded. Check console output at ${env.BUILD_URL} to view the results.",
+                to: '2202211e@student.tp.edu.sg',
+                attachLog: true
+            )
+        }
+        failure {
+            emailext (
+                subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName} Failed",
+                body: "The Jenkins pipeline job ${env.JOB_NAME} build number ${env.BUILD_NUMBER} has failed. Check console output at ${env.BUILD_URL} to view the results.",
+                to: '2202211e@student.tp.edu.sg',
+                attachLog: true
+            )
         }
     }
 }
