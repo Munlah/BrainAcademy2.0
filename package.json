@@ -17,14 +17,18 @@
       "text-summary"
     ],
     "all": true,
-    "check-coverage": true
+    "check-coverage": true,
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80
   },
   "scripts": {
     "start": "node index.js",
     "test": "nyc mocha tests/*.test.js",
     "frontend-instrument": "nyc instrument .\\public\\js .\\public\\instrumented\\js && copy .\\public\\*.html .\\public\\instrumented\\ && copy .\\public\\images\\* .\\public\\instrumented\\images && copy .\\public\\css\\* .\\public\\instrumented\\css",
     "frontend-report": "npx nyc report --reporter html --reporter text -t coverage-frontend --report-dir coverage-frontend/summary",
-    "cy:run": "nyc cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
+    "cy:run": "cypress run --browser chrome --headless --spec 'cypress/e2e/**.cy.js'",
     "cypress-frontend-report": "npx nyc report --reporter html --reporter text -t cypress-coverage --report-dir cypress-coverage/summary",
     "coverage:report": "npx nyc report --reporter=html"
   },
@@ -44,6 +48,7 @@
     "jsdom": "^24.0.0",
     "mocha": "^10.2.0",
     "mock-cloud-firestore": "^0.12.0",
+    "pm2": "^5.3.1",
     "proxyquire": "^2.1.3",
     "selenium-webdriver": "^4.17.0",
     "winston": "^3.11.0"

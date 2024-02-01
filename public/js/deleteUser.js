@@ -15,18 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
             },
           });
           
-          Navigate();
+          localStorage.removeItem('userId');
+          window.location.href = '/index.html';
         } catch (error) {
-          console.error('Error deleting user:', error);
           alert('An error occurred. Please try again.');
         }
       }
     });
-  }
-
-  function Navigate() {
-    localStorage.removeItem('userId');
-    window.location.href = '/index.html';
   }
 
   function confirmAsync(message) {

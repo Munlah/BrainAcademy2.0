@@ -16,11 +16,11 @@ services:
     build:
       context: .
       dockerfile: DockerfileSujitha
-    image: sujithapalani/brain-academy-img:latest
+    image: sujithapalani/brain-academy-img:v1
     container_name: ba-docker-sujitha
   ba-thathmuu:
     build:
       context: .
       dockerfile: DockerfileThathmuu
-    image: thathmuu/brain-academy-img:latest
+    image: thathmuu/brain-academy-img:v1
     container_name: ba-docker-thathmuu
