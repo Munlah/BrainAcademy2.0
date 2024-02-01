@@ -22,5 +22,5 @@ services:
     build:
       context: .
       dockerfile: DockerfileThathmuu
-    image: thathmuu/brain-academy-img:v1
+    image: thathmuu/brain-academy-img:v5
     container_name: ba-docker-thathmuu
