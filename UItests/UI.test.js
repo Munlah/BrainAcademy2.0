@@ -828,7 +828,7 @@ describe('Delete User UI Testing', function () {
 
 
 //add quiz start
-describe('Add Quiz UI', function () {
+describe.only('Add Quiz UI', function () {
     let driver;
     this.timeout(30000);
 
@@ -1399,7 +1399,7 @@ describe.only("UI for validating quiz answers", function () {
 
     it("Should redirect to courses.html when the back button is clicked", async function () {
         // Locate and click the back button
-        const backButton = await driver.findElement(By.id('bavckArrow'));
+        const backButton = await driver.findElement(By.id('backArrow'));
         await backButton.click();
 
         // Wait for the redirection to complete (you may need to adjust the wait conditions)
