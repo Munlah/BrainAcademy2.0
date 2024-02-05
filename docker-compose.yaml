@@ -4,23 +4,23 @@ services:
     build:
       context: .
       dockerfile: DockerfileMunleng
-    image: chengmunleng/brain-academy-img:v10
+    image: chengmunleng/brain-academy-img:v11
     container_name: ba-docker-munleng
   ba-sanjana:
     build:
       context: .
       dockerfile: DockerfileSanjana
-    image: sanjana624/sanjanaba-docker-img:v10
+    image: sanjana624/sanjanaba-docker-img:v11
     container_name: ba-docker-sanjana
   ba-sujitha:
     build:
       context: .
       dockerfile: DockerfileSujitha
-    image: sujithapalani/brain-academy-img:v10
+    image: sujithapalani/brain-academy-img:v11
     container_name: ba-docker-sujitha
   ba-thathmuu:
     build:
       context: .
       dockerfile: DockerfileThathmuu
-    image: thathmuu/brain-academy-img:v10
+    image: thathmuu/brain-academy-img:v11
     container_name: ba-docker-thathmuu
