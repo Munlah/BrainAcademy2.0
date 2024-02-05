@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function validateAnswers(quizId, userAnswers) {
     // Perform a fetch request to the server with quizId and userAnswers
-    fetch('http://localhost:5050/validate-answers', {
+    fetch('/validate-answers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

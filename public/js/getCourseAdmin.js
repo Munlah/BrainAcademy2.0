@@ -1,6 +1,6 @@
 async function getAllCourses1() {
     try {
-        const response = await fetch('http://localhost:5050/getAllCourses');
+        const response = await fetch('/getAllCourses');
         const data = await response.json();
 
         if (response.ok) {

@@ -193,6 +193,6 @@ function fetchAndDisplayQuizzesByCourse(course) {
 
 function navigateToEditQuiz(event) {
   const quizId = event.currentTarget.dataset.quizId; // Use currentTarget to ensure we get the button's dataset
-  const url = `editQuiz.html?quizId=${quizId}`; // Construct the URL with quizId as a query parameter
+  const url = `/editQuiz.html?quizId=${quizId}`; // Construct the URL with quizId as a query parameter
   window.location.href = url; // Navigate to the edit quiz page
 }

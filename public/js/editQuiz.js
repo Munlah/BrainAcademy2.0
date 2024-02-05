@@ -128,5 +128,5 @@ function updateQuiz(quizId, updatedQuiz) {
 
 // Navigation function used after successful quiz update
 function navigateToQuizList() {
-  window.location.href = "viewAllQuizzes.html";
+  window.location.href = "/viewAllQuizzes.html";
 }

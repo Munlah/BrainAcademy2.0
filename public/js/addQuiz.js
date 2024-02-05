@@ -47,7 +47,7 @@ document.getElementById('addQuizForm').addEventListener('submit', function (even
   };
   // console.log('Quiz Body:', JSON.stringify(quizBody));
 
-  fetch('http://localhost:5050/create-new-quiz', {
+  fetch('/create-new-quiz', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ document.getElementById('addQuizForm').addEventListener('submit', function (even
       console.log('Response Data:', data);
       if (data.message === 'Quiz created successfully.') {
         alert('Quiz created successfully.');
-        window.location.href = 'http://localhost:5050/viewAllQuizzes.html';
+        window.location.href = '/viewAllQuizzes.html';
       } else {
         alert(data.message); // Show backend validation message as an alert
       }
