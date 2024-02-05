@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to get all questions for a quiz
   function getQuestions(quiz_id) {
     return new Promise((resolve, reject) => {
-      fetch(`http://localhost:5050/view-all-questions-for-quiz/${quiz_id}`, {
+      fetch(`/view-all-questions-for-quiz/${quiz_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
