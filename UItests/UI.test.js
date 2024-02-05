@@ -1044,7 +1044,7 @@ describe('Add Quiz UI', function () {
     });
 });
 // add quiz end
-
+  
 // validate quiz start
 describe("UI for validating quiz answers", function () {
     this.timeout(30000);

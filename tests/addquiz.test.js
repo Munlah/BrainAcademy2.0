@@ -4,7 +4,7 @@ const proxyquire = require('proxyquire');
 const { admin } = require('../firebaseAdmin.js');
 const { createQuizWithQuestions, deleteQuiz } = require('../utils/QuizzesUtil');
 
-describe('Testing Add Quiz Function', () => {
+describe.only('Testing Add Quiz Function', () => {
   let addStub;
   let addedQuizId; // Variable to store the addedQuizId
 
