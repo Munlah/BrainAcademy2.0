@@ -10,7 +10,7 @@ services:
     build:
       context: .
       dockerfile: DockerfileSanjana
-    image: sanjana624/sanjanaba-docker-img:v2
+    image: sanjana624/sanjanaba-docker-img:v3
     container_name: ba-docker-sanjana
   ba-sujitha:
     build:
