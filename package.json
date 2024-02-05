@@ -8,6 +8,7 @@
       "utils/CourseUtil.js",
       "utils/QuizzesUtil.js",
       "utils/UserUtil.js"
+      
     ],
     "exclude": [],
     "reporter": [
