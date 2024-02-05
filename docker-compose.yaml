@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: DockerfileSujitha
-    image: sujithapalani/brain-academy-img:v1
+    image: sujithapalani/brain-academy-img:v2
     container_name: ba-docker-sujitha
   ba-thathmuu:
     build:
