@@ -8,7 +8,7 @@ const { JSDOM } = require('jsdom');
 const dom = new JSDOM('<!doctype html><html><body></body></html>', { url: "http://localhost" });
 const sinon = require('sinon');
 const path = require('path');
-
+   
 global.window = dom.window;
 global.document = dom.window.document;
 global.localStorage = dom.window.localStorage;
@@ -1693,7 +1693,7 @@ describe('Testing View All Quizzes Admin Page', function () {
 // validate quiz end 
 
 // edit quiz start
-quizId = "ShFCSO5A1d9t9w09ikkI"; // Define the quiz ID as a constant
+quizId = "Qb86EsWEg5O8zR7CjeAD"; // Define the quiz ID as a constant
 describe("Testing Edit Quiz in Chrome", function () {
     this.timeout(30000);
     let driver;
