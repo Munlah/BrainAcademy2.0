@@ -66,7 +66,7 @@ describe('Testing Add Quiz Function', () => {
     addStub = sinon.stub(admin.firestore().collection('quizzes'), 'add').returns({ id: 'fakeQuizId' });
 
     const newQuiz = {
-      quizTitle: 'Test add quiz test cccase',
+      quizTitle: 'Test add quiz test case',
       quizCourse: 'Division',
       questions: [
         {
@@ -133,9 +133,6 @@ describe('Testing Add Quiz Function', () => {
       console.error('Caught an error in the test:', error);
     }
   })
-
-
-
 
 
   it('should handle invalid data', async () => {
