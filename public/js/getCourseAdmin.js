@@ -1,4 +1,4 @@
-async function getAllCourses1() {
+async function getAllCourses() {
     try {
         const response = await fetch('/getAllCourses');
         const data = await response.json();
@@ -21,5 +21,5 @@ async function getAllCourses1() {
         console.error('Error fetching courses:', error.message);
     }
 }
-window.onload = getAllCourses1;
+window.onload = getAllCourses;
 

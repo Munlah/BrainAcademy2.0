@@ -45,7 +45,7 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
         // Clear form fields
         document.getElementById('addCourseForm').reset();
 
-        getAllCourses1();
+        getAllCourses();
         // Display success message
         alert('Course added successfully!');
     } else {
@@ -73,7 +73,7 @@ document.getElementById('addCourseForm').addEventListener('submit', async functi
 
 
 
-async function getAllCourses1() {
+async function getAllCourses() {
     try {
         const response = await fetch('/getAllCourses');
         const data = await response.json();
