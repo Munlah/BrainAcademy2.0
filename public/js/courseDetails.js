@@ -11,10 +11,10 @@ async function getCourseById() {
 
         // Use the correct API endpoint to fetch course details
         const response = await fetch(`/getcourse/${courseId}`);
-        console.log('API Response:', response); 
+        console.log('API Response:', response);
 
         const data = await response.json();
-        console.log('API Data:', data); 
+        console.log('API Data:', data);
 
         if (response.ok) {
             const courseDetails = document.getElementById('courseDetails');
@@ -50,7 +50,7 @@ function getYouTubeVideoId(url) {
     const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? match[1] : null;
 }
-window.onload = getCourseById;
+window.onload = getCourseById();
 
 async function getquiz(topic) {
     try {

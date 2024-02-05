@@ -37,4 +37,4 @@ function navigateToCourseDetails(event) {
     window.location.href = url;
 }
 
-window.onload = getAllCourses;
+window.onload = getAllCourses();
