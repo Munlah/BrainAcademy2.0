@@ -36,7 +36,7 @@ const adminMockInternalError = {
 // Use the updated adminMockInternalError in the test case
 const { validateUserAnswers: validateUserAnswersInternalError } = proxyquire('../utils/QuizzesUtil', { '../firebaseAdmin.js': { admin: adminMockInternalError } });
 
-describe.only('Testing validateUserAnswers utility function', () => {
+describe('Testing validateUserAnswers utility function', () => {
   it('should return correct answer message for correct options', async () => {
     const quizId = 'eD34Q9fHHRds7BTKHPBK';
     const userAnswers = [2, 1]; // Assuming Option C for Question 1 and Option Y for Question 2 are correct

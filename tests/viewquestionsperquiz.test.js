@@ -35,7 +35,7 @@ const adminMock = {
 
 const { viewQuestionsPerQuiz } = proxyquire('../utils/QuizzesUtil', { '../firebaseAdmin.js': { admin: adminMock } });
 
-describe.only('Testing Display All Questions by QuizId Function', () => {
+describe('Testing Display All Questions by QuizId Function', () => {
   it('should return questions by quizId', async () => {
     const req = { params: { quizId: 'Test Quiz Id' } };
     const res = { status: sinon.stub().returnsThis(), json: sinon.stub() };
