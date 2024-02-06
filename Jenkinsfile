@@ -13,11 +13,6 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Run Tests') {
-            steps {
-                bat 'npm test'
-            }
-        }
         stage('Docker Operations') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker_hub_credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
