@@ -828,7 +828,7 @@ describe('Delete User UI Testing', function () {
 
 
 //add quiz start
-describe('Add Quiz UI', function () {
+describe.only('Add Quiz UI', function () {
     let driver;
     this.timeout(30000);
 
@@ -1046,7 +1046,7 @@ describe('Add Quiz UI', function () {
 // add quiz end
   
 // validate quiz start
-describe("UI for validating quiz answers", function () {
+describe.only("UI for validating quiz answers", function () {
     this.timeout(30000);
     let driver;
 
@@ -1056,7 +1056,7 @@ describe("UI for validating quiz answers", function () {
         await driver.get(
             "http://localhost:" +
             server.address().port +
-            `/instrumented/validateQuiz.html?quizId=W4WLnqupz3bC0W6rA4ea`
+            `/instrumented/validateQuiz.html?quizId=57FI2xCQwjqOzx83tU6H`
         );
     });
 
@@ -1097,7 +1097,7 @@ describe("UI for validating quiz answers", function () {
         const currentUrl = await driver.getCurrentUrl();
 
         // Check if the URL contains the expected quizId parameter
-        const expectedQuizId = 'W4WLnqupz3bC0W6rA4ea'; // Replace with the expected quizId
+        const expectedQuizId = '57FI2xCQwjqOzx83tU6H'; // Replace with the expected quizId
         const isQuizIdInUrl = currentUrl.includes(`quizId=${expectedQuizId}`);
 
         // Assert that the quizId is present in the URL
