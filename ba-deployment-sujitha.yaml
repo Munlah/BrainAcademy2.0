@@ -14,6 +14,6 @@ spec: # defines the desired state of the Deployment.
     spec: # specifies the container(s) to run
       containers: 
       - name: ba-docker-sujitha
-        image: sujithapalani/brain-academy-img:v18
+        image: sujithapalani/brain-academy-img:v19
         ports: 
         - containerPort: 5050 # specifies the port that the application listens on
