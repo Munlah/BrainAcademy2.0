@@ -828,7 +828,7 @@ describe('Delete User UI Testing', function () {
 
 
 //add quiz start
-describe.only('Add Quiz UI', function () {
+describe('Add Quiz UI', function () {
     let driver;
     this.timeout(30000);
 
@@ -1046,7 +1046,7 @@ describe.only('Add Quiz UI', function () {
 // add quiz end
   
 // validate quiz start
-describe.only("UI for validating quiz answers", function () {
+describe("UI for validating quiz answers", function () {
     this.timeout(30000);
     let driver;
 
