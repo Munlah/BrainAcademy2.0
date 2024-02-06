@@ -14,6 +14,6 @@ spec: # defines the desired state of the Deployment.
     spec: # specifies the container(s) to run
       containers: 
       - name: ba-docker-munleng
-        image: chengmunleng/brain-academy-img:v26
+        image: chengmunleng/brain-academy-img:v27
         ports: 
         - containerPort: 5050 # specifies the port that the application listens on
